@@ -1,0 +1,123 @@
+---
+interface Props {
+  lang: "en" | "pl";
+}
+const { lang } = Astro.props;
+const pl = lang === "pl";
+---
+
+<dialog
+  class="image-viewer"
+  aria-labelledby="viewer-title"
+  data-error={
+    pl
+      ? "Nie udało się wczytać obrazu. Zamknij podgląd i spróbuj ponownie."
+      : "The image couldn’t load. Close the viewer and try again."
+  }
+>
+  <div class="viewer-toolbar">
+    <p id="viewer-title">{pl ? "Widok aplikacji" : "App view"}</p>
+    <button
+      class="viewer-zoom"
+      type="button"
+      aria-pressed="false"
+      data-fit={pl ? "Dopasuj" : "Fit to screen"}
+      data-zoom={pl ? "Pełny rozmiar" : "Actual size"}
+    >
+      {pl ? "Pełny rozmiar" : "Actual size"}
+    </button>
+    <form method="dialog">
+      <button autofocus>
+        {pl ? "Zamknij" : "Close"}
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"
+        >
+          <path d="m6 6 12 12M18 6 6 18" />
+        </svg>
+      </button>
+    </form>
+  </div>
+  <div
+    class="viewer-stage"
+    tabindex="0"
+    role="region"
+    aria-label={
+      pl
+        ? "Obraz; przewijaj, aby obejrzeć szczegóły"
+        : "Image; scroll to inspect details"
+    }
+  >
+    <img alt="" />
+  </div>
+  <p class="viewer-caption"></p>
+</dialog>
+
+<script>
+  const viewer = document.querySelector<HTMLDialogElement>(".image-viewer")!;
+  const image = viewer.querySelector<HTMLImageElement>("img")!;
+  const caption = viewer.querySelector<HTMLElement>(".viewer-caption")!;
+  const stage = viewer.querySelector<HTMLElement>(".viewer-stage")!;
+  const zoom = viewer.querySelector<HTMLButtonElement>(".viewer-zoom")!;
+  let trigger: HTMLAnchorElement | null = null;
+
+  document
+    .querySelectorAll<HTMLAnchorElement>("[data-image-viewer]")
+    .forEach((link) => {
+      link.addEventListener("click", (event) => {
+        if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey)
+          return;
+        event.preventDefault();
+        trigger = link;
+        zoom.disabled = true;
+        image.src = link.href;
+        image.alt = link.querySelector("img")?.alt ?? "";
+        caption.textContent = image.alt;
+        viewer.classList.remove("is-zoomed");
+        zoom.setAttribute("aria-pressed", "false");
+        zoom.textContent = zoom.dataset.zoom!;
+        viewer.showModal();
+        document.documentElement.classList.add("viewer-open");
+        stage.scrollTo(0, 0);
+      });
+    });
+  zoom.addEventListener("click", () => {
+    const enlarged = viewer.classList.toggle("is-zoomed");
+    zoom.setAttribute("aria-pressed", String(enlarged));
+    zoom.textContent = enlarged ? zoom.dataset.fit! : zoom.dataset.zoom!;
+    stage.scrollTo(
+      enlarged ? image.naturalWidth / 2 - stage.clientWidth / 2 : 0,
+      enlarged
+        ? image.naturalHeight * Number(trigger?.dataset.focusY ?? 0.5) -
+            stage.clientHeight / 2
+        : 0,
+    );
+  });
+  image.addEventListener("load", () => {
+    zoom.disabled = false;
+  });
+  image.addEventListener("error", () => {
+    caption.textContent = viewer.dataset.error!;
+  });
+  viewer.addEventListener("click", (event) => {
+    if (event.target !== viewer) return;
+    const rect = viewer.getBoundingClientRect();
+    if (
+      event.clientX < rect.left ||
+      event.clientX > rect.right ||
+      event.clientY < rect.top ||
+      event.clientY > rect.bottom
+    )
+      viewer.close();
+  });
+  viewer.addEventListener("close", () => {
+    document.documentElement.classList.remove("viewer-open");
+    trigger?.focus({ preventScroll: true });
+    image.removeAttribute("src");
+  });
+</script>

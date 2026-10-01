@@ -1,67 +1,51 @@
-import frameSync from "../assets/random-frame-sync.png";
-import frameHistory from "../assets/random-frame-history.png";
-import frameFavorites from "../assets/random-frame-favorites.png";
-import frameStats from "../assets/random-frame-stats.png";
-import frameSettings from "../assets/random-frame-settings.png";
-import radioCatalog from "../assets/kajtek-catalog.png";
-import radioStations from "../assets/kajtek-stations.png";
-import radioHistory from "../assets/kajtek-history.png";
-import radioFavorites from "../assets/kajtek-favorites.png";
-import radioTheme from "../assets/kajtek-theme.png";
+import frameSync from "../assets/random-frame-sync-detail.png";
+import radioCatalog from "../assets/kajtek-catalog-detail.png";
+import radioPlaylist from "../assets/kajtek-playlist-detail.png";
+import radioPlaylistMobile from "../assets/kajtek-playlist-mobile.png";
 
 export const screenshots = {
   "random-frame": [
     {
-      source: frameHistory,
-      en: "History before the first draw.",
-      pl: "Historia przed pierwszym losowaniem.",
-    },
-    {
-      source: frameFavorites,
-      en: "The favorites view with no saved frames.",
-      pl: "Widok ulubionych bez zapisanych obrazów.",
-    },
-    {
-      source: frameStats,
-      en: "Activity statistics before any frames have been drawn.",
-      pl: "Statystyki aktywności przed pierwszym losowaniem.",
-    },
-    {
-      source: frameSettings,
-      en: "Settings and theme selection.",
-      pl: "Ustawienia i wybór motywu.",
-    },
-    {
+      section: 1,
       source: frameSync,
-      en: "Optional encrypted sync, before pairing a device.",
-      pl: "Opcjonalna szyfrowana synchronizacja przed połączeniem urządzenia.",
+      original: "/images/random-frame-sync.png",
+      focusY: 0.5,
+      wide: false,
+      en: "Sync is a separate, optional step. The recovery key is needed to join from another device.",
+      pl: "Synchronizacja jest osobnym, opcjonalnym krokiem. Klucz odzyskiwania pozwala dołączyć kolejne urządzenie.",
+      alt: {
+        en: "Random Frame’s sync setup, with Turn on Sync and Join existing Sync controls.",
+        pl: "Konfiguracja synchronizacji Random Frame z przyciskami włączenia i dołączenia do istniejącej synchronizacji.",
+      },
     },
   ],
   kajtek: [
     {
+      section: 1,
       source: radioCatalog,
-      en: "The station catalog with search, provider filters and listening-list controls.",
-      pl: "Katalog stacji z wyszukiwaniem, filtrami dostawców i wyborem stacji do słuchania.",
+      original: "/images/kajtek-catalog.png",
+      focusY: 0.24,
+      wide: false,
+      en: "Search and provider filters share one catalog. Each station can be added to the listening list or played directly.",
+      pl: "Wyszukiwanie i filtry dostawców działają we wspólnym katalogu. Stację można dodać do listy lub od razu włączyć.",
+      alt: {
+        en: "Detail of Kajtek’s station catalog: search, provider filters, and station playback and selection controls.",
+        pl: "Fragment katalogu Kajtka: wyszukiwarka, filtry dostawców oraz przyciski odtwarzania i wyboru stacji.",
+      },
     },
     {
-      source: radioStations,
-      en: "The player, volume, sleep timer and station list.",
-      pl: "Odtwarzacz, głośność, wyłącznik czasowy i lista stacji.",
-    },
-    {
-      source: radioHistory,
-      en: "A recorded RMF playlist, including the gap between songs and the upcoming track.",
-      pl: "Zapisana playlista RMF z przerwą między utworami i kolejną piosenką.",
-    },
-    {
-      source: radioFavorites,
-      en: "A track saved from the RMF playlist.",
-      pl: "Utwór zapisany z playlisty RMF.",
-    },
-    {
-      source: radioTheme,
-      en: "The complete cassette player in its dark theme and blue shell.",
-      pl: "Cały magnetofon w ciemnym motywie z niebieską obudową.",
+      section: 3,
+      source: radioPlaylist,
+      mobileSource: radioPlaylistMobile,
+      original: "/images/kajtek-history.png",
+      focusY: 0.38,
+      wide: true,
+      en: "The playlist places a news break between songs and distinguishes the current track from the next one.",
+      pl: "Playlista pokazuje przerwę na wiadomości między utworami i odróżnia bieżącą piosenkę od następnej.",
+      alt: {
+        en: "Kajtek’s RMF playlist with a previous song, a news break, the current ATB track and the upcoming Laura Branigan track.",
+        pl: "Playlista RMF w Kajtku: poprzedni utwór, przerwa na wiadomości, bieżący utwór ATB i następny utwór Laury Branigan.",
+      },
     },
   ],
 };

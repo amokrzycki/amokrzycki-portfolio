@@ -67,6 +67,12 @@ const next = slug === "random-frame" ? "kajtek" : "random-frame";
         {pl ? "Kod źródłowy" : "View source"}
         <Arrow external />
       </a>
+      {slug === "random-frame" && (
+        <a class="text-link download-link" href={`${project.repo}/releases/`}>
+          {pl ? "Pobierz aplikację" : "Download the app"}
+          <Arrow external />
+        </a>
+      )}
     </div>
   </section>
   <div class="case-body">
@@ -91,9 +97,6 @@ const next = slug === "random-frame" ? "kajtek" : "random-frame";
         <details class="engineering-details">
           <summary>
             <span>
-              <span class="detail-category">
-                {pl ? "Szczegóły techniczne" : "Engineering details"}
-              </span>
               <span class="detail-topic">{section.detail.topic}</span>
             </span>
             <svg
@@ -108,38 +111,36 @@ const next = slug === "random-frame" ? "kajtek" : "random-frame";
               <path d="M8 2v12M2 8h12" />
             </svg>
           </summary>
-          <dl class="detail-content">
-            <div>
-              <dt>{pl ? "Decyzja" : "Decision"}</dt>
-              <dd>{section.detail.decision}</dd>
-            </div>
-            <div>
-              <dt>{pl ? "Mechanizm" : "Mechanism"}</dt>
-              <dd>{section.detail.mechanism}</dd>
-            </div>
-            <div>
-              <dt>{pl ? "Ograniczenie" : "Constraint"}</dt>
-              <dd>{section.detail.constraint}</dd>
-            </div>
-          </dl>
+          <div class="detail-content">
+            <p>{section.detail.mechanism}</p>
+            <p>{section.detail.constraint}</p>
+          </div>
         </details>
+        {screenshots[slug]
+          .filter((shot) => shot.section === index)
+          .map((shot) => (
+            <figure class:list={["section-media", { "media-wide": shot.wide }]}>
+              <ProductImage
+                slug={slug}
+                source={shot.source}
+                mobileSource={
+                  "mobileSource" in shot ? shot.mobileSource : undefined
+                }
+                original={shot.original}
+                focusY={shot.focusY}
+                sizes={
+                  shot.wide
+                    ? "(max-width: 700px) calc(100vw - 64px), 1100px"
+                    : "(max-width: 700px) calc(100vw - 64px), (max-width: 1400px) 50vw, 700px"
+                }
+                alt={shot.alt[lang]}
+              />
+              <figcaption>{shot[lang]}</figcaption>
+            </figure>
+          ))}
       </section>
     ))}
   </div>
-  <section class="project-gallery" aria-labelledby="gallery-heading">
-    <h2 id="gallery-heading">{pl ? "W aplikacji" : "Inside the app"}</h2>
-    {screenshots[slug].map((shot) => (
-      <figure>
-        <ProductImage
-          slug={slug}
-          source={shot.source}
-          sizes="(max-width: 700px) calc(100vw - 64px), (max-width: 1400px) 85vw, 1236px"
-          alt={`${project.name}: ${shot[lang]}`}
-        />
-        <figcaption>{shot[lang]}</figcaption>
-      </figure>
-    ))}
-  </section>
   <a class="next-project" href={`${base}/work/${next}/`}>
     <span>{pl ? "Drugi projekt" : "The other project"}</span>
     <span>

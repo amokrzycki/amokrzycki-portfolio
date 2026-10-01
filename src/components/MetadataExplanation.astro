@@ -23,9 +23,9 @@ const steps = pl
         label: "Porównanie",
         title: "Najpierw sprawdź, czy tytuły pasują.",
         states: [
-          "Tytuł z REST",
+          "Tytuły z REST i HLS",
           "Normalizacja i porównanie",
-          "Tytuł z tagu HLS",
+          "Dołączenie lub pominięcie czasu",
         ],
         caption:
           "Porównanie ignoruje wielkość liter i znaki przestankowe. Wspólny fragment tytułu pozwala połączyć dane, choć nie daje pewności identyfikatora utworu.",
@@ -36,7 +36,7 @@ const steps = pl
         states: [
           "REST: nazwa i wykonawca",
           "HLS: początek i długość",
-          "Wspólny TrackInfo",
+          "Utwór z danymi o czasie",
         ],
         caption:
           "Czas pochodzi z segmentu, w który właśnie weszło odtwarzanie. Początek bloku jest wyliczany z czasu segmentu, więc kolejne odczyty nie przesuwają zegara utworu.",
@@ -64,7 +64,11 @@ const steps = pl
       {
         label: "Compare titles",
         title: "Check that the titles describe the same song.",
-        states: ["REST title", "Normalize and compare", "HLS tag title"],
+        states: [
+          "REST + HLS titles",
+          "Normalize and compare",
+          "Match or omit timing",
+        ],
         caption:
           "The comparison ignores case and punctuation. A shared title substring allows the data to be combined, with less certainty than a provider-issued track ID.",
       },
@@ -74,7 +78,7 @@ const steps = pl
         states: [
           "REST: artist and title",
           "HLS: start and duration",
-          "Shared TrackInfo",
+          "One track with timing",
         ],
         caption:
           "Timing comes from the segment playback has just entered. Deriving the block start from the segment timestamp keeps repeated reads from moving the song’s clock.",

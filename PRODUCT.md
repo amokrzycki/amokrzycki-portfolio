@@ -8,36 +8,36 @@ web
 
 ## Users
 
-Technical recruiters, engineering managers, product teams, founders, and developers evaluating Adrian's work.
+Technical recruiters, engineering managers, product teams, founders and developers considering Adrian's work.
 
 ## Product Purpose
 
-A personal portfolio that demonstrates product quality and technical ownership through two substantial personal projects. Visitors should immediately understand that Adrian builds software, then discover the engineering depth by exploring.
+A personal portfolio showing Adrian's working habits and engineering depth through Random Frame and Kajtek. Visitors can understand each product quickly, then inspect selected decisions.
 
 ## Positioning
 
-Adrian Mokrzycki is a product-oriented full-stack engineer with a strong frontend bias, working professionally since 2021. He follows problems across interface, application, backend, and infrastructure boundaries.
+Adrian Mokrzycki is a full-stack engineer with a frontend focus, working professionally since 2021. He follows interface problems into application state, services, storage, security and delivery.
 
 ## Capabilities and Constraints
 
-Astro, TypeScript, static HTML, custom CSS, minimal JavaScript. English default and Polish routes. Dedicated case studies for Random Frame and Kajtek. Performance, semantic HTML, keyboard access, contrast, responsive layout, and reduced motion are requirements.
+Astro, TypeScript, static HTML, custom CSS and a small native-dialog image viewer. English and Polish static routes. Performance, keyboard access, readable contrast, responsive composition and reduced motion are requirements. No UI framework or new dependency is needed.
 
 ## Brand Commitments
 
-portfolio-direction.md is the design constitution. Premium, calm, editorial, restrained, subtly playful. Typography, proportion, whitespace, and authentic product imagery carry the design. No generic cards, technology walls, fake terminals, neon, gradients as filler, scroll-jacking, or invented metrics. Concise factual copy.
+[docs/portfolio-direction.md](docs/portfolio-direction.md) is the constitution. A light, restrained editorial portfolio with self-hosted Manrope, authentic product imagery and generous whitespace. Natural factual copy; no invented metrics, client claims or decorative filler.
 
 ## Evidence on Hand
 
-The user's brief and portfolio-direction.md establish project facts. Local sibling repositories /home/adrian/Repos/random-frame and /home/adrian/Repos/kajtek contain working interfaces and READMEs. Public contact contact@amokrzycki.ovh and GitHub amokrzycki are documented in Random Frame's README. No supplied testimonials, benchmarks, work history details, or portrait.
+The direction notes and sibling project sources establish the facts. The repository contains reviewed image-free Random Frame captures and controlled Kajtek views. Public contact and GitHub identity are documented in Random Frame's README. Capture framing is documented in src/assets/README.md.
 
 ## Open Decisions
 
-Final screenshot choice and production hostname require confirmation. Project captures may use the actual empty interface rather than unverified third-party images. This first pass does not invent project outcomes or retrospective claims.
+The production origin and social artwork remain deployment decisions. A populated Random Frame screenshot would require deliberately selected safe content and a reproducible capture setup.
 
 ## Product Principles
 
-Evidence before self-description. Depth through progressive disclosure. Capabilities as ownership. Coherence before variety. The site itself is part of the work.
+Keep the person present. Let the work support claims. Reveal technical depth on demand. Edit screenshots as part of the narrative. Preserve the shared visual identity.
 
 ## Accessibility & Inclusion
 
-Visible focus, adequate contrast, touch targets, native semantics, image descriptions, reduced motion, and deliberate mobile composition.
+Native navigation, disclosures and radio controls; visible focus, clear image descriptions, reduced motion and deliberate mobile composition. The viewer supports Escape, focus return, actual-size scrolling and stable original links without JavaScript.

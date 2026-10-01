@@ -24,12 +24,6 @@ typography:
     fontWeight: 500
     lineHeight: 1.04
     letterSpacing: "-0.035em"
-  approach:
-    fontFamily: "Manrope, sans-serif"
-    fontSize: "clamp(32px, 4.65vw, 64px)"
-    fontWeight: 500
-    lineHeight: 1.2
-    letterSpacing: "-0.035em"
   headline:
     fontFamily: "Manrope, sans-serif"
     fontSize: "clamp(1.75rem, 3vw, 2.75rem)"
@@ -89,7 +83,7 @@ components:
   product-plate-frame:
     backgroundColor: "{colors.frame-ground}"
     rounded: "{rounded.plate}"
-    padding: "clamp(30px, 5.8vw, 84px) clamp(28px, 8vw, 115px)"
+    padding: "clamp(30px, 5.8vw, 84px) clamp(16px, 3vw, 44px)"
     width: "100%"
   product-plate-kajtek:
     backgroundColor: "{colors.kajtek-ground}"
@@ -98,149 +92,55 @@ components:
     width: "100%"
   viewer-close:
     backgroundColor: "transparent"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.plate}"
-    typography: "{typography.label}"
+    textColor: "{colors.accent}"
+    typography: "{typography.link}"
   image-viewer:
     backgroundColor: "{colors.canvas}"
     textColor: "{colors.ink}"
     rounded: "{rounded.viewer}"
-    padding: "{spacing.viewer-padding}"
-    width: "1150px"
+    width: "min(1400px, calc(100vw - 48px))"
 ---
 
-# Design System: Adrian Mokrzycki Portfolio
+# Design system
 
-## Overview
+## Authority and mode
 
-**Creative North Star: "A publication of software and its supporting systems"**
+[docs/portfolio-direction.md](docs/portfolio-direction.md) is the constitution. This Experience surface presents Adrian and two personal projects through a restrained editorial composition. [docs/homepage-direction.md](docs/homepage-direction.md) records homepage order. CSS in src/styles/global.css owns the implemented values.
 
-A calm, light-first editorial portfolio. Typography, proportion, negative space and complete authentic application captures carry the visual identity. Adrian's identity remains compact; the work receives generous space. The applications provide their own character inside one coherent portfolio system.
+## Color and type
 
-This is an Experience surface: visitors understand the products before opening technical detail. The durable visual authority is [portfolio-direction.md](portfolio-direction.md), with the approved first-surface contract in [docs/homepage-direction.md](docs/homepage-direction.md). This document records the implemented system rather than expanding it.
+Cool porcelain, charcoal, slate and restrained blue surround the products. Random Frame uses a blue-grey ground; Kajtek uses olive-grey. Preserve the products' own interface colors. The site declares a light color scheme.
 
-**Key Characteristics:**
+Self-hosted variable Manrope supplies every type role. Latin is preloaded; Latin Extended supports Polish. Display and section headings use medium weight and balanced wrapping. The name uses semibold in the header. Display type stops at 6rem; case titles stop at 5rem. Body is 16px, narrative is 15px and metadata is 12–13px. Captions use 13–14px. Reading copy stops at 70ch. No decorative monospace role is needed.
 
-- Cool porcelain, charcoal, slate and restrained blue.
-- Manrope typography, open compositions and fine structural rules.
-- Full application captures with understated tonal grounds.
-- Native interactions and brief, optional motion.
+## Composition
 
-The first-pass identity is preserved. The approved refinement adds composition, readable image inspection, topic-specific disclosures and native engineering walkthroughs. Desktop and mobile captures were inspected in a bounded pass. The production hostname remains unresolved.
+The content width is 1280px with fluid 22–64px gutters and 80–144px major gaps. Hero uses a 7:5 split. About, working method, project captions and case sections use 5:7. Random Frame's main image spans both columns. Kajtek's opening uses 4:8, with its text beside the cassette. Rules separate ideas without enclosing text in cards.
 
-## Colors
+The homepage order is header, name and introduction, concise About, selected work beginning with Random Frame, working-method interlude, Kajtek, email action and footer. The large ownership statement and capabilities list have no role in this composition.
 
-The frontmatter owns the palette values; the existing CSS custom properties in [global.css](src/styles/global.css) remain the implementation source.
+At 700px, navigation wraps into its own row and the compositions become single columns. Project introductions precede images and descriptions. Captions follow their media. Radio walkthroughs use vertical flows and two-column controls. The email action scales to fit narrow screens; the footer stacks. There is no hamburger menu.
 
-### Primary
+## Media
 
-- **Restrained blue** (`accent`): text actions and visible keyboard focus. It signals interaction without becoming a decorative wash.
+One complete interface establishes each project. Selected dialog and playlist crops appear inside the relevant narrative section. Details use a 5:7 image/caption composition; the playlist uses a wide strip. Long original pages are available in the viewer rather than repeated in the page. Responsive lossless PNGs preserve text. Asset notes in src/assets/README.md record framing and provenance.
 
-### Neutral
+Images with useful detail are stable public links enhanced by the shared native dialog. A visible Enlarge label and zoom cursor signal inspection. The fitted view offers actual-size scrolling; Close, Escape and backdrop dismissal restore focus. Native modality contains keyboard focus. Viewer controls stay outside the scroll area. Modified clicks and no-JavaScript navigation open the public original. Transformation URLs are never link destinations.
 
-- **Cool porcelain** (`canvas`): page and image-viewer background; the site declares a light color scheme.
-- **Charcoal** (`ink`): headings and primary text.
-- **Slate** (`muted`): supporting copy, captions and metadata.
-- **Fine grey** (`rule`): section dividers, disclosures and viewer controls.
-- **Pale blue-grey** (`frame-ground`): the Random Frame product plate.
-- **Muted olive-grey** (`kajtek-ground`): the Kajtek product plate.
-- **Selection blue** (`selection-background`, `selection-text`): a controlled text-selection pair.
+## Depth and shapes
 
-**The Palette Economy Rule.** Let the products retain their real interface colors; keep the surrounding portfolio inside this palette.
+Tonal image plates are flat with 2px corners. Captures use 8px corners, reduced to 4px on mobile, and the shared offset soft shadow `0 18px 40px -15px #20272b42`. The viewer uses 4px corners and a dark translucent backdrop. No decorative card system or pill family is present.
 
-## Typography
+## Reading and interactions
 
-**Display and Body Font:** self-hosted variable Manrope, with a sans-serif fallback. Latin and Latin Extended WOFF2 files support both languages; Latin is preloaded, with `font-display: swap` and font synthesis disabled. The font is distributed under the SIL Open Font License in [public/fonts/OFL.txt](public/fonts/OFL.txt).
+Native topic-specific disclosures reveal two short technical paragraphs: the mechanism and its limitation. The decision belongs in the visible narrative. A blue summary, fine rule, 44px minimum height and rotating plus establish a consistent affordance.
 
-The type is expressive through scale and spacing. Display and heading roles use medium weight in the finished CSS; navigation uses medium weight and the compact name uses semibold. Headings balance their wrapping. No distinct monospace role is currently implemented.
+Random Frame's radio walkthrough illustrates revisions r7–r9 across two devices and the server, including client-side merge and bounded retries. Kajtek illustrates ESKA's REST/HLS disagreement, title comparison, combination and expiry. Native radio controls precede the panels in DOM and visual order. CSS selects a panel without JavaScript and reserves enough space for every stage. Unsupported selector behavior leaves a readable static sequence.
 
-### Hierarchy
+Links use restrained SVG arrows, a one-pixel underline on hover/focus and a 44px minimum action height. The language link points to the equivalent static route. Focus outlines are blue with a six-pixel offset; text selection and scrollbars follow the palette. The skip link leads to main.
 
-- **Display:** the homepage statement; use the normative fluid display token, not an oversized greeting.
-- **Case display:** a smaller project-name scale that inherits display leading and tracking.
-- **Headline:** section titles. Case-body headings are more compact (`clamp(22px, 2.1vw, 29px)`); the ownership statement uses the full-width approach token with 1.2 leading and both sentences in ink. Mobile uses `clamp(30px, 8.2vw, 48px)` and a measure of 18ch.
-- **Project title:** the name beneath a desktop capture, or above a mobile capture.
-- **Body / reading body:** base interface text and quieter narrative text. Reading columns stop at 70ch; project supporting copy stops at 53ch and uses slightly looser leading (1.8).
-- **Label / link / metadata:** navigation and viewer controls, text actions, then quiet project descriptors. There is no decorative all-caps label system.
+## Motion and delivery
 
-At the mobile breakpoint the homepage display uses `clamp(3.25rem, 11.4vw, 4.75rem)` in English. Polish uses `clamp(1.875rem, 8.5vw, 3.7rem)` to preserve its full words. Mobile case titles use `clamp(2.8rem, 10vw, 4.5rem)`. Localization must preserve readability rather than force identical title sizes.
+Content is visible immediately. Link arrows shift three pixels over 220ms; supported cross-document transitions use 150ms. Reduced motion disables the transitions and smooth scrolling. There are no scroll reveals or animation dependencies.
 
-## Layout
-
-The content width is capped at 1280px; the outer shell includes the fluid gutters on both sides. Major spacing is fluid through the gutter and section-gap tokens. These are an open editorial layout, not a fixed twelve-column CSS grid: homepage positioning uses a 7:5 split, while Random Frame captions, ownership supporting content and case-study rows use 5:7. Random Frame media spans both columns. Kajtek uses a 4:8 composition with its introduction beside the image on the homepage and case-study opening. The ownership statement spans the page above its supporting content. Each case study has one full-width engineering explanation. Section rules establish rhythm without enclosing paragraphs in cards.
-
-Two viewport breakpoints are implemented:
-
-- **At 1000px and below:** capability definition-list rows stack their labels above descriptions.
-- **At 700px and below:** the header wraps into a full-width navigation row; primary compositions become one column. Project order is identity and premise, media, explanation and action. Plates use reduced padding. Engineering walkthroughs turn into vertical sequences, with a two-column set of controls below the visual. The ownership list resumes a compact label/description split, and footer content stacks. Product-image corners tighten, enlargement labels stay visible, and explicit mobile spacing replaces selected fluid values.
-
-There is no hidden hamburger navigation. Mobile navigation links receive at least 44px in each direction. Media remains uncropped, responsive and independently enlargeable.
-
-Verification covers six static routes: `/`, `/pl/`, and both project case studies under `/work/` and `/pl/work/`. All six routes had no horizontal overflow at 320, 768 and 1024px; English homepage and both case pages were also captured at 390 and 1440px, with Polish mobile captures at 390px. The four walkthrough stages, keyboard and pointer operation, structured disclosures, reduced motion, no-JavaScript walkthroughs, full-size mobile image scrolling, Escape, focus restoration and viewer reset were checked. Build and lint passed. Absolute canonical, hreflang and Open Graph URL metadata is conditional on configured `SITE_URL`; do not invent a production hostname.
-
-## Elevation & Depth
-
-The page is flat at rest. Tonal plates separate the application screenshots from the canvas; fine rules separate reading sections. Shadows belong to application captures and the modal viewer, not to every content block.
-
-### Shadow Vocabulary
-
-- **Capture depth** (`0 18px 40px -15px #20272b42`): the real application image above its pale plate.
-- **Modal depth** (`0 24px 80px #10191b4d`): the native image viewer, accompanied by a dark translucent backdrop (`#141d24bb`).
-
-**The Evidence Depth Rule.** Use depth to clarify the displayed product or modal state, not to add decorative containers around copy.
-
-## Shapes
-
-Corners are gently softened, with separate plate, viewer and capture radii in the frontmatter. Captures tighten to the viewer radius on mobile. There is no pill-shaped component family. Fine borders are one pixel; the global keyboard outline is two pixels with a six-pixel offset. Product plates clip their contents. The viewer offers a fitted image and full-size inspection inside a separately scrollable image area; controls remain outside the scroll area.
-
-## Components
-
-### Text actions and navigation
-
-Actions remain plain text links with inline SVG arrows. Text links have a minimum 44px height; underline thickness is one pixel with a six-pixel offset. Hover and focus reveal the underline, and arrows shift three pixels horizontally. The name links home, and the language link moves to the equivalent real EN/PL route. The compact header uses no decorative badge or active-navigation pill.
-
-### Product plates
-
-A native image link places the authentic application capture on its project ground and opens the full-resolution PNG in a separate tab. The link has a translated accessible name and zoom cursor; the image retains descriptive alt text. Random Frame and Kajtek preserve their existing plate padding. The first homepage capture and case-study primary images load eagerly; gallery images load lazily with responsive PNG sources.
-
-Sources are captured at device scale factor 2, without lossy conversion. Primary Kajtek imagery isolates the complete cassette with breathing room; its gallery shows the complete application and catalog dialog. Random Frame uses only empty local data, with external images blocked. Source details, controlled states and pixel dimensions are recorded in [the asset notes](src/assets/README.md).
-
-### Engineering disclosure
-
-Native `details`/`summary` reveals optional technical reading below the product explanation. A ruled boundary, blue summary text, minimum 44px target and inline plus icon establish the pattern. A specific topic follows the Engineering details label. Opening rotates the plus by 45 degrees and reveals a definition list for Decision, Mechanism and Constraint; the content remains selectable. Use browser semantics rather than a custom accordion runtime.
-
-### Ownership list and editorial rows
-
-Capabilities use a definition list, with fine top rules and compact labels beside descriptions. Case sections and About/Contact use open two-column rows. Contact is a larger text link, and the next-project link closes a case study with generous type. The approach statement is a separate typographic pause. About uses three concise paragraphs describing working habits, professional experience since 2021 and the tools Adrian uses when a problem crosses application boundaries. There are no chips or generic project cards.
-
-### Engineering explanations
-
-Random Frame compares Device A, the encrypted sync server and Device B across four selected stages: shared revision, independent changes, stale-write rejection, and client-side merge/retry. Example revisions r7–r9 are explicitly illustrative; encryption and the server's metadata visibility are stated.
-
-Kajtek explains ESKA metadata reconciliation: REST and HLS disagree, normalized titles are compared, matching names and timing enter a shared track model, and stale tags expire. The example states that title matching is a heuristic and timing remains optional. It illustrates provider behavior without playing audio.
-
-Both use native radio groups with visible selected and keyboard focus states. CSS selects the displayed panel and reserves its layout space. They need no JavaScript, dependency or automatic motion. Without selector support, the stages remain readable as a static sequence.
-
-### Motion and accessibility
-
-Already-visible content is the default. CSS uses the incumbent easing (`cubic-bezier(0.16, 1, 0.3, 1)`) and short state duration (220ms). Image lift uses 380ms; supported cross-document view transitions use 150ms. Smooth anchor scrolling is native. No scroll reveals or animation dependency is present.
-
-Reduced motion disables transitions, animations, hover translations and smooth scrolling, including view-transition animations. The finish verification passed reduced-motion behavior. A focus-revealed skip link leads to `main`; semantic headings, labelled navigation, alt text, native controls, visible outlines and deliberate mobile targets remain part of the visual system.
-
-## Do's and Don'ts
-
-### Do:
-
-- Do let typography, proportion and negative space establish hierarchy.
-- Do use authentic complete application captures and keep their provenance beside the source assets.
-- Do introduce products before disclosing their technical depth.
-- Do retain visible keyboard focus, native semantics, reduced motion and uncropped touch-accessible enlargement.
-- Do compose localized text for its real length and preserve real EN/PL paths.
-
-### Don't:
-
-- Don't turn selected work into a generic grid of cards or technologies.
-- Don't add decorative glass, neon, gradients, fake terminals, stock imagery or generated visual filler.
-- Don't animate content into visibility or require motion to understand a page.
-- Don't expand the visual language merely because another variation is possible.
-- Don't present the first-pass review as a production launch or invent the hostname, metrics or outcomes.
+Astro generates six static routes. The small image-viewer script is shared; walkthroughs and disclosures use native HTML/CSS. Absolute canonical, alternate-language and Open Graph URLs depend on the confirmed SITE_URL. No production origin, availability, benchmark or outcome is invented.

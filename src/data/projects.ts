@@ -7,19 +7,17 @@ export const projects = {
       kind: "Desktop application",
       tagline: "Public images, one frame at a time.",
       summary:
-        "A desktop gallery for exploring public images from Prnt.sc, with local history and favorites. Optional encrypted sync keeps them together across devices without giving the server access to their contents.",
+        "A desktop viewer for public images from Prnt.sc. History and favorites stay on the device, with optional encrypted sync across devices.",
       alt: "Random Frame before the first draw, with its image stage and Draw control.",
       intro: "Browsing without losing your place.",
       overview:
-        "Random Frame draws a public image from Prnt.sc and lets you keep exploring, revisit earlier frames, or save a favorite. The browsing loop is short. The harder part was keeping a reliable history on the desktop and merging changes between devices without exposing their contents to the sync server.",
+        "Random Frame draws an image from Prnt.sc, lets you revisit earlier frames and save favorites. I kept that browsing loop small. The deeper work is in local persistence and merging changes across devices while the sync server stores only encrypted data.",
       sections: [
         {
           title: "Keep the image at the centre.",
-          text: "I kept the image visible and put history, statistics, and sync behind separate controls. You can draw another frame or return to an earlier one from the keyboard, without opening a menu.",
+          text: "The image has the main window to itself. History and other tools open when needed; drawing and moving through earlier frames work from the keyboard. A TypeScript interface calls into Rust through Tauri for image fetching and local storage.",
           detail: {
             topic: "Desktop interaction",
-            decision:
-              "Give history and sync their own views so the browsing screen stays focused on the image.",
             mechanism:
               "N, Space or Enter draws; arrows move through history; F toggles a favorite. Tauri connects TypeScript controls to the Rust image-fetching backend.",
             constraint:
@@ -28,13 +26,11 @@ export const projects = {
         },
         {
           title: "Keep history on the device.",
-          text: "History and favorites work without a sync account. I made synchronization optional and encrypt each snapshot on the device before sending it. Settings and statistics stay local.",
+          text: "History and favorites work locally from the first launch. Sync is optional. Each snapshot is encrypted on the device before it leaves; settings and statistics stay local.",
           detail: {
             topic: "Encryption boundary",
-            decision:
-              "History and favorites stay on the device. Sync is optional.",
             mechanism:
-              "The client encrypts snapshots before transfer. The recovery key controls access; the server stores ciphertext.",
+              "A recovery key lets another device derive the keys needed to join. Seen IDs, history and favorites are encrypted before transfer. Losing the key means losing the ability to join that sync again.",
             constraint:
               "Settings and statistics stay local. Connection metadata, transfer size and timing are still visible to the server.",
           },
@@ -44,23 +40,21 @@ export const projects = {
           text: "If two devices save at once, the later write must preserve the earlier changes. I used revision checks to reject stale writes, then merge and retry on the device.",
           detail: {
             topic: "Conflict resolution",
-            decision: "Check each write against the revision the client read.",
             mechanism:
-              "Revision ETags and compare-and-swap updates reject stale writes. The client fetches the current snapshot, merges locally and retries against the new revision.",
+              "The independent Rust/Axum service uses an atomic SQLite update to compare the revision and save the snapshot together. ETags carry that revision. On a conflict, the client fetches, decrypts, merges and retries.",
             constraint:
-              "Another concurrent write can conflict again. Merging belongs to the client; the server cannot inspect the plaintext.",
+              "Retries are bounded to three attempts. Continued contention returns a conflict; local data is retained. The service can check revisions without reading the contents.",
           },
         },
         {
-          title: "Releasing the desktop app.",
-          text: "I package the app for Linux and Windows, publish automatic updates, and maintain the sync service separately from the desktop releases.",
+          title: "A deletion is a change too.",
+          text: "Merging lists is easy until someone deletes an entry. I store additions with unique operation IDs and keep records of removals, so fetching an older snapshot does not simply restore a deleted favorite. Undo creates a fresh operation.",
           detail: {
-            topic: "Distribution and operations",
-            decision: "Release the app and sync service independently.",
+            topic: "Merging additions and removals",
             mechanism:
-              "Rust/Axum and SQLite run behind authentication, nginx and systemd, supported by backups and operational tooling.",
+              "The client combines operations and removal records, removes the matching operations, then rebuilds the visible history and favorites. Repeated merges deduplicate operations by ID.",
             constraint:
-              "Linux uses AppImage and .deb; Windows uses NSIS/MSI. Automatic updates are published through GitHub Releases.",
+              "Removal records are capped at 100,000. A device offline for longer than that removal history can reintroduce an old entry; indefinite retention would need a way to track which devices have received each removal.",
           },
         },
       ],
@@ -69,7 +63,7 @@ export const projects = {
       kind: "Aplikacja desktopowa",
       tagline: "Publiczne obrazy, po jednym.",
       summary:
-        "Galeria desktopowa do odkrywania publicznych obrazów z Prnt.sc, z lokalną historią i ulubionymi. Opcjonalna szyfrowana synchronizacja łączy je między urządzeniami bez ujawniania ich zawartości serwerowi.",
+        "Aplikacja desktopowa do przeglądania publicznych obrazów z Prnt.sc. Historia i ulubione zostają na urządzeniu, z opcjonalną szyfrowaną synchronizacją.",
       alt: "Random Frame przed pierwszym losowaniem, z głównym obszarem obrazu i przyciskiem Draw.",
       intro: "Przeglądanie z pamięcią.",
       overview:
@@ -80,8 +74,6 @@ export const projects = {
           text: "Obraz zajmuje główny obszar, a historia, statystyki i synchronizacja mają osobne kontrolki. Kolejny obraz i powrót do poprzedniego są dostępne z klawiatury, bez otwierania menu.",
           detail: {
             topic: "Obsługa desktopu",
-            decision:
-              "Główny obszar pozostaje dla obrazu. Dodatkowe narzędzia pojawiają się na żądanie.",
             mechanism:
               "N, Spacja lub Enter losuje obraz; strzałki poruszają się po historii; F przełącza ulubione. Tauri łączy TypeScript z backendem Rust.",
             constraint:
@@ -90,13 +82,11 @@ export const projects = {
         },
         {
           title: "Historia zostaje na urządzeniu.",
-          text: "Historia i ulubione działają bez konta synchronizacji. Synchronizacja jest opcjonalna, a każda migawka zostaje zaszyfrowana na urządzeniu przed wysłaniem. Ustawienia i statystyki zostają lokalnie.",
+          text: "Historia i ulubione działają lokalnie od pierwszego uruchomienia. Synchronizacja jest opcjonalna, a każda migawka zostaje zaszyfrowana na urządzeniu przed wysłaniem. Ustawienia i statystyki zostają lokalnie.",
           detail: {
             topic: "Granica szyfrowania",
-            decision:
-              "Historia i ulubione pozostają na urządzeniu. Synchronizacja jest opcjonalna.",
             mechanism:
-              "Klient szyfruje migawki przed wysłaniem. Klucz odzyskiwania kontroluje dostęp, a serwer przechowuje szyfrogram.",
+              "Klucz odzyskiwania pozwala kolejnemu urządzeniu wyprowadzić klucze potrzebne do dołączenia. Identyfikatory obejrzanych obrazów, historia i ulubione są szyfrowane przed wysłaniem. Utrata klucza uniemożliwia ponowne dołączenie do tej synchronizacji.",
             constraint:
               "Ustawienia i statystyki zostają lokalnie. Serwer nadal widzi metadane połączeń, rozmiar i czas transferów.",
           },
@@ -106,25 +96,21 @@ export const projects = {
           text: "Gdy dwa urządzenia zapisują jednocześnie, późniejszy zapis musi zachować wcześniejsze zmiany. Sprawdzam rewizję, odrzucam nieaktualny zapis i scalam dane na urządzeniu przed ponowną próbą.",
           detail: {
             topic: "Rozwiązywanie konfliktów",
-            decision:
-              "Każdy zapis jest sprawdzany względem odczytanej rewizji.",
             mechanism:
-              "ETagi rewizji i compare-and-swap odrzucają nieaktualny zapis. Klient pobiera bieżącą migawkę, scala lokalnie i ponawia zapis.",
+              "Osobna usługa Rust/Axum atomowo porównuje rewizję i zapisuje migawkę w SQLite. Rewizję przekazuje ETag. Przy konflikcie klient pobiera dane, odszyfrowuje je, scala i ponawia zapis.",
             constraint:
-              "Kolejny równoczesny zapis może znów spowodować konflikt. Scalenie należy do klienta; serwer nie odczytuje danych jawnych.",
+              "Po trzech nieudanych próbach klient zgłasza konflikt i zachowuje dane lokalne. Usługa sprawdza rewizje bez odczytywania zawartości.",
           },
         },
         {
-          title: "Wydania aplikacji desktopowej.",
-          text: "Przygotowuję pakiety dla Linuksa i Windowsa, publikuję automatyczne aktualizacje i utrzymuję usługę synchronizacji niezależnie od wydań desktopowych.",
+          title: "Usunięcie też jest zmianą.",
+          text: "Scalanie list komplikuje się, gdy ktoś usuwa wpis. Zapisuję dodania z unikalnymi identyfikatorami operacji i przechowuję informacje o usunięciach, aby starsza migawka nie przywracała po prostu usuniętego ulubionego. Cofnięcie usunięcia tworzy nową operację.",
           detail: {
-            topic: "Dystrybucja i utrzymanie",
-            decision:
-              "Aplikacja desktopowa i usługa synchronizacji mają niezależne wydania.",
+            topic: "Scalanie dodań i usunięć",
             mechanism:
-              "Rust/Axum i SQLite działają z uwierzytelnianiem, nginx i systemd, wspierane przez kopie zapasowe i narzędzia operacyjne.",
+              "Klient łączy operacje i zapisy usunięć, usuwa odpowiadające im operacje, a potem odtwarza widoczną historię i ulubione. Kolejne scalenia eliminują duplikaty według identyfikatora operacji.",
             constraint:
-              "Linux korzysta z AppImage i .deb, Windows z NSIS/MSI. Automatyczne aktualizacje trafiają przez GitHub Releases.",
+              "Zapisy usunięć mają limit 100 000. Urządzenie pozostające offline dłużej, niż obejmuje ta historia, może przywrócić stary wpis. Dłuższe przechowywanie wymagałoby śledzenia, które urządzenia otrzymały dane usunięcie.",
           },
         },
       ],
@@ -137,19 +123,17 @@ export const projects = {
       kind: "Web application",
       tagline: "Internet radio in a cassette player.",
       summary:
-        "A browser radio inspired by the Unitra PS-101. Behind the cassette controls, separate provider integrations turn different station catalogs and track data into one listening interface.",
+        "A browser radio inspired by the Unitra PS-101. The cassette controls bring together live audio, station catalogs and track information from several providers.",
       alt: "Kajtek’s complete red cassette player, ready to select a station, with reels, audio meter and playback controls.",
       intro: "What’s playing, and how do you know?",
       overview:
-        "Kajtek started with a cassette player: the Polish Unitra PS-101. Bringing internet radio into that interface meant working out what the player could reliably show. RMF publishes timed playlists, ESKA splits track information between a REST API and the audio stream, and Trójka has separate schedules and song lists. I built provider integrations that translate those sources into a shared model of the current track and playlist.",
+        "Kajtek brings internet radio into a cassette-inspired interface. The controls are familiar; the information behind them is less consistent. I built integrations for RMF, ESKA and Trójka so their different catalogs, playlists and audio metadata could work in one player.",
       sections: [
         {
           title: "The cassette follows the audio.",
           text: "The reels indicate playback, while Web Audio analysis drives the meter. Both belong to the player’s state: a station change has to update the stream, the track display and the physical controls together.",
           detail: {
             topic: "Playback and visualization",
-            decision:
-              "Drive the cassette’s moving parts from playback state and audio analysis.",
             mechanism:
               "Playback events update shared state; the UI renders the controls and reels. A separate visualizer reads the Web Audio spectrum.",
             constraint:
@@ -158,10 +142,9 @@ export const projects = {
         },
         {
           title: "Keep provider rules out of the controls.",
-          text: "The cassette should not need to know which provider calls a song title a name, or whether a playlist comes from one request or two. Each integration returns the same current-track and playlist structure. Playback, state and rendering use that structure in separate vanilla TypeScript modules.",
+          text: "RMF publishes timed playlists. ESKA splits track information between an API and its audio stream. Trójka has separate schedules and song lists. I normalize these sources into a shared track model, keeping provider rules separate from playback and rendering in vanilla TypeScript.",
           detail: {
             topic: "A shared track model",
-            decision: "Normalize data at the provider boundary.",
             mechanism:
               "Provider integrations return PlaylistResult: a current TrackInfo and a list of tracks. Optional fields carry timing, artwork and break information without requiring every source to supply them.",
             constraint:
@@ -170,11 +153,9 @@ export const projects = {
         },
         {
           title: "Two sources can name different songs.",
-          text: "ESKA’s REST API supplies readable track names, but timing lives in a private HLS tag. They can change songs a few seconds apart. Combining them blindly would put the previous song’s clock on the new title. The integration compares normalized titles before attaching timing and drops stream metadata when it becomes stale.",
+          text: "ESKA’s API supplies track names; timing lives in a private HLS stream tag. The sources can change songs a few seconds apart. I compare their titles before combining them, so the new song does not inherit the previous one’s clock.",
           detail: {
             topic: "Reconciling REST and HLS",
-            decision:
-              "Attach stream timing only when the titles describe the same song.",
             mechanism:
               "The HLS fragment-change event reads EXT-X-ZPR as playback enters a segment. The integration decodes its title, derives the block start from the segment timestamp, and compares normalized titles with REST. During a mismatch, the REST title remains without HLS timing.",
             constraint:
@@ -183,11 +164,9 @@ export const projects = {
         },
         {
           title: "A gap in the playlist needs context.",
-          text: "Missing song data can mean speech, news or a break. RMF’s integration examines timestamps and gaps between songs; Trójka’s combines the programme schedule with its song list. When a Trójka song is no longer current, the programme title gives the listener more useful context than leaving the old song on screen.",
+          text: "Missing song data can mean speech, news or a break. I use RMF’s timing gaps and Trójka’s programme schedule to give that absence context. When a song ends, the display can move to the programme instead of leaving an old title on screen.",
           detail: {
             topic: "Schedules and incomplete metadata",
-            decision:
-              "Use the provider’s schedule and timing to explain gaps in song data.",
             mechanism:
               "RMF maps timed playlist entries and inserts break rows for qualifying gaps. Trójka discovers the website’s Next.js build ID, fetches schedule and playlist data, and matches the active programme to its songs using Warsaw time.",
             constraint:
@@ -200,19 +179,17 @@ export const projects = {
       kind: "Aplikacja webowa",
       tagline: "Radio internetowe w magnetofonie.",
       summary:
-        "Radio w przeglądarce inspirowane Unitrą PS-101. Za kontrolkami magnetofonu osobne integracje łączą różne katalogi stacji i dane o utworach we wspólny interfejs.",
+        "Radio w przeglądarce inspirowane Unitrą PS-101. Kontrolki magnetofonu łączą dźwięk na żywo, katalogi stacji i informacje o utworach od różnych dostawców.",
       alt: "Cały czerwony odtwarzacz Kajtek, gotowy do wyboru stacji, ze szpulami, wskaźnikiem audio i kontrolkami odtwarzania.",
       intro: "Co teraz gra i skąd to wiadomo?",
       overview:
-        "Kajtek zaczął się od magnetofonu: polskiej Unitry PS-101. Przeniesienie radia internetowego do tego interfejsu wymagało ustalenia, jakie informacje odtwarzacz może wiarygodnie pokazać. RMF publikuje playlisty z czasem emisji, ESKA rozdziela dane o utworze między API REST a strumień audio, a Trójka ma osobną ramówkę i listy utworów. Przygotowałem integracje, które przekładają te źródła na wspólny model bieżącego utworu i playlisty.",
+        "Kajtek przenosi radio internetowe do interfejsu inspirowanego magnetofonem. Kontrolki są znajome; dane, które za nimi stoją, bywają niespójne. Przygotowałem integracje RMF, ESKI i Trójki, aby różne katalogi, playlisty i metadane audio działały w jednym odtwarzaczu.",
       sections: [
         {
           title: "Magnetofon podąża za dźwiękiem.",
           text: "Szpule sygnalizują odtwarzanie, a analiza Web Audio steruje wskaźnikiem. Oba elementy są powiązane ze stanem odtwarzacza: zmiana stacji musi jednocześnie zaktualizować strumień, informacje o utworze i fizyczne kontrolki.",
           detail: {
             topic: "Odtwarzanie i wizualizacja",
-            decision:
-              "Powiązać ruchome elementy magnetofonu ze stanem odtwarzania i analizą audio.",
             mechanism:
               "Zdarzenia odtwarzania aktualizują wspólny stan; interfejs renderuje kontrolki i szpule. Osobny moduł wizualizacji odczytuje widmo Web Audio.",
             constraint:
@@ -221,10 +198,9 @@ export const projects = {
         },
         {
           title: "Kontrolki nie muszą znać reguł dostawcy.",
-          text: "Magnetofon nie musi wiedzieć, jak dostawca nazywa pole z tytułem ani czy playlista wymaga jednego czy dwóch zapytań. Każda integracja zwraca tę samą strukturę bieżącego utworu i playlisty. Odtwarzanie, stan i renderowanie korzystają z niej w osobnych modułach czystego TypeScriptu.",
+          text: "RMF publikuje playlisty z czasem emisji. ESKA rozdziela informacje między API i strumień audio, a Trójka ma osobną ramówkę i listy utworów. Normalizuję te źródła do wspólnego modelu utworu. Reguły dostawców, odtwarzanie i renderowanie pozostają w osobnych modułach TypeScriptu.",
           detail: {
             topic: "Wspólny model utworu",
-            decision: "Normalizować dane na granicy integracji z dostawcą.",
             mechanism:
               "Integracje zwracają PlaylistResult: bieżący TrackInfo i listę utworów. Opcjonalne pola przechowują czas, okładki i informacje o przerwach, bez wymagania ich od każdego źródła.",
             constraint:
@@ -233,11 +209,9 @@ export const projects = {
         },
         {
           title: "Dwa źródła mogą wskazywać różne utwory.",
-          text: "API REST ESKI dostarcza czytelne nazwy utworów, ale dane o czasie znajdują się w prywatnym tagu HLS. Źródła mogą zmienić utwór w odstępie kilku sekund. Połączenie ich bez sprawdzenia przypisałoby zegar poprzedniego utworu do nowego tytułu. Integracja porównuje znormalizowane tytuły przed dołączeniem czasu i odrzuca nieaktualne metadane strumienia.",
+          text: "API ESKI dostarcza nazwy utworów; czas znajduje się w prywatnym tagu strumienia HLS. Źródła mogą zmienić piosenkę w odstępie kilku sekund. Porównuję ich tytuły przed połączeniem danych, aby nowy utwór nie dostał zegara poprzedniego.",
           detail: {
             topic: "Uzgadnianie REST i HLS",
-            decision:
-              "Dołączać czas ze strumienia tylko wtedy, gdy tytuły opisują ten sam utwór.",
             mechanism:
               "Zdarzenie zmiany fragmentu HLS odczytuje EXT-X-ZPR przy wejściu odtwarzania w segment. Integracja dekoduje tytuł, wyznacza początek bloku z czasu segmentu i porównuje znormalizowane tytuły z REST. Przy rozbieżności zostaje tytuł REST bez czasu HLS.",
             constraint:
@@ -246,11 +220,9 @@ export const projects = {
         },
         {
           title: "Przerwa w playliście potrzebuje kontekstu.",
-          text: "Brak danych o utworze może oznaczać audycję, wiadomości lub przerwę. Integracja RMF analizuje czas emisji i odstępy między utworami; integracja Trójki łączy ramówkę z listą piosenek. Gdy utwór w Trójce już się skończył, tytuł audycji daje słuchaczowi więcej informacji niż pozostawiony na ekranie stary utwór.",
+          text: "Brak danych o utworze może oznaczać audycję, wiadomości lub przerwę. Wykorzystuję odstępy między utworami RMF i ramówkę Trójki, aby nadać temu kontekst. Po zakończeniu piosenki ekran może pokazać audycję zamiast starego tytułu.",
           detail: {
             topic: "Ramówka i niepełne metadane",
-            decision:
-              "Wykorzystać ramówkę i czas emisji do wyjaśnienia przerw w danych o utworach.",
             mechanism:
               "RMF mapuje wpisy playlisty i dodaje wiersze przerw dla odpowiednich odstępów. Trójka odczytuje identyfikator buildu Next.js ze strony, pobiera ramówkę i playlistę, a następnie łączy bieżącą audycję z utworami według czasu warszawskiego.",
             constraint:

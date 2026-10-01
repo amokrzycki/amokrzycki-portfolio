@@ -245,6 +245,7 @@ a:focus-visible .arrow {
   display: block;
   width: 100%;
   max-width: 1000px;
+  position: relative;
   cursor: zoom-in;
 }
 .product-plate.kajtek .capture-link {
@@ -298,8 +299,8 @@ a:focus-visible .arrow {
 .project-caption > p {
   color: var(--muted);
   max-width: 53ch;
-  font-size: 14px;
-  line-height: 1.8;
+  font-size: 15px;
+  line-height: 1.75;
 }
 .project-caption .text-link {
   margin-top: 14px;
@@ -325,46 +326,6 @@ a:focus-visible .arrow {
   grid-row: 1 / 3;
   padding: clamp(36px, 5vw, 72px) clamp(24px, 3.3vw, 48px);
 }
-.approach {
-  display: grid;
-  grid-template-columns: 5fr 7fr;
-  column-gap: 40px;
-  row-gap: 56px;
-  margin-block: var(--section-gap);
-}
-.approach h2 {
-  grid-column: 1 / -1;
-  max-width: 1180px;
-  font-size: clamp(32px, 4.65vw, 64px);
-  line-height: 1.2;
-  letter-spacing: -0.035em;
-}
-.approach h2 span {
-  display: block;
-}
-.approach h2 span + span {
-  margin-top: 12px;
-}
-.approach-note {
-  max-width: 40ch;
-  color: var(--muted);
-  font-size: 15px;
-}
-.capabilities > div {
-  border-top: 1px solid var(--rule);
-  padding-block: 17px;
-  display: grid;
-  grid-template-columns: 110px 1fr;
-  gap: 22px;
-}
-.capabilities dt {
-  font-size: 13px;
-  font-weight: 600;
-}
-.capabilities dd {
-  font-size: 13px;
-  color: var(--muted);
-}
 .editorial-row {
   display: grid;
   grid-template-columns: 5fr 7fr;
@@ -387,13 +348,13 @@ a:focus-visible .arrow {
   font-size: 15px;
 }
 .about {
-  padding-block: 48px 72px;
-  margin-bottom: 48px;
+  padding-block: 36px 0;
+  margin-bottom: var(--section-gap);
   border-top: 1px solid var(--rule);
 }
 .reading-copy .education {
-  font-size: 12px;
-  margin-top: 30px;
+  font-size: 13px;
+  margin-top: 24px;
 }
 .contact {
   padding-block: 60px 80px;
@@ -409,7 +370,7 @@ a:focus-visible .arrow {
   align-items: center;
   gap: 24px;
   width: fit-content;
-  font-size: clamp(26px, 3.6vw, 44px);
+  font-size: clamp(20px, 3.2vw, 40px);
   line-height: 1.4;
   letter-spacing: -0.025em;
   text-decoration: none;
@@ -423,17 +384,13 @@ a:focus-visible .arrow {
   width: 28px;
   height: 28px;
 }
-.contact .email-address {
-  font-size: 12px;
-  margin-top: 9px;
-}
 .site-footer {
   border-top: 1px solid var(--rule);
   padding-block: 25px;
   display: flex;
   justify-content: space-between;
   gap: 20px;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--muted);
 }
 .site-footer > div {
@@ -472,13 +429,6 @@ a:focus-visible .arrow {
   line-height: 1.35;
   letter-spacing: -0.02em;
 }
-.project-gallery figcaption {
-  font-size: 11px;
-  line-height: 1.7;
-  color: var(--muted);
-  margin-top: 18px;
-  max-width: 78ch;
-}
 .case-intro {
   margin-block: var(--section-gap);
 }
@@ -514,34 +464,15 @@ a:focus-visible .arrow {
 .engineering-details {
   grid-column: 2;
 }
-.detail-category {
-  display: block;
-  font-size: 12px;
-  color: var(--muted);
-}
 .detail-topic {
   display: block;
   font-size: 14px;
-  margin-top: 2px;
 }
 .engineering-details[open] summary {
   border-bottom: 1px solid var(--rule);
 }
 .detail-content {
   padding-block: 24px 12px;
-}
-.detail-content > div + div {
-  margin-top: 22px;
-}
-.detail-content dt {
-  font-size: 12px;
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-.detail-content dd {
-  font-size: 15px;
-  color: var(--muted);
-  max-width: 65ch;
 }
 .engineering-explanation {
   grid-column: 1 / -1;
@@ -555,7 +486,6 @@ a:focus-visible .arrow {
   background: var(--kajtek-ground);
 }
 .explanation-panels {
-  order: 0;
 }
 .explanation-panel h3 {
   font-size: clamp(21px, 2.3vw, 30px);
@@ -613,12 +543,11 @@ a:focus-visible .arrow {
   font-size: 15px;
 }
 .explanation-controls {
-  order: 1;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
   border: 0;
-  margin: 32px 0 0;
+  margin: 0 0 32px;
   padding: 0;
   min-width: 0;
 }
@@ -665,7 +594,6 @@ a:focus-visible .arrow {
   font-variant-numeric: tabular-nums;
 }
 .engineering-explanation figcaption {
-  order: 2;
   margin-top: 24px;
   max-width: 80ch;
   font-size: 12px;
@@ -751,16 +679,214 @@ details > p {
 ::view-transition-new(root) {
   animation-duration: 150ms;
 }
-@media (max-width: 1000px) {
-  .approach {
-    row-gap: 40px;
-  }
-  .capabilities > div {
-    grid-template-columns: 1fr;
-    gap: 5px;
-  }
+
+.approach {
+  margin-block: var(--section-gap);
+  padding-top: 36px;
+  border-top: 1px solid var(--rule);
+}
+.approach h2 {
+  max-width: 20ch;
+}
+.download-link {
+  margin-left: 24px;
+}
+.case-intro .text-link {
+  margin-top: 20px;
+}
+.case-figure .product-plate.random-frame {
+  padding: clamp(12px, 2vw, 28px);
+}
+.case-figure .random-frame .capture-link,
+.case-figure .random-frame img {
+  max-width: none;
+}
+.detail-content p {
+  font-size: 15px;
+  color: var(--muted);
+}
+.detail-content p + p {
+  margin-top: 18px;
+}
+.section-media {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  gap: 28px 40px;
+  align-items: end;
+  margin-top: 32px;
+}
+.section-media .product-plate {
+  grid-column: 2;
+  grid-row: 1;
+  padding: clamp(12px, 2vw, 24px);
+}
+.section-media .capture-link,
+.section-media img {
+  max-width: none;
+}
+.section-media figcaption {
+  grid-column: 1;
+  grid-row: 1;
+  font-size: 14px;
+  color: var(--muted);
+  max-width: 38ch;
+}
+.media-wide .product-plate {
+  grid-column: 1 / -1;
+}
+.media-wide figcaption {
+  grid-column: 2;
+  grid-row: 2;
+  max-width: 65ch;
+}
+.capture-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-end;
+  min-height: 44px;
+  padding-top: 8px;
+  color: var(--accent);
+  font-size: 12px;
+}
+.capture-link:hover .capture-hint,
+.capture-link:focus-visible .capture-hint {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.viewer-open {
+  overflow: hidden;
+}
+.image-viewer {
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: var(--canvas);
+  color: var(--ink);
+  width: min(1400px, calc(100vw - 48px));
+  max-width: none;
+  height: 90dvh;
+  max-height: none;
+  overflow: hidden;
+}
+.image-viewer[open] {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+.image-viewer::backdrop {
+  background: #20272bd9;
+}
+.viewer-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--rule);
+}
+.viewer-toolbar > p {
+  margin-right: auto;
+  font-size: 14px;
+}
+.viewer-toolbar button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 8px;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+  font-size: 14px;
+}
+.viewer-toolbar button:hover {
+  text-decoration: underline;
+}
+.viewer-toolbar button:disabled {
+  color: var(--muted);
+  cursor: default;
+  text-decoration: none;
+}
+.viewer-stage {
+  overflow: auto;
+  overscroll-behavior: contain;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 20px;
+}
+.viewer-stage img {
+  object-fit: contain;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+}
+.is-zoomed .viewer-stage {
+  display: block;
+}
+.is-zoomed .viewer-stage img {
+  max-width: none;
+  max-height: none;
+}
+.viewer-caption {
+  padding: 12px 20px;
+  font-size: 13px;
+  border-top: 1px solid var(--rule);
 }
 @media (max-width: 700px) {
+  .approach {
+    padding-top: 28px;
+  }
+  .section-media {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    margin-top: 8px;
+  }
+  .section-media .product-plate {
+    grid-column: 1;
+    grid-row: 1;
+    padding: 10px;
+  }
+  .section-media figcaption {
+    grid-column: 1;
+    grid-row: 2;
+    max-width: none;
+    font-size: 13px;
+  }
+  .contact-link {
+    font-size: clamp(16px, 4.5vw, 24px);
+    gap: 12px;
+    min-height: 44px;
+  }
+  .contact-link .arrow {
+    width: 20px;
+    height: 20px;
+  }
+  .image-viewer {
+    width: calc(100vw - 16px);
+    height: calc(100dvh - 16px);
+  }
+  .viewer-toolbar {
+    gap: 8px;
+    padding: 8px;
+  }
+  .viewer-toolbar > p {
+    font-size: 12px;
+  }
+  .viewer-toolbar button {
+    font-size: 13px;
+  }
+  .viewer-stage {
+    padding: 8px;
+  }
+  .viewer-caption {
+    padding: 12px;
+  }
+
   .site-header {
     align-items: flex-start;
     flex-wrap: wrap;
@@ -771,7 +897,7 @@ details > p {
     font-size: 14px;
   }
   .name-note {
-    font-size: 11px;
+    font-size: 12px;
   }
   nav {
     gap: 17px;
@@ -788,10 +914,7 @@ details > p {
     padding-block: 64px 72px;
   }
   .hero h1 {
-    font-size: clamp(3.25rem, 11.4vw, 4.75rem);
-  }
-  html[lang="pl"] .hero h1 {
-    font-size: clamp(1.875rem, 8.5vw, 3.7rem);
+    font-size: clamp(2.75rem, 11.4vw, 4.75rem);
   }
   nav {
     width: 100%;
@@ -819,7 +942,7 @@ details > p {
     font-size: 14px;
   }
   .section-heading p {
-    font-size: 10px;
+    font-size: 12px;
   }
   .project-spread {
     grid-template-columns: 1fr;
@@ -867,28 +990,15 @@ details > p {
     margin-bottom: 0;
   }
   .project-caption > p {
-    font-size: 14px;
-  }
-  .approach {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-  .approach h2 {
-    font-size: clamp(30px, 8.2vw, 48px);
-    max-width: 18ch;
-    text-wrap: pretty;
-  }
-  .capabilities > div {
-    grid-template-columns: 100px 1fr;
-    gap: 20px;
+    font-size: 15px;
   }
   .editorial-row {
     grid-template-columns: 1fr;
     gap: 28px;
   }
   .about {
-    padding-block: 32px 48px;
-    margin-bottom: 24px;
+    padding-block: 28px 0;
+    margin-bottom: 64px;
   }
   .contact {
     padding-block: 50px 60px;
@@ -975,7 +1085,7 @@ details > p {
   .explanation-controls {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px 20px;
-    margin-top: 28px;
+    margin: 0 0 28px;
   }
   .case-tagline {
     font-size: 24px;
@@ -1001,39 +1111,5 @@ details > p {
   ::view-transition-old(root),
   ::view-transition-new(root) {
     animation: none;
-  }
-}
-
-.case-figure .product-plate {
-  padding: clamp(12px, 2vw, 28px);
-}
-.case-figure .product-plate .capture-link,
-.project-gallery .product-plate .capture-link {
-  max-width: none;
-}
-.case-figure .product-plate img {
-  max-width: none;
-}
-.case-intro .text-link {
-  margin-top: 20px;
-}
-.project-gallery {
-  display: grid;
-  gap: 40px;
-  margin-block: var(--section-gap);
-}
-.project-gallery h2 {
-  font-size: 16px;
-  letter-spacing: 0;
-}
-.project-gallery .product-plate {
-  padding: clamp(10px, 1.5vw, 22px);
-}
-.project-gallery .product-plate img {
-  max-width: min(100%, var(--capture-width));
-}
-@media (max-width: 700px) {
-  .project-gallery {
-    gap: 32px;
   }
 }
