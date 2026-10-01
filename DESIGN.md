@@ -109,7 +109,7 @@ components:
 
 ## Color and type
 
-Cool porcelain, charcoal, slate and restrained blue surround the products. Random Frame uses a blue-grey ground; Kajtek uses olive-grey. Preserve the products' own interface colors. The site declares a light color scheme.
+Cool porcelain, charcoal, slate and restrained blue surround the products. Random Frame uses a blue-grey ground; Kajtek uses olive-grey. Preserve the products' own interface colors. The default follows the OS/browser color scheme. A warm charcoal dark canvas (#1c1c1a), soft off-white ink (#e5e4df), stone secondary copy (#b4b3ab), and subdued slate (#292d2d) and olive (#2c2e27) plates preserve the same hierarchy. Shared semantic CSS tokens use light-dark() with explicit color-scheme overrides; imagery retains its original colors.
 
 Self-hosted variable Manrope supplies every type role. Latin is preloaded; Latin Extended supports Polish. Display and section headings use medium weight and balanced wrapping. The name uses semibold in the header. Display type stops at 6rem; case titles stop at 5rem. Body is 16px, narrative is 15px and metadata is 12–13px. Captions use 13–14px. Reading copy stops at 70ch. No decorative monospace role is needed.
 
@@ -136,6 +136,8 @@ Tonal image plates are flat with 2px corners. Captures use 8px corners, reduced 
 Native topic-specific disclosures reveal two short technical paragraphs: the mechanism and its limitation. The decision belongs in the visible narrative. A blue summary, fine rule, 44px minimum height and rotating plus establish a consistent affordance.
 
 Random Frame's radio walkthrough illustrates revisions r7–r9 across two devices and the server, including client-side merge and bounded retries. Kajtek illustrates ESKA's REST/HLS disagreement, title comparison, combination and expiry. Native radio controls precede the panels in DOM and visual order. CSS selects a panel without JavaScript and reserves enough space for every stage. Unsupported selector behavior leaves a readable static sequence.
+
+The header has a quiet 44px theme disclosure with crossfading monitor, sun and moon icons. Native radio choices select System, Light or Dark; localized help explains that System follows device settings. Escape restores focus, and outside clicks or leaving the control dismiss it. A head script restores explicit overrides before paint; choosing System removes the stored override. System changes remain live, including without JavaScript. The control uses no hydration or dependency.
 
 Links use restrained SVG arrows, a one-pixel underline on hover/focus and a 44px minimum action height. The language link points to the equivalent static route. Focus outlines are blue with a six-pixel offset; text selection and scrollbars follow the palette. The skip link leads to main.
 

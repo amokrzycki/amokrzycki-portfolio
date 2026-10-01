@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import Arrow from "../components/Arrow.astro";
 import ImageViewer from "../components/ImageViewer.astro";
+import ThemeControl from "../components/ThemeControl.astro";
 interface Props {
   title: string;
   description: string;
@@ -23,7 +24,19 @@ const canonical = Astro.site
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#f7f8f8" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" />
+    <script is:inline>
+      // Run before the body can paint; system mode never creates an override.
+      let theme = "system";
+      try {
+        const saved = localStorage.getItem("portfolio-theme");
+        if (saved === "light" || saved === "dark") theme = saved;
+      } catch {
+        // Storage can be unavailable; the system preference still works.
+      }
+      document.documentElement.dataset.theme = theme;
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link
       rel="preload"
@@ -83,6 +96,7 @@ const canonical = Astro.site
           >
             {pl ? "EN" : "PL"}
           </a>
+          <ThemeControl lang={lang} />
         </nav>
       </header>
       <main id="main">
