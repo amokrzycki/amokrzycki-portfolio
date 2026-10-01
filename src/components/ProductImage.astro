@@ -1,0 +1,43 @@
+---
+import { Image } from "astro:assets";
+import randomFrame from "../assets/random-frame.webp";
+import kajtek from "../assets/kajtek.webp";
+import type { Language, ProjectSlug } from "../data/projects";
+interface Props {
+  slug: ProjectSlug;
+  alt: string;
+  lang: Language;
+  eager?: boolean;
+}
+const { slug, alt, lang, eager = false } = Astro.props;
+const source = slug === "random-frame" ? randomFrame : kajtek;
+---
+
+<button
+  class:list={["product-plate", slug]}
+  data-enlarge={source.src}
+  aria-label={`${lang === "pl" ? "Powiększ zrzut" : "Enlarge screenshot"}: ${slug === "random-frame" ? "Random Frame" : "Kajtek"}`}
+>
+  <Image
+    src={source}
+    alt={alt}
+    widths={[480, 828, 1100]}
+    sizes="(max-width: 700px) 90vw, 75vw"
+    loading={eager ? "eager" : "lazy"}
+    decoding="async"
+  />
+  <span class="enlarge-label">
+    {lang === "pl" ? "Powiększ" : "Enlarge"}{" "}
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.2"
+      aria-hidden="true"
+    >
+      <path d="M2 6V2h4m4 0h4v4M14 10v4h-4M6 14H2v-4" />
+    </svg>
+  </span>
+</button>

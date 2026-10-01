@@ -1,0 +1,163 @@
+---
+import "../styles/global.css";
+import Arrow from "../components/Arrow.astro";
+interface Props {
+  title: string;
+  description: string;
+  lang?: "en" | "pl";
+}
+const { title, description, lang = "en" } = Astro.props;
+const pl = lang === "pl";
+const home = pl ? "/pl/" : "/";
+const english = Astro.url.pathname.replace(/^\/pl\//, "/");
+const polish = `/pl${english}`;
+const canonical = Astro.site
+  ? new URL(Astro.url.pathname, Astro.site)
+  : undefined;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f7f8f8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link
+      rel="preload"
+      href="/fonts/manrope-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <title>{title}</title>
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={pl ? "pl_PL" : "en_GB"} />
+    {canonical && (
+      <>
+        <link rel="canonical" href={canonical} />
+        <link
+          rel="alternate"
+          hreflang="en"
+          href={new URL(english, Astro.site)}
+        />
+        <link
+          rel="alternate"
+          hreflang="pl"
+          href={new URL(polish, Astro.site)}
+        />
+        <link
+          rel="alternate"
+          hreflang="x-default"
+          href={new URL(english, Astro.site)}
+        />
+        <meta property="og:url" content={canonical} />
+      </>
+    )}
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">
+      {pl ? "Przejdź do treści" : "Skip to content"}
+    </a>
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="name" href={home}>
+          Adrian Mokrzycki
+          <span class="name-note">{"Software engineer"}</span>
+        </a>
+        <nav aria-label={pl ? "Nawigacja główna" : "Main navigation"}>
+          <a href={`${home}#work`}>{pl ? "Projekty" : "Work"}</a>
+          <a href={`${home}#about`}>{pl ? "O mnie" : "About"}</a>
+          <a href={`${home}#contact`}>{pl ? "Kontakt" : "Contact"}</a>
+          <a
+            class="language"
+            href={pl ? english : polish}
+            lang={pl ? "en" : "pl"}
+            aria-label={pl ? "Read in English" : "Czytaj po polsku"}
+          >
+            {pl ? "EN" : "PL"}
+          </a>
+        </nav>
+      </header>
+      <main id="main">
+        <slot />
+      </main>
+      <footer class="site-footer">
+        <p>© {new Date().getFullYear()} Adrian Mokrzycki</p>
+        <div>
+          <a href="https://github.com/amokrzycki">
+            GitHub <Arrow external />
+          </a>
+          <a href="#top">
+            {pl ? "Do góry" : "Back to top"}{" "}
+            <svg
+              class="arrow"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              aria-hidden="true"
+            >
+              <path d="M12 20V4m-6 6 6-6 6 6" />
+            </svg>
+          </a>
+        </div>
+      </footer>
+    </div>
+    <dialog
+      class="image-viewer"
+      aria-label={
+        pl ? "Powiększony zrzut aplikacji" : "Enlarged application screenshot"
+      }
+    >
+      <form method="dialog">
+        <button autofocus>
+          {pl ? "Zamknij" : "Close"}{" "}
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path d="m3 3 10 10M13 3 3 13" />
+          </svg>
+        </button>
+      </form>
+    </dialog>
+    <script>
+      const viewer = document.querySelector<HTMLDialogElement>(".image-viewer");
+      const image = document.createElement("img");
+      image.className = "viewer-image";
+      viewer?.append(image);
+      document
+        .querySelectorAll<HTMLButtonElement>("[data-enlarge]")
+        .forEach((button) => {
+          button.addEventListener("click", () => {
+            const source = button.querySelector("img");
+            if (!viewer || !image || !source) return;
+            image.src = button.dataset.enlarge || source.currentSrc;
+            image.alt = source.alt;
+            viewer.showModal();
+          });
+        });
+      viewer?.addEventListener("click", (event) => {
+        if (event.target !== viewer) return;
+        const bounds = viewer.getBoundingClientRect();
+        if (
+          event.clientX < bounds.left ||
+          event.clientX > bounds.right ||
+          event.clientY < bounds.top ||
+          event.clientY > bounds.bottom
+        )
+          viewer.close();
+      });
+    </script>
+  </body>
+</html>

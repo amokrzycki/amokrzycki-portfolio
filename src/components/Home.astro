@@ -1,0 +1,188 @@
+---
+import Site from "../layouts/Site.astro";
+import Arrow from "./Arrow.astro";
+import ProductImage from "./ProductImage.astro";
+import { projects, type Language, type ProjectSlug } from "../data/projects";
+interface Props {
+  lang?: Language;
+}
+const { lang = "en" } = Astro.props;
+const pl = lang === "pl";
+const base = pl ? "/pl" : "";
+const c = pl
+  ? {
+      hero: ["Oprogramowanie.", "Z namysłem."],
+      intro:
+        "Buduję produkty w całym stosie. Ze szczególną uwagą dla interfejsu.",
+      selected: "Wybrane projekty",
+      selectedNote: "Dwa projekty osobiste",
+      explore: "Poznaj projekt",
+      approach: ["Zaczynam od interfejsu.", "Podążam za problemem."],
+      approachText:
+        "Dopracowanie kontrolki może prowadzić do stanu aplikacji, API, backendu lub sieci. Biorę odpowiedzialność za tę drogę.",
+      areas: [
+        ["Interfejsy", "Produkt, interakcje, dostępność i wydajność."],
+        ["Aplikacje", "Architektura, stan, synchronizacja i desktop."],
+        ["Systemy", "API, bazy danych, bezpieczeństwo i usługi."],
+        ["Dostarczenie", "Linux, CI/CD, wdrożenia i infrastruktura."],
+      ],
+      about: "Trochę o mnie.",
+      aboutText:
+        "Jestem Adrian. Pracuję zawodowo nad oprogramowaniem od 2021 roku. Najmocniej specjalizuję się we frontendzie; zakres mojej pracy sięga dalej.",
+      aboutMore:
+        "Buduję aplikacje w React i TypeScript, pracuję z Rails i Node.js, a po Rust sięgam w aplikacjach desktopowych i usługach. Lubię rozumieć, co dzieje się po opuszczeniu przeglądarki przez żądanie.",
+      education:
+        "Magister informatyki ze specjalizacją w cyberbezpieczeństwie.",
+      contact: "Masz coś na myśli?",
+      contactText:
+        "Produkt, techniczny problem albo rozmowę o budowaniu oprogramowania.",
+      email: "Porozmawiajmy",
+      site: "Ta strona też jest częścią pracy.",
+      siteText: "Astro. Statyczny HTML. Własny CSS. Niewiele JavaScriptu.",
+    }
+  : {
+      hero: ["Software,", "considered."],
+      intro:
+        "I build across the stack, with an eye for the part people actually use.",
+      selected: "Selected work",
+      selectedNote: "Two personal projects",
+      explore: "Explore the project",
+      approach: [
+        "The interface is where I start.",
+        "The problem decides where I go.",
+      ],
+      approachText:
+        "Getting a control right can lead into application state, an API, a backend service or the network. I take ownership of that path.",
+      areas: [
+        [
+          "Interfaces",
+          "Product UI, interaction, accessibility and performance.",
+        ],
+        ["Applications", "Architecture, state, synchronization and desktop."],
+        ["Systems", "APIs, databases, security and backend services."],
+        ["Delivery", "Linux, CI/CD, deployment and infrastructure."],
+      ],
+      about: "A little about me.",
+      aboutText:
+        "I’m Adrian. I’ve worked professionally in software since 2021. Frontend engineering is my strongest specialization; the work regularly takes me further.",
+      aboutMore:
+        "I build React and TypeScript applications, work with Rails and Node.js, and use Rust for desktop and service work. I like understanding what happens after a request leaves the browser.",
+      education:
+        "M.Sc. in Information Technology, specializing in cybersecurity.",
+      contact: "Have something in mind?",
+      contactText:
+        "A product, a technical problem, or a conversation about building software.",
+      email: "Get in touch",
+      site: "The site is part of the work too.",
+      siteText: "Astro. Static HTML. Custom CSS. A little JavaScript.",
+    };
+const selected: ProjectSlug[] = ["random-frame", "kajtek"];
+---
+
+<Site
+  lang={lang}
+  title="Adrian Mokrzycki — Full-stack engineer"
+  description={
+    pl
+      ? "Inżynier full-stack ze szczególną uwagą dla interfejsu. Wybrane projekty: Random Frame i Kajtek."
+      : "Product-oriented full-stack engineer with a strong frontend bias. Selected work: Random Frame and Kajtek."
+  }
+>
+  <section class="hero" aria-labelledby="hero-heading">
+    <h1 id="hero-heading">
+      {c.hero[0]}
+      <br />
+      {c.hero[1]}
+    </h1>
+    <div class="hero-note">
+      <p>{c.intro}</p>
+      <a class="text-link" href="#work">
+        {c.selected}
+        <Arrow />
+      </a>
+    </div>
+  </section>
+  <section class="selected-work" id="work" aria-labelledby="work-heading">
+    <div class="section-heading">
+      <h2 id="work-heading">{c.selected}</h2>
+      <p>{c.selectedNote}</p>
+    </div>
+    {selected.map((slug, index) => {
+      const project = projects[slug];
+      const content = project[lang];
+      return (
+        <article class="project-spread">
+          <div class="project-identity">
+            <h3>
+              <a href={`${base}/work/${slug}/`}>{project.name}</a>
+            </h3>
+            <p class="metadata">{content.kind}</p>
+          </div>
+          <ProductImage
+            slug={slug}
+            alt={content.alt}
+            lang={lang}
+            eager={index === 0}
+          />
+          <div class="project-caption">
+            <p class="project-tagline">{content.tagline}</p>
+            <p>{content.summary}</p>
+            <a class="text-link" href={`${base}/work/${slug}/`}>
+              {c.explore}
+              <Arrow />
+            </a>
+          </div>
+        </article>
+      );
+    })}
+  </section>
+  <section class="approach" aria-labelledby="approach-heading">
+    <div>
+      <h2 id="approach-heading">
+        {c.approach[0]}
+        <br />
+        <span>{c.approach[1]}</span>
+      </h2>
+      <p>{c.approachText}</p>
+    </div>
+    <dl class="capabilities">
+      {c.areas.map(([name, description]) => (
+        <div>
+          <dt>{name}</dt>
+          <dd>{description}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+  <section
+    class="about editorial-row"
+    id="about"
+    aria-labelledby="about-heading"
+  >
+    <h2 id="about-heading">{c.about}</h2>
+    <div class="reading-copy">
+      <p class="lead">{c.aboutText}</p>
+      <p>{c.aboutMore}</p>
+      <p class="education">{c.education}</p>
+    </div>
+  </section>
+  <section
+    class="contact editorial-row"
+    id="contact"
+    aria-labelledby="contact-heading"
+  >
+    <h2 id="contact-heading">{c.contact}</h2>
+    <div>
+      <p>{c.contactText}</p>
+      <a class="contact-link" href="mailto:contact@amokrzycki.ovh">
+        {c.email}
+        <Arrow external />
+      </a>
+      <p class="email-address">contact@amokrzycki.ovh</p>
+    </div>
+  </section>
+  <aside class="site-note">
+    <p>{c.site}</p>
+    <p>{c.siteText}</p>
+  </aside>
+</Site>

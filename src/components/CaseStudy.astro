@@ -1,0 +1,101 @@
+---
+import Site from "../layouts/Site.astro";
+import Arrow from "./Arrow.astro";
+import ProductImage from "./ProductImage.astro";
+import { projects, type ProjectSlug, type Language } from "../data/projects";
+interface Props {
+  slug: ProjectSlug;
+  lang?: Language;
+}
+const { slug, lang = "en" } = Astro.props;
+const project = projects[slug];
+const c = project[lang];
+const pl = lang === "pl";
+const base = pl ? "/pl" : "";
+const next = slug === "random-frame" ? "kajtek" : "random-frame";
+---
+
+<Site
+  lang={lang}
+  title={`${project.name} — Adrian Mokrzycki`}
+  description={c.summary}
+>
+  <a class="back-link text-link" href={`${base}/#work`}>
+    <svg
+      class="arrow"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      aria-hidden="true"
+    >
+      <path d="M20 12H5m6-6-6 6 6 6" />
+    </svg>
+    {pl ? "Wybrane projekty" : "Selected work"}
+  </a>
+  <header class="case-heading">
+    <div>
+      <h1>{project.name}</h1>
+      <p class="metadata">{c.kind}</p>
+    </div>
+    <p class="case-tagline">{c.tagline}</p>
+  </header>
+  <figure class="case-figure">
+    <ProductImage slug={slug} alt={c.alt} lang={lang} eager />
+    <figcaption>{c.capture}</figcaption>
+  </figure>
+  <section class="case-intro editorial-row">
+    <h2>{c.intro}</h2>
+    <div class="reading-copy">
+      <p class="lead">{c.overview}</p>
+      <p class="scope">{c.scope}</p>
+      <a class="text-link" href={project.repo}>
+        {pl ? "Kod źródłowy" : "View source"}
+        <Arrow external />
+      </a>
+    </div>
+  </section>
+  <div class="case-body">
+    {c.sections.map((section) => (
+      <section class="case-section editorial-row">
+        <h2>{section.title}</h2>
+        <div class="reading-copy">
+          <p>{section.text}</p>
+          <details>
+            <summary>
+              {pl ? "Szczegóły techniczne" : "Engineering details"}
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.2"
+                aria-hidden="true"
+              >
+                <path d="M8 2v12M2 8h12" />
+              </svg>
+            </summary>
+            <p>{section.detail}</p>
+          </details>
+        </div>
+      </section>
+    ))}
+  </div>
+  <section class="case-close editorial-row">
+    <h2>{pl ? "Całość ma znaczenie." : "The whole thing matters."}</h2>
+    <div class="reading-copy">
+      <p class="lead">{c.result}</p>
+      <p class="source-note">{c.note}</p>
+    </div>
+  </section>
+  <a class="next-project" href={`${base}/work/${next}/`}>
+    <span>{pl ? "Drugi projekt" : "The other project"}</span>
+    <span>
+      {projects[next].name}
+      <Arrow />
+    </span>
+  </a>
+</Site>
