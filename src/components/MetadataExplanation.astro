@@ -10,43 +10,43 @@ const steps = pl
   ? [
       {
         label: "Rozbieżność",
-        title: "Nowy tytuł. Czas poprzedniego utworu.",
+        title: "Tytuł jest już nowy, ale czas dotyczy poprzedniego utworu.",
         states: [
           "REST: utwór B",
           "HLS: utwór A + czas",
           "Tytuł B bez czasu HLS",
         ],
         caption:
-          "REST i strumień nie muszą zmienić utworu jednocześnie. Przy różnych tytułach integracja pomija czas HLS.",
+          "API REST i strumień HLS mogą zaktualizować informacje o utworze w różnym momencie. Jeśli tytuły się różnią, Kajtek pomija czas z HLS.",
       },
       {
         label: "Porównanie",
-        title: "Najpierw sprawdź, czy tytuły pasują.",
+        title: "Aplikacja porównuje tytuły z obu źródeł.",
         states: [
           "Tytuły z REST i HLS",
           "Normalizacja i porównanie",
           "Dołączenie lub pominięcie czasu",
         ],
         caption:
-          "Porównanie ignoruje wielkość liter i znaki przestankowe. Wspólny fragment tytułu pozwala połączyć dane, choć nie daje pewności identyfikatora utworu.",
+          "Przy porównaniu aplikacja pomija wielkość liter i znaki przestankowe. Jeśli tytuły mają wspólny fragment, łączy dane. Takie dopasowanie daje mniejszą pewność niż identyfikator utworu od nadawcy.",
       },
       {
         label: "Zgodne dane",
-        title: "Czytelna nazwa i czas związany z dźwiękiem.",
+        title: "Tytuł z API uzupełnia czas ze strumienia.",
         states: [
-          "REST: nazwa i wykonawca",
+          "REST: tytuł i wykonawca",
           "HLS: początek i długość",
           "Utwór z danymi o czasie",
         ],
         caption:
-          "Czas pochodzi z segmentu, w który właśnie weszło odtwarzanie. Początek bloku jest wyliczany z czasu segmentu, więc kolejne odczyty nie przesuwają zegara utworu.",
+          "Dane o czasie pochodzą z aktualnie odtwarzanego segmentu HLS. Aplikacja oblicza początek bloku na podstawie czasu segmentu. Dzięki temu kolejne odczyty nie zmieniają wyliczonej godziny rozpoczęcia utworu.",
       },
       {
         label: "Nieaktualny tag",
-        title: "Stary zegar nie zostaje na ekranie.",
-        states: ["Brak świeżego tagu", "Wygaszenie po 30 s", "Dane z REST"],
+        title: "Nieaktualne dane o czasie wygasają po 30 sekundach.",
+        states: ["Brak nowego tagu", "Wygaśnięcie po 30 s", "Dane z REST"],
         caption:
-          "Pauza lub zatrzymany strumień mogą przerwać dopływ tagów. Po trzydziestu sekundach integracja odrzuca metadane HLS; czas pozostaje opcjonalny.",
+          "Po wstrzymaniu odtwarzania lub zatrzymaniu strumienia nowe tagi mogą przestać docierać. Po trzydziestu sekundach aplikacja odrzuca metadane HLS i korzysta z REST. Informacje o czasie są opcjonalne.",
       },
     ]
   : [
@@ -97,7 +97,7 @@ const steps = pl
   <fieldset class="explanation-controls">
     <legend>
       {pl
-        ? "Jak Kajtek uzgadnia metadane ESKI"
+        ? "Jak Kajtek łączy dane o utworach ESKI"
         : "How Kajtek reconciles ESKA metadata"}
     </legend>
     {steps.map((step, index) => (
@@ -134,7 +134,7 @@ const steps = pl
   </div>
   <figcaption>
     {pl
-      ? "Przykład ESKI: nazwa z REST i czas ze strumienia trafiają do jednego modelu utworu."
+      ? "W integracji ESKI tytuł pochodzi z REST, a czas ze strumienia HLS. Kajtek łączy je w jednym modelu utworu."
       : "ESKA example: REST names and stream timing feed one track model."}
   </figcaption>
 </figure>

@@ -67,7 +67,9 @@ const canonical = Astro.site
       <header class="site-header">
         <a class="name" href={home}>
           Adrian Mokrzycki
-          <span class="name-note">Software engineer</span>
+          <span class="name-note">
+            {pl ? "Programista full-stack" : "Software engineer"}
+          </span>
         </a>
         <nav aria-label={pl ? "Nawigacja główna" : "Main navigation"}>
           <a href={`${home}#work`}>{pl ? "Projekty" : "Work"}</a>

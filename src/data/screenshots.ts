@@ -12,10 +12,10 @@ export const screenshots = {
       focusY: 0.5,
       wide: false,
       en: "Sync is a separate, optional step. The recovery key is needed to join from another device.",
-      pl: "Synchronizacja jest osobnym, opcjonalnym krokiem. Klucz odzyskiwania pozwala dołączyć kolejne urządzenie.",
+      pl: "Synchronizację włączasz osobno. Do połączenia kolejnego urządzenia potrzebujesz klucza odzyskiwania.",
       alt: {
         en: "Random Frame’s sync setup, with Turn on Sync and Join existing Sync controls.",
-        pl: "Konfiguracja synchronizacji Random Frame z przyciskami włączenia i dołączenia do istniejącej synchronizacji.",
+        pl: "Ustawienia Random Frame z przyciskami włączenia synchronizacji i dołączenia do już istniejącej.",
       },
     },
   ],
@@ -27,10 +27,10 @@ export const screenshots = {
       focusY: 0.24,
       wide: false,
       en: "Search and provider filters share one catalog. Each station can be added to the listening list or played directly.",
-      pl: "Wyszukiwanie i filtry dostawców działają we wspólnym katalogu. Stację można dodać do listy lub od razu włączyć.",
+      pl: "Stacje różnych nadawców są w jednym katalogu z wyszukiwarką i filtrami. Wybraną stację możesz dodać do listy słuchanych stacji lub od razu włączyć.",
       alt: {
         en: "Detail of Kajtek’s station catalog: search, provider filters, and station playback and selection controls.",
-        pl: "Fragment katalogu Kajtka: wyszukiwarka, filtry dostawców oraz przyciski odtwarzania i wyboru stacji.",
+        pl: "Katalog stacji Kajtka z wyszukiwarką, filtrami nadawców oraz przyciskami odtwarzania i wyboru stacji.",
       },
     },
     {
@@ -41,7 +41,7 @@ export const screenshots = {
       focusY: 0.38,
       wide: true,
       en: "The playlist places a news break between songs and distinguishes the current track from the next one.",
-      pl: "Playlista pokazuje przerwę na wiadomości między utworami i odróżnia bieżącą piosenkę od następnej.",
+      pl: "Na playliście widać przerwę na wiadomości między utworami. Bieżący i następny utwór są oznaczone osobno.",
       alt: {
         en: "Kajtek’s RMF playlist with a previous song, a news break, the current ATB track and the upcoming Laura Branigan track.",
         pl: "Playlista RMF w Kajtku: poprzedni utwór, przerwa na wiadomości, bieżący utwór ATB i następny utwór Laury Branigan.",

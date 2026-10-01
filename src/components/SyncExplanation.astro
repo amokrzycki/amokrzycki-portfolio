@@ -8,52 +8,52 @@ const pl = lang === "pl";
 const steps = pl
   ? [
       {
-        label: "Wspólny początek",
-        title: "Oba urządzenia znają tę samą rewizję.",
-        states: ["Odczytano r7", "Rewizja r7", "Odczytano r7"],
+        label: "Ta sama wersja",
+        title: "Oba urządzenia mają tę samą wersję danych.",
+        states: ["Pobrano r7", "Wersja r7", "Pobrano r7"],
         notes: [
           "Historia na urządzeniu",
-          "Zaszyfrowana migawka",
+          "Zaszyfrowana kopia danych",
           "Historia na urządzeniu",
         ],
         caption:
-          "Urządzenia pobierają migawkę i odszyfrowują ją lokalnie. Numer rewizji wskazuje wersję, względem której mogą zapisać zmiany.",
+          "Każde urządzenie pobiera kopię danych i odszyfrowuje ją lokalnie. Przy zapisie podaje numer pobranej wersji, żeby serwer mógł sprawdzić, czy dane są nadal aktualne.",
       },
       {
         label: "Niezależne zmiany",
-        title: "Jedno urządzenie zapisuje. Drugie nadal zmienia dane.",
-        states: ["Zapisano r8", "Rewizja r8", "Nadal na r7"],
+        title: "Urządzenie A zapisuje zmiany, B nadal ma starszą wersję.",
+        states: ["Zapisano r8", "Wersja r8", "Nadal r7"],
         notes: [
-          "Nowy ulubiony → szyfrowanie → zapis",
-          "Nowa zaszyfrowana migawka",
-          "Niezsynchronizowane lokalne zmiany",
+          "Dodanie do ulubionych → szyfrowanie → zapis",
+          "Nowa zaszyfrowana kopia danych",
+          "Lokalne zmiany czekają na synchronizację",
         ],
         caption:
-          "Urządzenie A zapisuje względem r7. Serwer przyjmuje zapis i zmienia rewizję. Urządzenie B nadal pracuje na poprzedniej wersji.",
+          "Urządzenie A wysyła zmiany, podając wersję r7. Serwer przyjmuje zapis i nadaje danym wersję r8. Urządzenie B nadal pracuje na r7 i wprowadza własne zmiany.",
       },
       {
         label: "Konflikt",
-        title: "Nieaktualny zapis nie nadpisuje nowych danych.",
-        states: ["Zapisano r8", "Rewizja r8", "Zapis odrzucony"],
+        title: "Serwer odrzuca zapis oparty na starszej wersji.",
+        states: ["Zapisano r8", "Wersja r8", "Zapis odrzucony"],
         notes: [
           "Zmiany już zsynchronizowane",
-          "r7 nie jest bieżącą rewizją",
-          "Próba zapisu względem r7",
+          "r7 jest już nieaktualna",
+          "Próba zapisu na podstawie r7",
         ],
         caption:
-          "Urządzenie B wysyła zaszyfrowaną migawkę względem r7. Porównanie rewizji wykrywa konflikt i chroni zapis urządzenia A.",
+          "Urządzenie B wysyła zaszyfrowane dane, podając wersję r7. Serwer ma już r8, więc odrzuca zapis. Zmiany urządzenia A pozostają zachowane.",
       },
       {
         label: "Scalenie i zapis",
-        title: "Scalenie odbywa się na urządzeniu.",
-        states: ["Może pobrać r9", "Rewizja r9", "Zapisano r9"],
+        title: "Urządzenie B łączy obie wersje i ponawia zapis.",
+        states: ["Może pobrać r9", "Wersja r9", "Zapisano r9"],
         notes: [
           "Pobranie → lokalne odszyfrowanie",
-          "Scalona, zaszyfrowana migawka",
+          "Połączone i zaszyfrowane dane",
           "Pobranie → scalenie → szyfrowanie",
         ],
         caption:
-          "B pobiera r8, scala lokalnie, szyfruje i zapisuje względem r8. Po trzech nieudanych zapisach klient zgłasza konflikt i zachowuje dane lokalne.",
+          "Urządzenie B pobiera r8 i łączy ją ze swoimi zmianami. Szyfruje wynik i ponawia zapis, podając wersję r8. Po trzech nieudanych próbach aplikacja zgłasza konflikt i zachowuje lokalne dane.",
       },
     ]
   : [
@@ -114,7 +114,9 @@ const names = pl
 <figure class="engineering-explanation sync-explanation">
   <fieldset class="explanation-controls">
     <legend>
-      {pl ? "Prześledź konflikt synchronizacji" : "Follow a sync conflict"}
+      {pl
+        ? "Jak aplikacja rozwiązuje konflikt synchronizacji"
+        : "Follow a sync conflict"}
     </legend>
     {steps.map((step, index) => (
       <label>
@@ -151,7 +153,7 @@ const names = pl
   </div>
   <figcaption>
     {pl
-      ? "Rewizje r7–r9 ilustrują wymianę danych. Serwer nie odszyfrowuje historii."
+      ? "r7, r8 i r9 to przykładowe numery wersji danych. Serwer nie odszyfrowuje historii."
       : "Revisions r7–r9 illustrate the exchange; the server never decrypts the history."}
   </figcaption>
 </figure>

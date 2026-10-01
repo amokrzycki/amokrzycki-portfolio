@@ -12,21 +12,22 @@ const base = pl ? "/pl" : "";
 const c = pl
   ? {
       intro:
-        "Jestem inżynierem full-stack. Od 2021 roku pracuję nad oprogramowaniem, najwięcej przy frontendzie.",
+        "Jestem programistą full-stack. Pracuję zawodowo od 2021 roku, głównie przy frontendzie.",
       about: "O mnie",
       aboutText:
-        "Zwykle zaczynam od tego, co ktoś próbuje zrobić i gdzie aplikacja mu to utrudnia. Interesuje mnie, co dzieje się po kliknięciu, na co trzeba czekać i jak wrócić po błędzie.",
+        "Najczęściej zaczynam od interfejsu, ale nie traktuję frontendu jako granicy problemu. Jeśli źródło tarcia leży w stanie aplikacji, kontrakcie API, modelu danych, backendzie albo wdrożeniu, schodzę warstwę niżej i rozwiązuję je tam, gdzie faktycznie powstaje.",
       aboutTools:
-        "Na co dzień pracuję głównie z Reactem i TypeScriptem. Sięgam też do Rails, Node i Rusta, kiedy trzeba poprawić API, przechowywanie danych albo sposób wdrażania aplikacji.",
-      education: "Magister informatyki, specjalizacja: cyberbezpieczeństwo.",
+        "Na co dzień pracuję głównie z Reactem i TypeScriptem, ale regularnie wchodzę też w Rails, Node.js i Rust. Dobieram warstwę i narzędzia do problemu, zamiast próbować zamknąć wszystko w frontendzie.",
+      education:
+        "Magister Inżynier informatyki, Specjalizacja: Cyberbezpieczeństwo.",
       selected: "Wybrane projekty",
-      selectedNote: "Projekty osobiste",
-      explore: "Poznaj projekt",
+      selectedNote: "Własne projekty",
+      explore: "O projekcie",
       approach: "Jak pracuję",
       approachText:
-        "Własne projekty pozwalają mi przejść od interfejsu do usług, które go obsługują. Wracam do decyzji po dłuższym używaniu aplikacji, kiedy lepiej widać, co przeszkadza.",
+        "We własnych projektach zajmuję się zarówno interfejsem, jak i usługami, na których działa aplikacja. Korzystam z niej przez dłuższy czas i wracam do wcześniejszych decyzji, gdy zauważę coś niewygodnego.",
       approachMore:
-        "W Random Frame zapis historii prowadzi do szyfrowania i scalania zmian. W Kajtku tytuł na kasecie wymaga sprawdzenia, czy API i strumień audio opisują ten sam utwór. Takie zależności decydują o tym, jak daleko sięgam w danym projekcie.",
+        "W Random Frame musiałem zadbać o to, żeby historia była szyfrowana, a zmiany z kilku urządzeń dało się połączyć. W Kajtku sprawdzam, czy tytuł z API dotyczy utworu, który właśnie słychać. To, co ma działać w interfejsie, często wymaga więc pracy także po stronie danych i backendu.",
       contact: "Porozmawiajmy",
       contactText:
         "Napisz, jeśli chcesz porozmawiać o projekcie lub wspólnej pracy.",
@@ -36,11 +37,11 @@ const c = pl
         "I’m a full-stack engineer. I’ve worked in software since 2021, mostly on the frontend.",
       about: "About me",
       aboutText:
-        "I usually start with what someone is trying to do and where the application gets in their way. I pay attention to what happens after a click, what needs to wait, and how to get back from an error.",
+        "I usually start with the interface, but I don’t treat frontend as the boundary of the problem. If the friction comes from application state, an API contract, the data model, the backend, or deployment, I go deeper and solve it where it actually originates.",
       aboutTools:
-        "Most of my day-to-day work is in React and TypeScript. I also work with Rails, Node and Rust when that means improving an API, how data is stored, or how an application is deployed.",
+        "Most of my day-to-day work is in React and TypeScript, but I also work regularly with Rails, Node.js, and Rust. I choose the layer and tools based on the problem instead of trying to force everything into the frontend.",
       education:
-        "M.Sc. in Information Technology, specializing in cybersecurity.",
+        "M.Sc. Eng. in Information Technology, specializing in Cybersecurity.",
       selected: "Selected work",
       selectedNote: "Personal projects",
       explore: "Explore the project",
@@ -59,20 +60,20 @@ const selected: ProjectSlug[] = ["random-frame", "kajtek"];
   lang={lang}
   title={
     pl
-      ? "Adrian Mokrzycki — Inżynier full-stack"
+      ? "Adrian Mokrzycki | Programista full-stack"
       : "Adrian Mokrzycki — Full-stack engineer"
   }
   description={
     pl
-      ? "Adrian Mokrzycki, inżynier full-stack ze szczególnym zainteresowaniem interfejsami. Projekty osobiste: Random Frame i Kajtek."
+      ? "Adrian Mokrzycki, programista full-stack skupiony na frontendzie. Zobacz moje projekty: Random Frame i Kajtek."
       : "Adrian Mokrzycki, a full-stack engineer with a focus on interfaces. Personal projects: Random Frame and Kajtek."
   }
 >
   <section class="hero" aria-labelledby="hero-heading">
     <h1 id="hero-heading">
-      {pl ? "Kod" : "Software,"}
+      {pl ? "Tworzę" : "Software,"}
       <br />
-      {pl ? "z namysłem." : "considered."}
+      {pl ? "aplikacje." : "considered."}
     </h1>
     <div class="hero-note">
       <p>{c.intro}</p>

@@ -804,6 +804,9 @@ details > p {
 .viewer-toolbar button:hover {
   text-decoration: underline;
 }
+.viewer-toolbar button[hidden] {
+  display: none;
+}
 .viewer-toolbar button:disabled {
   color: var(--muted);
   cursor: default;
@@ -824,6 +827,7 @@ details > p {
   max-height: 100%;
   width: auto;
   height: auto;
+  cursor: zoom-in;
 }
 .is-zoomed .viewer-stage {
   display: block;
@@ -831,6 +835,7 @@ details > p {
 .is-zoomed .viewer-stage img {
   max-width: none;
   max-height: none;
+  cursor: zoom-out;
 }
 .viewer-caption {
   padding: 12px 20px;

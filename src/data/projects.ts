@@ -61,56 +61,56 @@ export const projects = {
     },
     pl: {
       kind: "Aplikacja desktopowa",
-      tagline: "Publiczne obrazy, po jednym.",
+      tagline: "Losuj obrazy z Prnt.sc i zapisuj ulubione.",
       summary:
-        "Aplikacja desktopowa do przeglądania publicznych obrazów z Prnt.sc. Historia i ulubione zostają na urządzeniu, z opcjonalną szyfrowaną synchronizacją.",
-      alt: "Random Frame przed pierwszym losowaniem, z głównym obszarem obrazu i przyciskiem Draw.",
-      intro: "Przeglądanie z pamięcią.",
+        "Aplikacja do przeglądania publicznych obrazów z Prnt.sc. Przechowuje historię i ulubione na urządzeniu. Można też włączyć szyfrowaną synchronizację między urządzeniami.",
+      alt: "Okno Random Frame przed pierwszym losowaniem: miejsce na obraz i przycisk Draw.",
+      intro: "Wracaj do obejrzanych obrazów.",
       overview:
-        "Random Frame losuje publiczny obraz z Prnt.sc. Możesz losować dalej, wrócić do poprzednich obrazów lub zapisać ulubiony. Najwięcej pracy wymagało trwałe przechowywanie historii i scalanie zmian między urządzeniami, bez ujawniania ich zawartości serwerowi synchronizacji.",
+        "Random Frame losuje publiczne obrazy z Prnt.sc. Możesz obejrzeć kolejny, wrócić do wcześniejszych lub dodać wybrany do ulubionych. Najwięcej pracy wymagał zapis historii i łączenie zmian z kilku urządzeń tak, żeby serwer synchronizacji nie miał dostępu do treści tych danych.",
       sections: [
         {
-          title: "Obraz pozostaje w centrum.",
-          text: "Obraz zajmuje główny obszar, a historia, statystyki i synchronizacja mają osobne kontrolki. Kolejny obraz i powrót do poprzedniego są dostępne z klawiatury, bez otwierania menu.",
+          title: "Przeglądanie z klawiatury.",
+          text: "Większość okna zajmuje obraz. Historię, statystyki i synchronizację otwierasz osobno, a losowanie i powrót do wcześniejszych obrazów obsługujesz z klawiatury, bez otwierania menu.",
           detail: {
-            topic: "Obsługa desktopu",
+            topic: "Skróty klawiaturowe i Tauri",
             mechanism:
-              "N, Spacja lub Enter losuje obraz; strzałki poruszają się po historii; F przełącza ulubione. Tauri łączy TypeScript z backendem Rust.",
+              "N, spacja lub Enter losują obraz. Strzałkami przeglądasz historię, a klawiszem F dodajesz obraz do ulubionych lub go stamtąd usuwasz. Tauri łączy interfejs w TypeScript z backendem w Rust.",
             constraint:
-              "Pobieranie z zewnętrznego źródła wymaga backendu desktopowego działającego poza ograniczeniami CORS przeglądarki.",
+              "Obrazy pobiera backend aplikacji desktopowej, ponieważ w przeglądarce dostęp do zewnętrznego źródła ogranicza CORS.",
           },
         },
         {
           title: "Historia zostaje na urządzeniu.",
-          text: "Historia i ulubione działają lokalnie od pierwszego uruchomienia. Synchronizacja jest opcjonalna, a każda migawka zostaje zaszyfrowana na urządzeniu przed wysłaniem. Ustawienia i statystyki zostają lokalnie.",
+          text: "Historia i ulubione zapisują się lokalnie od pierwszego uruchomienia. Jeśli włączysz synchronizację, aplikacja zaszyfruje kopię danych przed wysłaniem jej na serwer. Ustawienia i statystyki są przechowywane tylko na urządzeniu.",
           detail: {
-            topic: "Granica szyfrowania",
+            topic: "Co obejmuje szyfrowanie",
             mechanism:
-              "Klucz odzyskiwania pozwala kolejnemu urządzeniu wyprowadzić klucze potrzebne do dołączenia. Identyfikatory obejrzanych obrazów, historia i ulubione są szyfrowane przed wysłaniem. Utrata klucza uniemożliwia ponowne dołączenie do tej synchronizacji.",
+              "Na podstawie klucza odzyskiwania kolejne urządzenie oblicza klucze potrzebne do synchronizacji. Identyfikatory obejrzanych obrazów, historia i ulubione są szyfrowane przed wysłaniem. Bez klucza odzyskiwania nie da się ponownie dołączyć do tej synchronizacji.",
             constraint:
-              "Ustawienia i statystyki zostają lokalnie. Serwer nadal widzi metadane połączeń, rozmiar i czas transferów.",
+              "Ustawienia i statystyki nie są synchronizowane. Serwer widzi jednak metadane połączeń, rozmiar przesyłanych danych i czas ich przesyłania.",
           },
         },
         {
           title: "Dwa urządzenia, wspólna historia.",
-          text: "Gdy dwa urządzenia zapisują jednocześnie, późniejszy zapis musi zachować wcześniejsze zmiany. Sprawdzam rewizję, odrzucam nieaktualny zapis i scalam dane na urządzeniu przed ponowną próbą.",
+          text: "Gdy dwa urządzenia zapisują zmiany w tym samym czasie, jedno może nadpisać dane drugiego. Dlatego serwer sprawdza numer wersji danych i odrzuca nieaktualny zapis. Aplikacja pobiera wtedy nowszą wersję, łączy ją z lokalnymi zmianami i próbuje ponownie.",
           detail: {
             topic: "Rozwiązywanie konfliktów",
             mechanism:
-              "Osobna usługa Rust/Axum atomowo porównuje rewizję i zapisuje migawkę w SQLite. Rewizję przekazuje ETag. Przy konflikcie klient pobiera dane, odszyfrowuje je, scala i ponawia zapis.",
+              "Osobna usługa w Rust, oparta na Axum, porównuje numer wersji i zapisuje kopię danych w jednej operacji atomowej w SQLite. Numer wersji przekazuje nagłówek ETag. Przy konflikcie klient pobiera dane, odszyfrowuje je, scala i ponawia zapis.",
             constraint:
-              "Po trzech nieudanych próbach klient zgłasza konflikt i zachowuje dane lokalne. Usługa sprawdza rewizje bez odczytywania zawartości.",
+              "Po trzech nieudanych próbach klient zgłasza konflikt i zachowuje lokalne dane. Serwer może porównywać numery wersji bez odszyfrowywania zawartości.",
           },
         },
         {
-          title: "Usunięcie też jest zmianą.",
-          text: "Scalanie list komplikuje się, gdy ktoś usuwa wpis. Zapisuję dodania z unikalnymi identyfikatorami operacji i przechowuję informacje o usunięciach, aby starsza migawka nie przywracała po prostu usuniętego ulubionego. Cofnięcie usunięcia tworzy nową operację.",
+          title: "Jak zachować usunięcia przy synchronizacji.",
+          text: "Po połączeniu danych z dwóch urządzeń usunięty obraz mógłby wrócić do ulubionych. Każdemu dodaniu nadaję więc unikalny identyfikator i zapisuję też informacje o usunięciach. Dzięki temu aplikacja rozpoznaje usunięty wpis w starszej kopii danych. Cofnięcie usunięcia tworzy nową operację.",
           detail: {
-            topic: "Scalanie dodań i usunięć",
+            topic: "Łączenie operacji dodawania i usuwania",
             mechanism:
-              "Klient łączy operacje i zapisy usunięć, usuwa odpowiadające im operacje, a potem odtwarza widoczną historię i ulubione. Kolejne scalenia eliminują duplikaty według identyfikatora operacji.",
+              "Klient łączy operacje z zapisami usunięć, odrzuca operacje oznaczone jako usunięte i na tej podstawie odtwarza historię oraz ulubione. Identyfikatory pozwalają pominąć duplikaty przy kolejnych scaleniach.",
             constraint:
-              "Zapisy usunięć mają limit 100 000. Urządzenie pozostające offline dłużej, niż obejmuje ta historia, może przywrócić stary wpis. Dłuższe przechowywanie wymagałoby śledzenia, które urządzenia otrzymały dane usunięcie.",
+              "Aplikacja przechowuje do 100 000 zapisów usunięć. Jeśli urządzenie wróci do synchronizacji po usunięciu starszych zapisów z tej historii, może przywrócić dawny wpis. Bezterminowe zachowywanie usunięć wymagałoby śledzenia, które urządzenia już je otrzymały.",
           },
         },
       ],
@@ -176,57 +176,57 @@ export const projects = {
       ],
     },
     pl: {
-      kind: "Aplikacja webowa",
+      kind: "Aplikacja przeglądarkowa",
       tagline: "Radio internetowe w magnetofonie.",
       summary:
-        "Radio w przeglądarce inspirowane Unitrą PS-101. Kontrolki magnetofonu łączą dźwięk na żywo, katalogi stacji i informacje o utworach od różnych dostawców.",
-      alt: "Cały czerwony odtwarzacz Kajtek, gotowy do wyboru stacji, ze szpulami, wskaźnikiem audio i kontrolkami odtwarzania.",
+        "Radio internetowe z interfejsem inspirowanym magnetofonem Unitra PS-101. Ma wspólny katalog stacji różnych nadawców i pokazuje informacje o aktualnie nadawanych utworach.",
+      alt: "Czerwony odtwarzacz Kajtek przed wyborem stacji, ze szpulami, wskaźnikiem poziomu dźwięku i przyciskami odtwarzania.",
       intro: "Co teraz gra i skąd to wiadomo?",
       overview:
-        "Kajtek przenosi radio internetowe do interfejsu inspirowanego magnetofonem. Kontrolki są znajome; dane, które za nimi stoją, bywają niespójne. Przygotowałem integracje RMF, ESKI i Trójki, aby różne katalogi, playlisty i metadane audio działały w jednym odtwarzaczu.",
+        "Kajtek to radio internetowe w przeglądarce, które wygląda jak magnetofon. Każdy nadawca inaczej udostępnia dane o stacjach i utworach. Przygotowałem integracje RMF, ESKI i Trójki, które łączą ich katalogi, playlisty i informacje ze strumieni w jednym odtwarzaczu.",
       sections: [
         {
-          title: "Magnetofon podąża za dźwiękiem.",
-          text: "Szpule sygnalizują odtwarzanie, a analiza Web Audio steruje wskaźnikiem. Oba elementy są powiązane ze stanem odtwarzacza: zmiana stacji musi jednocześnie zaktualizować strumień, informacje o utworze i fizyczne kontrolki.",
+          title: "Szpule i wskaźnik reagują na odtwarzanie.",
+          text: "Szpule obracają się podczas odtwarzania, a wskaźnik reaguje na dźwięk analizowany przez Web Audio. Po zmianie stacji strumień, informacje o utworze i przyciski interfejsu muszą zaktualizować się jednocześnie.",
           detail: {
             topic: "Odtwarzanie i wizualizacja",
             mechanism:
-              "Zdarzenia odtwarzania aktualizują wspólny stan; interfejs renderuje kontrolki i szpule. Osobny moduł wizualizacji odczytuje widmo Web Audio.",
+              "Zdarzenia odtwarzania aktualizują wspólny stan aplikacji, na podstawie którego interfejs wyświetla przyciski i szpule. Osobny moduł wizualizacji odczytuje widmo dźwięku przez Web Audio.",
             constraint:
-              "Nie każdy strumień pozwala na analizę przez Web Audio. Wtedy wizualizacja emuluje rytm, więc ruch wskaźnika nie zawsze przedstawia pomiar dźwięku.",
+              "Nie każdy strumień można analizować przez Web Audio. W takim przypadku wskaźnik porusza się w symulowanym rytmie i nie pokazuje rzeczywistego poziomu dźwięku.",
           },
         },
         {
-          title: "Kontrolki nie muszą znać reguł dostawcy.",
-          text: "RMF publikuje playlisty z czasem emisji. ESKA rozdziela informacje między API i strumień audio, a Trójka ma osobną ramówkę i listy utworów. Normalizuję te źródła do wspólnego modelu utworu. Reguły dostawców, odtwarzanie i renderowanie pozostają w osobnych modułach TypeScriptu.",
+          title: "Jeden odtwarzacz dla różnych nadawców.",
+          text: "RMF publikuje playlisty z godzinami emisji. ESKA udostępnia część informacji przez API, a część w strumieniu audio. Trójka ma osobną ramówkę i listy utworów. Sprowadzam te dane do wspólnego formatu. Obsługa poszczególnych nadawców, odtwarzanie i wyświetlanie mają osobne moduły w TypeScript.",
           detail: {
             topic: "Wspólny model utworu",
             mechanism:
-              "Integracje zwracają PlaylistResult: bieżący TrackInfo i listę utworów. Opcjonalne pola przechowują czas, okładki i informacje o przerwach, bez wymagania ich od każdego źródła.",
+              "Każda integracja zwraca PlaylistResult z bieżącym utworem jako TrackInfo oraz listą utworów. Pola z czasem, okładką i informacjami o przerwach są opcjonalne, bo nie każdy nadawca udostępnia te dane.",
             constraint:
-              "Wspólny model nie uzupełni informacji, których dostawca nie publikuje. Czas i okładki pozostają opcjonalne.",
+              "Wspólny format nie uzupełnia brakujących danych. Jeśli nadawca nie publikuje czasu ani okładki, aplikacja ich nie wyświetla.",
           },
         },
         {
           title: "Dwa źródła mogą wskazywać różne utwory.",
-          text: "API ESKI dostarcza nazwy utworów; czas znajduje się w prywatnym tagu strumienia HLS. Źródła mogą zmienić piosenkę w odstępie kilku sekund. Porównuję ich tytuły przed połączeniem danych, aby nowy utwór nie dostał zegara poprzedniego.",
+          text: "API ESKI podaje tytuły utworów, a informacje o czasie są zapisane w prywatnym tagu strumienia HLS. Dane z obu źródeł mogą zaktualizować się w odstępie kilku sekund. Przed ich połączeniem porównuję tytuły, żeby do nowego utworu nie przypisać czasu poprzedniego.",
           detail: {
-            topic: "Uzgadnianie REST i HLS",
+            topic: "Łączenie danych z REST i HLS",
             mechanism:
-              "Zdarzenie zmiany fragmentu HLS odczytuje EXT-X-ZPR przy wejściu odtwarzania w segment. Integracja dekoduje tytuł, wyznacza początek bloku z czasu segmentu i porównuje znormalizowane tytuły z REST. Przy rozbieżności zostaje tytuł REST bez czasu HLS.",
+              "Gdy odtwarzanie przechodzi do kolejnego segmentu HLS, integracja odczytuje tag EXT-X-ZPR. Dekoduje tytuł, oblicza początek bloku na podstawie czasu segmentu i porównuje tytuły z HLS i REST po normalizacji. Jeśli się różnią, zachowuje tytuł z REST i pomija czas z HLS.",
             constraint:
-              "Porównanie tytułów jest heurystyką, a nie identyfikatorem utworu od dostawcy. Metadane HLS wygasają po trzydziestu sekundach; bez świeżego tagu integracja korzysta tylko z REST.",
+              "Dopasowanie po tytule jest przybliżone i daje mniejszą pewność niż identyfikator utworu od nadawcy. Metadane HLS wygasają po trzydziestu sekundach. Jeśli nie pojawi się nowy tag, integracja korzysta tylko z REST.",
           },
         },
         {
-          title: "Przerwa w playliście potrzebuje kontekstu.",
-          text: "Brak danych o utworze może oznaczać audycję, wiadomości lub przerwę. Wykorzystuję odstępy między utworami RMF i ramówkę Trójki, aby nadać temu kontekst. Po zakończeniu piosenki ekran może pokazać audycję zamiast starego tytułu.",
+          title: "Co pokazać między utworami.",
+          text: "Gdy brakuje danych o utworze, na antenie może trwać audycja, serwis wiadomości lub przerwa. Korzystam z odstępów między utworami w playliście RMF i z ramówki Trójki, żeby opisać, co wtedy słychać. Po zakończeniu piosenki ekran może wyświetlić nazwę audycji zamiast nieaktualnego tytułu utworu.",
           detail: {
             topic: "Ramówka i niepełne metadane",
             mechanism:
-              "RMF mapuje wpisy playlisty i dodaje wiersze przerw dla odpowiednich odstępów. Trójka odczytuje identyfikator buildu Next.js ze strony, pobiera ramówkę i playlistę, a następnie łączy bieżącą audycję z utworami według czasu warszawskiego.",
+              "Integracja RMF odczytuje wpisy playlisty i dodaje wiersze przerw tam, gdzie wskazują na nie odstępy między utworami. Integracja Trójki odczytuje ze strony identyfikator buildu Next.js, pobiera ramówkę i playlistę, a następnie dopasowuje utwory do bieżącej audycji według czasu warszawskiego.",
             constraint:
-              "Etykiety przerw RMF są wnioskowane z czasu. Dane strony Trójki mogą zmienić się po wdrożeniu; po odpowiedzi 404 integracja usuwa zapamiętany identyfikator buildu, aby pobrać nowy.",
+              "Opisy przerw RMF wynikają z odstępów czasowych. Po wdrożeniu nowej wersji strony Trójki mogą zmienić się adresy danych. Po odpowiedzi 404 integracja usuwa zapamiętany identyfikator buildu i pobiera aktualny.",
           },
         },
       ],
