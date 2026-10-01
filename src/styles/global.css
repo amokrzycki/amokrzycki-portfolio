@@ -224,6 +224,19 @@ nav a:focus-visible {
   background: var(--surface);
   color: var(--ink);
 }
+.theme-control::details-content {
+  opacity: 0;
+  transform: scale(0.98);
+  transform-origin: top right;
+  transition:
+    opacity 160ms ease-out,
+    transform 160ms ease-out,
+    content-visibility 160ms allow-discrete;
+}
+.theme-control[open]::details-content {
+  opacity: 1;
+  transform: scale(1);
+}
 .theme-menu fieldset {
   border: 0;
   margin: 0;
@@ -580,8 +593,30 @@ a:focus-visible .arrow {
   display: block;
   font-size: 14px;
 }
+.engineering-details summary {
+  border-bottom: 1px solid transparent;
+}
 .engineering-details[open] summary {
   border-bottom: 1px solid var(--rule);
+}
+@supports (interpolate-size: allow-keywords) and selector(::details-content) {
+  .engineering-details {
+    interpolate-size: allow-keywords;
+  }
+  .engineering-details::details-content {
+    block-size: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+      block-size 180ms var(--ease),
+      opacity 180ms ease-out,
+      content-visibility 180ms allow-discrete;
+  }
+  .engineering-details[open]::details-content {
+    block-size: auto;
+    opacity: 1;
+    transition-duration: 260ms;
+  }
 }
 .detail-content {
   padding-block: 24px 12px;
@@ -718,6 +753,13 @@ a:focus-visible .arrow {
   .explanation-panel {
     grid-area: 1 / 1;
     visibility: hidden;
+    opacity: 0;
+    transform: translateY(3px);
+    pointer-events: none;
+    transition:
+      opacity 160ms ease-out,
+      transform 160ms ease-out,
+      visibility 160ms ease-out;
   }
   .engineering-explanation:has(input[value="0"]:checked)
     .explanation-panel:nth-child(1),
@@ -728,6 +770,9 @@ a:focus-visible .arrow {
   .engineering-explanation:has(input[value="3"]:checked)
     .explanation-panel:nth-child(4) {
     visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
   }
 }
 details {
@@ -881,13 +926,39 @@ details > p {
   height: 90dvh;
   max-height: none;
   overflow: hidden;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  opacity: 0;
+  transform: scale(0.98);
+  transition:
+    opacity var(--duration) var(--ease),
+    transform var(--duration) var(--ease),
+    display var(--duration) allow-discrete,
+    overlay var(--duration) allow-discrete;
 }
 .image-viewer[open] {
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
+  opacity: 1;
+  transform: scale(1);
 }
 .image-viewer::backdrop {
   background: var(--viewer-backdrop);
+  opacity: 0;
+  transition:
+    opacity var(--duration) var(--ease),
+    display var(--duration) allow-discrete,
+    overlay var(--duration) allow-discrete;
+}
+.image-viewer[open]::backdrop {
+  opacity: 1;
+}
+@starting-style {
+  .image-viewer[open] {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  .image-viewer[open]::backdrop {
+    opacity: 0;
+  }
 }
 .viewer-toolbar {
   display: flex;
@@ -1228,5 +1299,30 @@ details > p {
   ::view-transition-old(root),
   ::view-transition-new(root) {
     animation: none;
+  }
+  .image-viewer,
+  .image-viewer::backdrop {
+    transition:
+      opacity 120ms ease-out,
+      display 120ms allow-discrete,
+      overlay 120ms allow-discrete !important;
+  }
+  .image-viewer,
+  .explanation-panel,
+  .theme-control::details-content {
+    transform: none !important;
+  }
+  .explanation-panel {
+    transition:
+      opacity 120ms ease-out,
+      visibility 120ms ease-out !important;
+  }
+  .theme-control::details-content {
+    transition:
+      opacity 120ms ease-out,
+      content-visibility 120ms allow-discrete !important;
+  }
+  .engineering-details::details-content {
+    transition: none !important;
   }
 }
