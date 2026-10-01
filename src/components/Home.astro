@@ -19,7 +19,7 @@ const c = pl
       explore: "Poznaj projekt",
       approach: ["Zaczynam od interfejsu.", "Podążam za problemem."],
       approachText:
-        "Przy odtwarzaczu radia oznacza to obsługę przerw w strumieniu. Przy galerii desktopowej — zachowanie historii, gdy dwa urządzenia zapisują zmiany jednocześnie.",
+        "W Kajtku informacje o utworze i sam dźwięk przychodzą z różnych źródeł. W Random Frame dwa urządzenia mogą zmieniać tę samą historię. W obu przypadkach problem zaczyna się w interfejsie i prowadzi do sposobu przetwarzania danych.",
       areas: [
         ["Interfejsy", "Produkt, interakcje, dostępność i wydajność."],
         ["Aplikacje", "Architektura, stan, synchronizacja i desktop."],
@@ -28,9 +28,11 @@ const c = pl
       ],
       about: "O mnie.",
       aboutText:
-        "Pracuję nad interfejsami i systemami, które je obsługują. Gdy problem leży w stanie aplikacji, API lub wdrożeniu, zajmuję się również nim.",
+        "Zawodowo pracuję nad oprogramowaniem od 2021 roku. Jestem inżynierem full-stack, ale najwięcej czasu spędzam przy frontendzie. Zwykle zaczynam od tego, co użytkownik próbuje zrobić i gdzie aplikacja mu to utrudnia.",
       aboutMore:
-        "Random Frame i Kajtek to moje projekty osobiste. Projektuję ich interfejsy, piszę kod i utrzymuję wydania.",
+        "Dużo uwagi poświęcam zachowaniu interfejsu: temu, co pokazuje po kliknięciu, na co trzeba czekać i jak wrócić po błędzie. To często prowadzi do stanu aplikacji, API albo przechowywania danych. Zajmuję się tym po drodze, bo te decyzje wpływają na to, jak korzysta się z produktu.",
+      aboutTools:
+        "Najczęściej pracuję z Reactem i TypeScriptem. Gdy problem tego wymaga, sięgam też do usług backendowych w Rails lub Node, Rusta, bezpieczeństwa, wdrożeń i infrastruktury. Własne projekty dają mi okazję przejść przez cały ten proces i wracać do decyzji po dłuższym używaniu aplikacji.",
       education:
         "Magister informatyki ze specjalizacją w cyberbezpieczeństwie.",
       contact: "Masz coś na myśli?",
@@ -49,7 +51,7 @@ const c = pl
         "The problem decides where I go.",
       ],
       approachText:
-        "For a radio player, that means handling interrupted streams. For a desktop gallery, it means preserving history when two devices save changes at once.",
+        "In Kajtek, the song information and the audio come from different sources. In Random Frame, two devices can change the same history. Both start as interface problems and lead into how the application handles its data.",
       areas: [
         [
           "Interfaces",
@@ -61,9 +63,11 @@ const c = pl
       ],
       about: "About me.",
       aboutText:
-        "I work on interfaces and the systems behind them. When a problem sits in application state, an API, or deployment, I work on that too.",
+        "I’ve worked in software professionally since 2021. I’m a full-stack engineer who spends most of my time on the frontend. I usually start with what someone is trying to do and where the application gets in their way.",
       aboutMore:
-        "Random Frame and Kajtek are my personal projects. I design their interfaces, write the software, and maintain their releases.",
+        "I pay attention to what happens after a click, what needs to wait, and how someone gets back from an error. That often takes me into application state, an API, or how data is stored. I work through those parts too, because they affect how the product feels to use.",
+      aboutTools:
+        "Most of my work is in React and TypeScript. I also work with Rails and Node services, Rust, security, deployment and infrastructure when the problem calls for it. My own projects let me follow that process through and revisit decisions after living with the software for a while.",
       education:
         "M.Sc. in Information Technology, specializing in cybersecurity.",
       contact: "Have something in mind?",
@@ -105,6 +109,7 @@ const selected: ProjectSlug[] = ["random-frame", "kajtek"];
     <div class="reading-copy">
       <p class="lead">{c.aboutText}</p>
       <p>{c.aboutMore}</p>
+      <p>{c.aboutTools}</p>
       <p class="education">{c.education}</p>
     </div>
   </section>

@@ -241,6 +241,15 @@ a:focus-visible .arrow {
   text-decoration: none;
   overflow: hidden;
 }
+.capture-link {
+  display: block;
+  width: 100%;
+  max-width: 1000px;
+  cursor: zoom-in;
+}
+.product-plate.kajtek .capture-link {
+  max-width: 880px;
+}
 .product-plate img {
   width: 100%;
   max-width: 1000px;
@@ -542,7 +551,7 @@ a:focus-visible .arrow {
   padding: clamp(24px, 4vw, 56px);
   background: var(--frame-ground);
 }
-.stream-explanation {
+.metadata-explanation {
   background: var(--kajtek-ground);
 }
 .explanation-panels {
@@ -578,14 +587,14 @@ a:focus-visible .arrow {
   margin-block: 14px 12px;
   font-variant-numeric: tabular-nums;
 }
-.stream-flow {
+.metadata-flow {
   display: flex;
   gap: 24px;
   list-style: none;
   padding: 0;
   margin-block: 44px;
 }
-.stream-flow li {
+.metadata-flow li {
   display: flex;
   flex: 1;
   align-items: center;
@@ -595,7 +604,7 @@ a:focus-visible .arrow {
   line-height: 1.35;
   letter-spacing: -0.02em;
 }
-.stream-flow .arrow {
+.metadata-flow .arrow {
   width: 28px;
   height: 28px;
 }
@@ -947,18 +956,18 @@ details > p {
     margin: 0;
     font-size: 21px;
   }
-  .stream-flow {
+  .metadata-flow {
     flex-direction: column;
     gap: 20px;
     margin-block: 28px;
   }
-  .stream-flow li {
+  .metadata-flow li {
     flex-direction: column;
     align-items: flex-start;
     gap: 20px;
     font-size: 23px;
   }
-  .stream-flow .arrow {
+  .metadata-flow .arrow {
     transform: rotate(90deg);
     width: 24px;
     height: 24px;
@@ -997,6 +1006,10 @@ details > p {
 
 .case-figure .product-plate {
   padding: clamp(12px, 2vw, 28px);
+}
+.case-figure .product-plate .capture-link,
+.project-gallery .product-plate .capture-link {
+  max-width: none;
 }
 .case-figure .product-plate img {
   max-width: none;

@@ -7,11 +7,11 @@ export const projects = {
       kind: "Desktop application",
       tagline: "Public images, one frame at a time.",
       summary:
-        "A desktop gallery for exploring public images from Prnt.sc. I built the browsing interface and the encrypted sync that keeps history and favorites across devices.",
+        "A desktop gallery for exploring public images from Prnt.sc, with local history and favorites. Optional encrypted sync keeps them together across devices without giving the server access to their contents.",
       alt: "Random Frame before the first draw, with its image stage and Draw control.",
       intro: "Browsing without losing your place.",
       overview:
-        "Random Frame draws a public image from Prnt.sc and lets you keep exploring, revisit earlier frames, or save a favorite. I built it around that short browsing loop, then worked through the harder part: keeping a reliable history on the desktop and merging changes between devices without exposing their contents to the sync server.",
+        "Random Frame draws a public image from Prnt.sc and lets you keep exploring, revisit earlier frames, or save a favorite. The browsing loop is short. The harder part was keeping a reliable history on the desktop and merging changes between devices without exposing their contents to the sync server.",
       sections: [
         {
           title: "Keep the image at the centre.",
@@ -19,7 +19,7 @@ export const projects = {
           detail: {
             topic: "Desktop interaction",
             decision:
-              "Keep history and sync accessible without covering the current image.",
+              "Give history and sync their own views so the browsing screen stays focused on the image.",
             mechanism:
               "N, Space or Enter draws; arrows move through history; F toggles a favorite. Tauri connects TypeScript controls to the Rust image-fetching backend.",
             constraint:
@@ -69,11 +69,11 @@ export const projects = {
       kind: "Aplikacja desktopowa",
       tagline: "Publiczne obrazy, po jednym.",
       summary:
-        "Galeria desktopowa do odkrywania publicznych obrazów z Prnt.sc. Zbudowałem interfejs przeglądania i szyfrowaną synchronizację historii oraz ulubionych między urządzeniami.",
+        "Galeria desktopowa do odkrywania publicznych obrazów z Prnt.sc, z lokalną historią i ulubionymi. Opcjonalna szyfrowana synchronizacja łączy je między urządzeniami bez ujawniania ich zawartości serwerowi.",
       alt: "Random Frame przed pierwszym losowaniem, z głównym obszarem obrazu i przyciskiem Draw.",
       intro: "Przeglądanie z pamięcią.",
       overview:
-        "Random Frame losuje publiczny obraz z Prnt.sc. Możesz losować dalej, wrócić do poprzednich obrazów lub zapisać ulubiony. Wokół tego zbudowałem interfejs. Kolejnym zadaniem było trwałe przechowywanie historii i scalanie zmian między urządzeniami, bez ujawniania ich zawartości serwerowi synchronizacji.",
+        "Random Frame losuje publiczny obraz z Prnt.sc. Możesz losować dalej, wrócić do poprzednich obrazów lub zapisać ulubiony. Najwięcej pracy wymagało trwałe przechowywanie historii i scalanie zmian między urządzeniami, bez ujawniania ich zawartości serwerowi synchronizacji.",
       sections: [
         {
           title: "Obraz pozostaje w centrum.",
@@ -137,61 +137,61 @@ export const projects = {
       kind: "Web application",
       tagline: "Internet radio in a cassette player.",
       summary:
-        "A browser radio inspired by the Unitra PS-101. I designed the player and connected station catalogs, live track information, and stream recovery behind its controls.",
-      alt: "Kajtek playing RMF FM in its red cassette interface, with a live audio meter and station information.",
-      intro: "A radio you can leave playing.",
+        "A browser radio inspired by the Unitra PS-101. Behind the cassette controls, separate provider integrations turn different station catalogs and track data into one listening interface.",
+      alt: "Kajtek’s complete red cassette player, ready to select a station, with reels, audio meter and playback controls.",
+      intro: "What’s playing, and how do you know?",
       overview:
-        "Kajtek plays internet radio through an interface inspired by the Polish Unitra PS-101 cassette player. I designed its controls and playback behavior, then connected providers whose catalogs, track information, and streams work differently. The main engineering problem was keeping playback useful when those services stall or fail.",
+        "Kajtek started with a cassette player: the Polish Unitra PS-101. Bringing internet radio into that interface meant working out what the player could reliably show. RMF publishes timed playlists, ESKA splits track information between a REST API and the audio stream, and Trójka has separate schedules and song lists. I built provider integrations that translate those sources into a shared model of the current track and playlist.",
       sections: [
         {
-          title: "Make the controls feel like the object.",
-          text: "The reels turn during playback and the meter responds to audio. I kept those signals tied to the player’s state, so the cassette interface shows what the radio is doing.",
+          title: "The cassette follows the audio.",
+          text: "The reels indicate playback, while Web Audio analysis drives the meter. Both belong to the player’s state: a station change has to update the stream, the track display and the physical controls together.",
           detail: {
-            topic: "Mechanics and audio analysis",
-            decision: "Use the meter and reels to indicate playback.",
+            topic: "Playback and visualization",
+            decision:
+              "Drive the cassette’s moving parts from playback state and audio analysis.",
             mechanism:
-              "Cassette reels animate during playback. Web Audio spectrum analysis drives the visualization. Themes and case colors keep the same interaction model.",
+              "Playback events update shared state; the UI renders the controls and reels. A separate visualizer reads the Web Audio spectrum.",
             constraint:
-              "When audio analysis is unavailable, beat emulation provides a fallback.",
+              "Some streams cannot be analysed through Web Audio. The visualizer falls back to an emulated beat, so meter movement does not always represent measured audio.",
           },
         },
         {
-          title: "Keep station changes in step.",
-          text: "Changing station affects the stream, artwork, track information, and controls together. I separated playback from rendering and connected both through shared state, so the interface follows the selected station.",
+          title: "Keep provider rules out of the controls.",
+          text: "The cassette should not need to know which provider calls a song title a name, or whether a playlist comes from one request or two. Each integration returns the same current-track and playlist structure. Playback, state and rendering use that structure in separate vanilla TypeScript modules.",
           detail: {
-            topic: "State and rendering",
-            decision:
-              "Keep UI, state and playback in focused TypeScript modules.",
+            topic: "A shared track model",
+            decision: "Normalize data at the provider boundary.",
             mechanism:
-              "The state store connects playback, provider metadata and rendering. Favorites, track history, sleep timer and station catalog extend that model.",
+              "Provider integrations return PlaylistResult: a current TrackInfo and a list of tracks. Optional fields carry timing, artwork and break information without requiring every source to supply them.",
             constraint:
-              "Track information arrives separately from audio and may be missing even while a stream is playing.",
+              "The shared model cannot create information a provider does not publish. Timing and artwork remain optional.",
           },
         },
         {
-          title: "Keep listening when a stream fails.",
-          text: "A live stream can stall or disappear. The player handles those failures as part of normal operation, with alternative stream mounts and bounded retries.",
+          title: "Two sources can name different songs.",
+          text: "ESKA’s REST API supplies readable track names, but timing lives in a private HLS tag. They can change songs a few seconds apart. Combining them blindly would put the previous song’s clock on the new title. The integration compares normalized titles before attaching timing and drops stream metadata when it becomes stale.",
           detail: {
-            topic: "Failover limits",
+            topic: "Reconciling REST and HLS",
             decision:
-              "Treat stalled and broken streams as normal operating conditions.",
+              "Attach stream timing only when the titles describe the same song.",
             mechanism:
-              "Playback error or stalled events can switch to secondary MP3 mounts. Provider metadata supports ad detection and switching away from blacklisted tracks.",
+              "The HLS fragment-change event reads EXT-X-ZPR as playback enters a segment. The integration decodes its title, derives the block start from the segment timestamp, and compares normalized titles with REST. During a mismatch, the REST title remains without HLS timing.",
             constraint:
-              "Three retries within thirty seconds bound automatic recovery. An alternate stream can fail too.",
+              "Title matching is a heuristic, rather than a provider-issued track ID. HLS metadata expires after thirty seconds; without a fresh tag, the integration uses REST alone.",
           },
         },
         {
-          title: "Different stations, different APIs.",
-          text: "I investigated the RMF, ESKA, and Trójka APIs and gave each provider its own integration. That keeps their catalog and metadata differences out of the player controls.",
+          title: "A gap in the playlist needs context.",
+          text: "Missing song data can mean speech, news or a break. RMF’s integration examines timestamps and gaps between songs; Trójka’s combines the programme schedule with its song list. When a Trójka song is no longer current, the programme title gives the listener more useful context than leaving the old song on screen.",
           detail: {
-            topic: "Provider boundaries",
+            topic: "Schedules and incomplete metadata",
             decision:
-              "Keep provider differences behind their own integrations.",
+              "Use the provider’s schedule and timing to explain gaps in song data.",
             mechanism:
-              "RMF, ESKA, Trójka and generic MP3/HLS streams have separate paths, informed by API investigation and reverse engineering.",
+              "RMF maps timed playlist entries and inserts break rows for qualifying gaps. Trójka discovers the website’s Next.js build ID, fetches schedule and playlist data, and matches the active programme to its songs using Warsaw time.",
             constraint:
-              "Catalogs, metadata and stream behavior vary. Track artwork falls back to station covers when needed.",
+              "RMF break labels are inferred from timing. Trójka’s website data can change with a deployment; the integration clears a cached build ID after a 404 so it can discover the new one.",
           },
         },
       ],
@@ -200,61 +200,61 @@ export const projects = {
       kind: "Aplikacja webowa",
       tagline: "Radio internetowe w magnetofonie.",
       summary:
-        "Radio w przeglądarce inspirowane Unitrą PS-101. Zaprojektowałem odtwarzacz i połączyłem katalogi stacji, informacje o utworach oraz obsługę przerw w strumieniu.",
-      alt: "Kajtek odtwarza RMF FM w czerwonym interfejsie magnetofonu, ze wskaźnikiem audio i informacjami o stacji.",
-      intro: "Radio do codziennego słuchania.",
+        "Radio w przeglądarce inspirowane Unitrą PS-101. Za kontrolkami magnetofonu osobne integracje łączą różne katalogi stacji i dane o utworach we wspólny interfejs.",
+      alt: "Cały czerwony odtwarzacz Kajtek, gotowy do wyboru stacji, ze szpulami, wskaźnikiem audio i kontrolkami odtwarzania.",
+      intro: "Co teraz gra i skąd to wiadomo?",
       overview:
-        "Kajtek odtwarza radio internetowe w interfejsie inspirowanym polskim magnetofonem Unitra PS-101. Zaprojektowałem kontrolki i obsługę odtwarzania, a następnie połączyłem dostawców z różnymi katalogami, metadanymi i strumieniami. Głównym problemem technicznym była obsługa sytuacji, gdy te usługi przestają odpowiadać.",
+        "Kajtek zaczął się od magnetofonu: polskiej Unitry PS-101. Przeniesienie radia internetowego do tego interfejsu wymagało ustalenia, jakie informacje odtwarzacz może wiarygodnie pokazać. RMF publikuje playlisty z czasem emisji, ESKA rozdziela dane o utworze między API REST a strumień audio, a Trójka ma osobną ramówkę i listy utworów. Przygotowałem integracje, które przekładają te źródła na wspólny model bieżącego utworu i playlisty.",
       sections: [
         {
-          title: "Kontrolki pasujące do przedmiotu.",
-          text: "Szpule obracają się podczas odtwarzania, a wskaźnik reaguje na dźwięk. Powiązałem te sygnały ze stanem odtwarzacza, żeby interfejs magnetofonu pokazywał, co robi radio.",
+          title: "Magnetofon podąża za dźwiękiem.",
+          text: "Szpule sygnalizują odtwarzanie, a analiza Web Audio steruje wskaźnikiem. Oba elementy są powiązane ze stanem odtwarzacza: zmiana stacji musi jednocześnie zaktualizować strumień, informacje o utworze i fizyczne kontrolki.",
           detail: {
-            topic: "Mechanizmy i analiza audio",
-            decision: "Wskaźnik i szpule sygnalizują odtwarzanie.",
+            topic: "Odtwarzanie i wizualizacja",
+            decision:
+              "Powiązać ruchome elementy magnetofonu ze stanem odtwarzania i analizą audio.",
             mechanism:
-              "Szpule animują się podczas odtwarzania. Analiza widma Web Audio steruje wizualizacją. Motywy i kolory zachowują ten sam model interakcji.",
+              "Zdarzenia odtwarzania aktualizują wspólny stan; interfejs renderuje kontrolki i szpule. Osobny moduł wizualizacji odczytuje widmo Web Audio.",
             constraint:
-              "Gdy analiza audio jest niedostępna, wizualizacja korzysta z emulacji rytmu.",
+              "Nie każdy strumień pozwala na analizę przez Web Audio. Wtedy wizualizacja emuluje rytm, więc ruch wskaźnika nie zawsze przedstawia pomiar dźwięku.",
           },
         },
         {
-          title: "Spójny stan po zmianie stacji.",
-          text: "Zmiana stacji wpływa jednocześnie na strumień, okładkę, informacje o utworze i kontrolki. Oddzieliłem odtwarzanie od renderowania i połączyłem je wspólnym stanem, żeby interfejs podążał za wybraną stacją.",
+          title: "Kontrolki nie muszą znać reguł dostawcy.",
+          text: "Magnetofon nie musi wiedzieć, jak dostawca nazywa pole z tytułem ani czy playlista wymaga jednego czy dwóch zapytań. Każda integracja zwraca tę samą strukturę bieżącego utworu i playlisty. Odtwarzanie, stan i renderowanie korzystają z niej w osobnych modułach czystego TypeScriptu.",
           detail: {
-            topic: "Stan i renderowanie",
-            decision:
-              "Interfejs, stan i odtwarzanie pozostają w osobnych modułach TypeScript.",
+            topic: "Wspólny model utworu",
+            decision: "Normalizować dane na granicy integracji z dostawcą.",
             mechanism:
-              "Magazyn stanu łączy odtwarzanie, metadane i renderowanie. Ulubione, historia, wyłącznik czasowy i katalog stacji rozszerzają ten model.",
+              "Integracje zwracają PlaylistResult: bieżący TrackInfo i listę utworów. Opcjonalne pola przechowują czas, okładki i informacje o przerwach, bez wymagania ich od każdego źródła.",
             constraint:
-              "Informacje o utworze przychodzą niezależnie od audio i mogą być niedostępne nawet wtedy, gdy stacja gra.",
+              "Wspólny model nie uzupełni informacji, których dostawca nie publikuje. Czas i okładki pozostają opcjonalne.",
           },
         },
         {
-          title: "Muzyka gra dalej.",
-          text: "Strumień na żywo może się zatrzymać lub zniknąć. Odtwarzacz traktuje te awarie jako część normalnego działania, z alternatywnymi adresami i ograniczoną liczbą prób.",
+          title: "Dwa źródła mogą wskazywać różne utwory.",
+          text: "API REST ESKI dostarcza czytelne nazwy utworów, ale dane o czasie znajdują się w prywatnym tagu HLS. Źródła mogą zmienić utwór w odstępie kilku sekund. Połączenie ich bez sprawdzenia przypisałoby zegar poprzedniego utworu do nowego tytułu. Integracja porównuje znormalizowane tytuły przed dołączeniem czasu i odrzuca nieaktualne metadane strumienia.",
           detail: {
-            topic: "Limit odzyskiwania",
+            topic: "Uzgadnianie REST i HLS",
             decision:
-              "Zatrzymany lub uszkodzony strumień jest normalną sytuacją operacyjną.",
+              "Dołączać czas ze strumienia tylko wtedy, gdy tytuły opisują ten sam utwór.",
             mechanism:
-              "Błąd lub zatrzymanie odtwarzania może przełączyć na zapasowy adres MP3. Metadane wspierają wykrywanie reklam i pomijanie zablokowanych utworów.",
+              "Zdarzenie zmiany fragmentu HLS odczytuje EXT-X-ZPR przy wejściu odtwarzania w segment. Integracja dekoduje tytuł, wyznacza początek bloku z czasu segmentu i porównuje znormalizowane tytuły z REST. Przy rozbieżności zostaje tytuł REST bez czasu HLS.",
             constraint:
-              "Trzy próby w trzydzieści sekund ograniczają automatyczne odzyskiwanie. Zapasowy strumień też może zawieść.",
+              "Porównanie tytułów jest heurystyką, a nie identyfikatorem utworu od dostawcy. Metadane HLS wygasają po trzydziestu sekundach; bez świeżego tagu integracja korzysta tylko z REST.",
           },
         },
         {
-          title: "Różne stacje, różne API.",
-          text: "Zbadałem API RMF, ESKI i Trójki i przygotowałem osobną integrację dla każdego dostawcy. Różnice w katalogach i metadanych są obsługiwane poza kontrolkami odtwarzacza.",
+          title: "Przerwa w playliście potrzebuje kontekstu.",
+          text: "Brak danych o utworze może oznaczać audycję, wiadomości lub przerwę. Integracja RMF analizuje czas emisji i odstępy między utworami; integracja Trójki łączy ramówkę z listą piosenek. Gdy utwór w Trójce już się skończył, tytuł audycji daje słuchaczowi więcej informacji niż pozostawiony na ekranie stary utwór.",
           detail: {
-            topic: "Granice dostawców",
+            topic: "Ramówka i niepełne metadane",
             decision:
-              "Różnice między dostawcami są obsługiwane w osobnych integracjach.",
+              "Wykorzystać ramówkę i czas emisji do wyjaśnienia przerw w danych o utworach.",
             mechanism:
-              "RMF, ESKA, Trójka i strumienie MP3/HLS mają osobne ścieżki, oparte na badaniu API i reverse engineeringu.",
+              "RMF mapuje wpisy playlisty i dodaje wiersze przerw dla odpowiednich odstępów. Trójka odczytuje identyfikator buildu Next.js ze strony, pobiera ramówkę i playlistę, a następnie łączy bieżącą audycję z utworami według czasu warszawskiego.",
             constraint:
-              "Katalogi, metadane i strumienie różnią się. Gdy brak okładki utworu, używana jest grafika stacji.",
+              "Etykiety przerw RMF są wnioskowane z czasu. Dane strony Trójki mogą zmienić się po wdrożeniu; po odpowiedzi 404 integracja usuwa zapamiętany identyfikator buildu, aby pobrać nowy.",
           },
         },
       ],

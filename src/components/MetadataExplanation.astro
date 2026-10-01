@@ -1,0 +1,136 @@
+---
+import Arrow from "./Arrow.astro";
+import type { Language } from "../data/projects";
+interface Props {
+  lang: Language;
+}
+const { lang } = Astro.props;
+const pl = lang === "pl";
+const steps = pl
+  ? [
+      {
+        label: "Rozbieżność",
+        title: "Nowy tytuł. Czas poprzedniego utworu.",
+        states: [
+          "REST: utwór B",
+          "HLS: utwór A + czas",
+          "Tytuł B bez czasu HLS",
+        ],
+        caption:
+          "REST i strumień nie muszą zmienić utworu jednocześnie. Przy różnych tytułach integracja pomija czas HLS.",
+      },
+      {
+        label: "Porównanie",
+        title: "Najpierw sprawdź, czy tytuły pasują.",
+        states: [
+          "Tytuł z REST",
+          "Normalizacja i porównanie",
+          "Tytuł z tagu HLS",
+        ],
+        caption:
+          "Porównanie ignoruje wielkość liter i znaki przestankowe. Wspólny fragment tytułu pozwala połączyć dane, choć nie daje pewności identyfikatora utworu.",
+      },
+      {
+        label: "Zgodne dane",
+        title: "Czytelna nazwa i czas związany z dźwiękiem.",
+        states: [
+          "REST: nazwa i wykonawca",
+          "HLS: początek i długość",
+          "Wspólny TrackInfo",
+        ],
+        caption:
+          "Czas pochodzi z segmentu, w który właśnie weszło odtwarzanie. Początek bloku jest wyliczany z czasu segmentu, więc kolejne odczyty nie przesuwają zegara utworu.",
+      },
+      {
+        label: "Nieaktualny tag",
+        title: "Stary zegar nie zostaje na ekranie.",
+        states: ["Brak świeżego tagu", "Wygaszenie po 30 s", "Dane z REST"],
+        caption:
+          "Pauza lub zatrzymany strumień mogą przerwać dopływ tagów. Po trzydziestu sekundach integracja odrzuca metadane HLS; czas pozostaje opcjonalny.",
+      },
+    ]
+  : [
+      {
+        label: "Sources disagree",
+        title: "A new title with the previous song’s timing.",
+        states: [
+          "REST: song B",
+          "HLS: song A + timing",
+          "Title B without HLS timing",
+        ],
+        caption:
+          "REST and the stream do not always change tracks together. When their titles disagree, the integration leaves out the HLS timing.",
+      },
+      {
+        label: "Compare titles",
+        title: "Check that the titles describe the same song.",
+        states: ["REST title", "Normalize and compare", "HLS tag title"],
+        caption:
+          "The comparison ignores case and punctuation. A shared title substring allows the data to be combined, with less certainty than a provider-issued track ID.",
+      },
+      {
+        label: "Combine data",
+        title: "Readable names, timing tied to the audio.",
+        states: [
+          "REST: artist and title",
+          "HLS: start and duration",
+          "Shared TrackInfo",
+        ],
+        caption:
+          "Timing comes from the segment playback has just entered. Deriving the block start from the segment timestamp keeps repeated reads from moving the song’s clock.",
+      },
+      {
+        label: "Expire stale tags",
+        title: "An old clock should not stay on screen.",
+        states: ["No fresh tag", "Expire after 30 s", "REST data"],
+        caption:
+          "Pausing or stalling can stop new tags arriving. After thirty seconds, the integration discards HLS metadata; timing remains optional.",
+      },
+    ];
+---
+
+<figure class="engineering-explanation metadata-explanation">
+  <fieldset class="explanation-controls">
+    <legend>
+      {pl
+        ? "Jak Kajtek uzgadnia metadane ESKI"
+        : "How Kajtek reconciles ESKA metadata"}
+    </legend>
+    {steps.map((step, index) => (
+      <label>
+        <input
+          type="radio"
+          name="metadata-step"
+          value={index}
+          checked={index === 0}
+          aria-controls={"metadata-panel-" + index}
+        />
+        <span>
+          <span class="step-number">{index + 1}</span>
+          {step.label}
+        </span>
+      </label>
+    ))}
+  </fieldset>
+  <div class="explanation-panels">
+    {steps.map((step, index) => (
+      <div class="explanation-panel" id={"metadata-panel-" + index}>
+        <h3>{step.title}</h3>
+        <ol class="metadata-flow">
+          {step.states.map((state, lane) => (
+            <li>
+              <span>{state}</span>
+              {lane < 2 && <Arrow />}
+            </li>
+          ))}
+        </ol>
+        <p class="explanation-caption">{step.caption}</p>
+      </div>
+    ))}
+  </div>
+  <figcaption>
+    {pl
+      ? "Przykład ESKI: nazwa z REST i czas ze strumienia trafiają do jednego modelu utworu."
+      : "ESKA example: REST names and stream timing feed one track model."}
+  </figcaption>
+</figure>

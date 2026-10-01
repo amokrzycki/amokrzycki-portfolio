@@ -4,7 +4,7 @@ import Arrow from "./Arrow.astro";
 import ProductImage from "./ProductImage.astro";
 import { screenshots } from "../data/screenshots";
 import SyncExplanation from "./SyncExplanation.astro";
-import StreamExplanation from "./StreamExplanation.astro";
+import MetadataExplanation from "./MetadataExplanation.astro";
 import { projects, type ProjectSlug, type Language } from "../data/projects";
 interface Props {
   slug: ProjectSlug;
@@ -47,7 +47,16 @@ const next = slug === "random-frame" ? "kajtek" : "random-frame";
       <p class="case-tagline">{c.tagline}</p>
     </header>
     <figure class="case-figure">
-      <ProductImage slug={slug} alt={c.alt} eager />
+      <ProductImage
+        slug={slug}
+        alt={c.alt}
+        eager
+        sizes={
+          slug === "random-frame"
+            ? "(max-width: 700px) calc(100vw - 68px), (max-width: 1400px) 85vw, 1224px"
+            : undefined
+        }
+      />
     </figure>
   </div>
   <section class="case-intro editorial-row">
@@ -77,7 +86,7 @@ const next = slug === "random-frame" ? "kajtek" : "random-frame";
           (slug === "random-frame" ? (
             <SyncExplanation lang={lang} />
           ) : (
-            <StreamExplanation lang={lang} />
+            <MetadataExplanation lang={lang} />
           ))}
         <details class="engineering-details">
           <summary>
@@ -124,6 +133,7 @@ const next = slug === "random-frame" ? "kajtek" : "random-frame";
         <ProductImage
           slug={slug}
           source={shot.source}
+          sizes="(max-width: 700px) calc(100vw - 64px), (max-width: 1400px) 85vw, 1236px"
           alt={`${project.name}: ${shot[lang]}`}
         />
         <figcaption>{shot[lang]}</figcaption>

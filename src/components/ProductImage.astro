@@ -1,7 +1,7 @@
 ---
-import { Image } from "astro:assets";
-import randomFrame from "../assets/random-frame.webp";
-import kajtek from "../assets/kajtek.webp";
+import { Image, getImage } from "astro:assets";
+import randomFrame from "../assets/random-frame.png";
+import kajtek from "../assets/kajtek.png";
 import type { ImageMetadata } from "astro";
 import type { ProjectSlug } from "../data/projects";
 interface Props {
@@ -9,25 +9,40 @@ interface Props {
   alt: string;
   source?: ImageMetadata;
   eager?: boolean;
+  sizes?: string;
 }
 const {
   slug,
   alt,
   source = slug === "random-frame" ? randomFrame : kajtek,
   eager = false,
+  sizes = slug === "random-frame"
+    ? "(max-width: 700px) calc(100vw - 64px), (max-width: 1400px) 75vw, 1000px"
+    : "(max-width: 700px) calc(100vw - 64px), (max-width: 1400px) 50vw, 880px",
 } = Astro.props;
+const widths = [
+  ...new Set([480, 720, 960, 1280, 1600, 2000, source.width]),
+].filter((width) => width <= source.width);
+const fullSize = await getImage({ src: source, format: "png" });
 ---
 
 <div class:list={["product-plate", slug]}>
-  <Image
-    src={source}
-    alt={alt}
-    widths={[...new Set([480, 828, 1100, source.width])].filter(
-      (width) => width <= source.width,
-    )}
-    style={`--capture-width: ${source.width}px`}
-    sizes="(max-width: 700px) 90vw, (max-width: 1400px) 85vw, 1280px"
-    loading={eager ? "eager" : "lazy"}
-    decoding="async"
-  />
+  <a
+    class="capture-link"
+    href={fullSize.src}
+    target="_blank"
+    rel="noopener"
+    aria-label={`${Astro.url.pathname.startsWith("/pl/") ? "Otwórz obraz w pełnym rozmiarze" : "Open full-size image"}: ${alt}`}
+  >
+    <Image
+      src={source}
+      alt={alt}
+      widths={widths}
+      format="png"
+      style={`--capture-width: ${source.width}px`}
+      sizes={sizes}
+      loading={eager ? "eager" : "lazy"}
+      decoding="async"
+    />
+  </a>
 </div>

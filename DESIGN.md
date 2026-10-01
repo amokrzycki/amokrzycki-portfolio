@@ -201,20 +201,9 @@ Actions remain plain text links with inline SVG arrows. Text links have a minimu
 
 ### Product plates
 
-A native image link places the authentic application capture on its project ground. JavaScript enhances the link with a modal; without JavaScript it opens the source image. The link has a translated accessible enlargement name, and the image retains descriptive alt text. Random Frame and Kajtek preserve distinct source widths and padding; these are project presentation variants, not additional generic card components. The first homepage capture and case-study captures load eagerly; other homepage media loads lazily through Astro responsive images.
+A native image link places the authentic application capture on its project ground and opens the full-resolution PNG in a separate tab. The link has a translated accessible name and zoom cursor; the image retains descriptive alt text. Random Frame and Kajtek preserve their existing plate padding. The first homepage capture and case-study primary images load eagerly; gallery images load lazily with responsive PNG sources.
 
-The enlargement label appears on hover or keyboard focus and remains visible on mobile. On hover-capable devices only, the image lifts three pixels. No image is cropped to fill an arbitrary card ratio.
-
-**Capture provenance:**
-
-- [random-frame.webp](src/assets/random-frame.webp) and [its provenance](src/assets/random-frame.webp.json): captured from the actual local Random Frame frontend at 1100×720 on 2026-10-01. Its existing empty state was revealed because the Tauri backend cannot run in the browser; dialogs and the backend error were hidden. The case study discloses this limit. No invented content or third-party image fills the interface.
-- [kajtek.webp](src/assets/kajtek.webp) and [its provenance](src/assets/kajtek.webp.json): captured from the actual local Kajtek frontend and committed CSS in its ready state on 2026-10-01. No generated artwork or invented product data.
-
-### Image viewer and close control
-
-The enlargement uses a native modal `dialog`, a translated accessible label, and an autofocus close button in a `method="dialog"` form. The viewer fits within viewport bounds, preserves the image's alt text, and uses `object-fit: contain`. Escape and outside-backdrop clicks close it; native modal behavior restores focus to the trigger. Escape, focus restoration and disclosure behavior passed the finish verification.
-
-The close and inspection controls are quiet and rectangular, with a fine border and minimum 44px height. Full-size inspection scrolls naturally in both axes and resets to fit when the viewer reopens. Its focus treatment is the common visible outline; there is no extra animated close state.
+Sources are captured at device scale factor 2, without lossy conversion. Primary Kajtek imagery isolates the complete cassette with breathing room; its gallery shows the complete application and catalog dialog. Random Frame uses only empty local data, with external images blocked. Source details, controlled states and pixel dimensions are recorded in [the asset notes](src/assets/README.md).
 
 ### Engineering disclosure
 
@@ -222,13 +211,13 @@ Native `details`/`summary` reveals optional technical reading below the product 
 
 ### Ownership list and editorial rows
 
-Capabilities use a definition list, with fine top rules and compact labels beside descriptions. Case sections and About/Contact use open two-column rows. Contact is a larger text link, and the next-project link closes a case study with generous type. The approach statement is a separate typographic pause. About describes concrete working habits rather than listing technologies. There are no chips or generic project cards.
+Capabilities use a definition list, with fine top rules and compact labels beside descriptions. Case sections and About/Contact use open two-column rows. Contact is a larger text link, and the next-project link closes a case study with generous type. The approach statement is a separate typographic pause. About uses three concise paragraphs describing working habits, professional experience since 2021 and the tools Adrian uses when a problem crosses application boundaries. There are no chips or generic project cards.
 
 ### Engineering explanations
 
 Random Frame compares Device A, the encrypted sync server and Device B across four selected stages: shared revision, independent changes, stale-write rejection, and client-side merge/retry. Example revisions r7–r9 are explicitly illustrative; encryption and the server's metadata visibility are stated.
 
-Kajtek shows primary playback, a stalled/error event, alternate-stream recovery, and the three-retry/thirty-second boundary as a directional flow. This is a labeled behavior illustration without audio playback.
+Kajtek explains ESKA metadata reconciliation: REST and HLS disagree, normalized titles are compared, matching names and timing enter a shared track model, and stale tags expire. The example states that title matching is a heuristic and timing remains optional. It illustrates provider behavior without playing audio.
 
 Both use native radio groups with visible selected and keyboard focus states. CSS selects the displayed panel and reserves its layout space. They need no JavaScript, dependency or automatic motion. Without selector support, the stages remain readable as a static sequence.
 

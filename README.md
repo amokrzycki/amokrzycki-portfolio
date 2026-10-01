@@ -19,8 +19,8 @@ npm run astro -- dev stop
 npm run build
 ```
 
-Set `SITE_URL` to the confirmed production origin before building for deployment. It enables absolute canonical and language-alternate URLs. The first pass is not deployed; a launch still needs final product captures, social artwork, sitemap/robots metadata, and factual review of the case-study copy.
+Set `SITE_URL` to the confirmed production origin before building for deployment. It enables absolute canonical and language-alternate URLs. The first pass is not deployed; a launch still needs social artwork, sitemap/robots metadata and launch review.
 
 ## Imagery
 
-Product images are optimized captures of the actual sibling project interfaces. Random Frame shows the existing empty state without the desktop backend. Kajtek shows the actual player ready to play. Capture provenance lives next to each source image. Manrope is self-hosted under its included OFL license.
+Product images are fresh lossless PNG captures from the current sibling project sources, with responsive PNG delivery and full-resolution links. Random Frame uses image-free states with empty local data. Kajtek shows complete cassette and application states, with a reviewed recorded playlist. [Capture notes and dimensions](src/assets/README.md) document the sources and controlled capture setup. Manrope is self-hosted under its included OFL license.
