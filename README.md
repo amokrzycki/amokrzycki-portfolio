@@ -1,30 +1,50 @@
-# amokrzycki.github.io
+# Adrian Mokrzycki’s portfolio
 
-Personal portfolio website for **Adrian Mokrzycki**.
+A bilingual portfolio built with Astro. It presents two personal projects, Random Frame and Kajtek, with case studies covering their interfaces and the engineering behind them.
 
-Live site: [amokrzycki.ovh](https://amokrzycki.ovh)
+## Stack
 
-## Tech Stack
+- Astro 7 with static generation
+- TypeScript and custom CSS
+- No UI framework or runtime dependency beyond Astro
+- Self-hosted Manrope font
 
-- **Framework:** React 19 + Vite 8
-- **Language:** TypeScript
-- **Styling:** Tailwind CSS 4
-- **Animations:** Framer Motion
-- **Formatting/Linting:** Biome
+## Projects
 
-## Development
+- [Random Frame](https://github.com/amokrzycki/random-frame): a desktop image viewer with local history and optional encrypted sync.
+- [Kajtek](https://github.com/amokrzycki/kajtek): an internet radio player with a cassette-inspired interface and integrations for Polish radio providers.
 
-### Setup
+The site includes English and Polish homepages and project pages. Project copy and metadata live in `src/data/projects.ts`; the pages are generated from the project slugs.
 
-Install the dependencies:
+## Run locally
 
-```bash
+Requires Node.js 22.12 or newer.
+
+```sh
 npm install
+npm run dev -- --background
 ```
 
-### Scripts
+Astro’s background server can be managed with:
 
-- **Development server:** `npm run dev`
-- **Build for production:** `npm run build`
-- **Lint code:** `npm run lint`
-- **Preview production build:** `npm run preview`
+```sh
+npm run astro -- dev status
+npm run astro -- dev logs
+npm run astro -- dev stop
+```
+
+## Build and checks
+
+```sh
+npm run build
+npm run lint
+npm run check:site
+```
+
+Set `SITE_URL` to the production origin when building for deployment. Astro uses it to generate canonical, language alternate and social metadata URLs.
+
+## License
+
+The portfolio source is released under the MIT License. See [LICENSE](LICENSE). The Manrope font is distributed under the SIL Open Font License; its license is in `public/fonts/OFL.txt`.
+
+© 2026 Adrian Mokrzycki

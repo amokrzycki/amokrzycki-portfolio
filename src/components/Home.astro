@@ -1,0 +1,155 @@
+---
+import Site from "../layouts/Site.astro";
+import Arrow from "./Arrow.astro";
+import ProductImage from "./ProductImage.astro";
+import { projects, type Language, type ProjectSlug } from "../data/projects";
+interface Props {
+  lang?: Language;
+}
+const { lang = "en" } = Astro.props;
+const pl = lang === "pl";
+const base = pl ? "/pl" : "";
+const c = pl
+  ? {
+      intro:
+        "Jestem programistą full-stack. Pracuję zawodowo od 2021 roku, głównie przy frontendzie.",
+      about: "O mnie",
+      aboutText:
+        "Najczęściej zaczynam od interfejsu, ale nie traktuję frontendu jako granicy problemu. Jeśli źródło tarcia leży w stanie aplikacji, kontrakcie API, modelu danych, backendzie albo wdrożeniu, schodzę warstwę niżej i rozwiązuję je tam, gdzie faktycznie powstaje.",
+      aboutTools:
+        "Na co dzień pracuję głównie z Reactem i TypeScriptem, ale regularnie wchodzę też w Rails, Node.js i Rust. Dobieram warstwę i narzędzia do problemu, zamiast próbować zamknąć wszystko w frontendzie.",
+      education:
+        "Magister Inżynier informatyki, Specjalizacja: Cyberbezpieczeństwo.",
+      selected: "Wybrane projekty",
+      selectedNote: "Własne projekty",
+      explore: "O projekcie",
+      approach: "Jak pracuję",
+      approachText:
+        "We własnych projektach zajmuję się zarówno interfejsem, jak i usługami, na których działa aplikacja. Korzystam z niej przez dłuższy czas i wracam do wcześniejszych decyzji, gdy zauważę coś niewygodnego.",
+      approachMore:
+        "W Random Frame musiałem zadbać o to, żeby historia była szyfrowana, a zmiany z kilku urządzeń dało się połączyć. W Kajtku sprawdzam, czy tytuł z API dotyczy utworu, który właśnie słychać. To, co ma działać w interfejsie, często wymaga więc pracy także po stronie danych i backendu.",
+      contact: "Porozmawiajmy",
+      contactText:
+        "Napisz, jeśli chcesz porozmawiać o projekcie lub wspólnej pracy.",
+    }
+  : {
+      intro:
+        "I’m a full-stack engineer. I’ve worked in software since 2021, mostly on the frontend.",
+      about: "About me",
+      aboutText:
+        "I usually start with the interface, but I don’t treat frontend as the boundary of the problem. If the friction comes from application state, an API contract, the data model, the backend, or deployment, I go deeper and solve it where it actually originates.",
+      aboutTools:
+        "Most of my day-to-day work is in React and TypeScript, but I also work regularly with Rails, Node.js, and Rust. I choose the layer and tools based on the problem instead of trying to force everything into the frontend.",
+      education:
+        "M.Sc. Eng. in Information Technology, specializing in Cybersecurity.",
+      selected: "Selected work",
+      selectedNote: "Personal projects",
+      explore: "Explore the project",
+      approach: "How I work",
+      approachText:
+        "My own projects let me work through the interface and the services behind it. I revisit decisions after living with the software for a while, when the awkward parts become easier to see.",
+      approachMore:
+        "In Random Frame, saving history leads into encryption and merging changes. In Kajtek, the title on the cassette means checking whether an API and the audio stream describe the same song. Those connections determine how much of the system I work on.",
+      contact: "Let’s talk",
+      contactText: "Email me about a project or working together.",
+    };
+const selected: ProjectSlug[] = ["random-frame", "kajtek"];
+---
+
+<Site
+  lang={lang}
+  title={
+    pl
+      ? "Adrian Mokrzycki | Programista full-stack"
+      : "Adrian Mokrzycki — Full-stack engineer"
+  }
+  description={
+    pl
+      ? "Adrian Mokrzycki, programista full-stack skupiony na frontendzie. Zobacz moje projekty: Random Frame i Kajtek."
+      : "Adrian Mokrzycki, a full-stack engineer with a focus on interfaces. Personal projects: Random Frame and Kajtek."
+  }
+>
+  <section class="hero" aria-labelledby="hero-heading">
+    <h1 id="hero-heading">
+      {pl ? "Tworzę" : "Software,"}
+      <br />
+      {pl ? "aplikacje." : "considered."}
+    </h1>
+    <div class="hero-note">
+      <p>{c.intro}</p>
+      <a class="text-link" href="#work">
+        {c.selected}
+        <Arrow />
+      </a>
+    </div>
+  </section>
+  <section
+    class="about editorial-row"
+    id="about"
+    aria-labelledby="about-heading"
+  >
+    <h2 id="about-heading">{c.about}</h2>
+    <div class="reading-copy">
+      <p>{c.aboutText}</p>
+      <p>{c.aboutTools}</p>
+      <p class="education">{c.education}</p>
+    </div>
+  </section>
+  <section class="selected-work" id="work" aria-labelledby="work-heading">
+    <div class="section-heading">
+      <h2 id="work-heading">{c.selected}</h2>
+      <p>{c.selectedNote}</p>
+    </div>
+    {selected.map((slug, index) => {
+      const project = projects[slug];
+      const content = project[lang];
+      return (
+        <>
+          <article class:list={["project-spread", "spread-" + slug]}>
+            <div class="project-identity">
+              <h3>
+                <a href={`${base}/work/${slug}/`}>{project.name}</a>
+              </h3>
+              <p class="metadata">{content.kind}</p>
+              <p class="project-tagline">{content.tagline}</p>
+            </div>
+            <ProductImage slug={slug} alt={content.alt} eager={index === 0} />
+            <div class="project-caption">
+              <p>{content.summary}</p>
+              <a class="text-link" href={`${base}/work/${slug}/`}>
+                {c.explore}
+                <Arrow />
+              </a>
+            </div>
+          </article>
+          {index === 0 && (
+            <section
+              class="approach editorial-row"
+              aria-labelledby="approach-heading"
+            >
+              <h2 id="approach-heading">{c.approach}</h2>
+              <div class="reading-copy">
+                <p>{c.approachText}</p>
+                <p>{c.approachMore}</p>
+              </div>
+            </section>
+          )}
+        </>
+      );
+    })}
+  </section>
+  <section
+    class="contact editorial-row"
+    id="contact"
+    aria-labelledby="contact-heading"
+  >
+    <h2 id="contact-heading">{c.contact}</h2>
+    <div>
+      <p>{c.contactText}</p>
+      <a class="contact-link" href="mailto:contact@amokrzycki.ovh">
+        contact@amokrzycki.ovh
+        <Arrow external />
+      </a>
+    </div>
+  </section>
+</Site>

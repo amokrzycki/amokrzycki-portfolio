@@ -1,0 +1,131 @@
+---
+import "../styles/global.css";
+import Arrow from "../components/Arrow.astro";
+import ImageViewer from "../components/ImageViewer.astro";
+import ThemeControl from "../components/ThemeControl.astro";
+interface Props {
+  title: string;
+  description: string;
+  lang?: "en" | "pl";
+}
+const { title, description, lang = "en" } = Astro.props;
+const pl = lang === "pl";
+const home = pl ? "/pl/" : "/";
+const english = Astro.url.pathname.replace(/^\/pl\//, "/");
+const polish = `/pl${english}`;
+const canonical = Astro.site
+  ? new URL(Astro.url.pathname, Astro.site)
+  : undefined;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" />
+    <script is:inline>
+      // Run before the body can paint; system mode never creates an override.
+      let theme = "system";
+      try {
+        const saved = localStorage.getItem("portfolio-theme");
+        if (saved === "light" || saved === "dark") theme = saved;
+      } catch {
+        // Storage can be unavailable; the system preference still works.
+      }
+      document.documentElement.dataset.theme = theme;
+    </script>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link
+      rel="preload"
+      href="/fonts/manrope-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <title>{title}</title>
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={pl ? "pl_PL" : "en_GB"} />
+    {canonical && (
+      <>
+        <link rel="canonical" href={canonical} />
+        <link
+          rel="alternate"
+          hreflang="en"
+          href={new URL(english, Astro.site)}
+        />
+        <link
+          rel="alternate"
+          hreflang="pl"
+          href={new URL(polish, Astro.site)}
+        />
+        <link
+          rel="alternate"
+          hreflang="x-default"
+          href={new URL(english, Astro.site)}
+        />
+        <meta property="og:url" content={canonical} />
+      </>
+    )}
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">
+      {pl ? "Przejdź do treści" : "Skip to content"}
+    </a>
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="name" href={home}>
+          Adrian Mokrzycki
+          <span class="name-note">
+            {pl ? "Programista full-stack" : "Software engineer"}
+          </span>
+        </a>
+        <nav aria-label={pl ? "Nawigacja główna" : "Main navigation"}>
+          <a href={`${home}#work`}>{pl ? "Projekty" : "Work"}</a>
+          <a href={`${home}#about`}>{pl ? "O mnie" : "About"}</a>
+          <a href={`${home}#contact`}>{pl ? "Kontakt" : "Contact"}</a>
+          <a
+            class="language"
+            href={pl ? english : polish}
+            lang={pl ? "en" : "pl"}
+            aria-label={pl ? "Read in English" : "Czytaj po polsku"}
+          >
+            {pl ? "EN" : "PL"}
+          </a>
+          <ThemeControl lang={lang} />
+        </nav>
+      </header>
+      <main id="main">
+        <slot />
+      </main>
+      <footer class="site-footer">
+        <p>© {new Date().getFullYear()} Adrian Mokrzycki</p>
+        <div>
+          <a href="https://github.com/amokrzycki">
+            GitHub <Arrow external />
+          </a>
+          <a href="#top">
+            {pl ? "Do góry" : "Back to top"}{" "}
+            <svg
+              class="arrow"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              aria-hidden="true"
+            >
+              <path d="M12 20V4m-6 6 6-6 6 6" />
+            </svg>
+          </a>
+        </div>
+      </footer>
+    </div>
+    <ImageViewer lang={lang} />
+  </body>
+</html>

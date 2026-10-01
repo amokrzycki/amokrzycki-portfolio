@@ -1,0 +1,131 @@
+---
+interface Props {
+  lang: "en" | "pl";
+}
+const pl = Astro.props.lang === "pl";
+const choices = [
+  { value: "system", label: pl ? "Systemowy" : "System" },
+  { value: "light", label: pl ? "Jasny" : "Light" },
+  { value: "dark", label: pl ? "Ciemny" : "Dark" },
+];
+const title = pl ? "Motyw" : "Theme";
+const follows = pl
+  ? "Zgodnie z ustawieniami urządzenia"
+  : "Follows your device settings";
+---
+
+<details class="theme-control" hidden>
+  <summary
+    class="theme-trigger"
+    aria-label={`${title}: ${choices[0].label}`}
+    data-label={title}
+  >
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <g class="theme-icon theme-icon-system">
+        <rect x="3" y="4" width="18" height="13" rx="2" />
+        <path d="M8 21h8m-4-4v4" />
+      </g>
+      <g class="theme-icon theme-icon-light">
+        <circle cx="12" cy="12" r="4" />
+        <path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" />
+      </g>
+      <g class="theme-icon theme-icon-dark">
+        <path d="M20.4 14.1A9 9 0 0 1 9.9 3.6a9 9 0 1 0 10.5 10.5Z" />
+      </g>
+    </svg>
+    <span class="theme-current">{choices[0].label}</span>
+  </summary>
+  <div class="theme-menu">
+    <fieldset>
+      <legend>{title}</legend>
+      {choices.map(({ value, label }) => (
+        <label>
+          <input
+            type="radio"
+            name="portfolio-theme"
+            value={value}
+            checked={value === "system"}
+            aria-describedby={
+              value === "system" ? "theme-system-hint" : undefined
+            }
+          />
+          <span>{label}</span>
+        </label>
+      ))}
+    </fieldset>
+    <p id="theme-system-hint">{follows}</p>
+  </div>
+</details>
+
+<script>
+  const root = document.documentElement;
+  const control = document.querySelector<HTMLDetailsElement>(".theme-control")!;
+  const trigger = control.querySelector<HTMLElement>("summary")!;
+  const current = control.querySelector<HTMLElement>(".theme-current")!;
+  const radios = [...control.querySelectorAll<HTMLInputElement>("input")];
+  const preference = matchMedia("(prefers-color-scheme: dark)");
+
+  function update() {
+    const selected = radios.find(
+      (radio) => radio.value === root.dataset.theme,
+    )!;
+    selected.checked = true;
+    const label = selected.nextElementSibling!.textContent!;
+    current.textContent = label;
+    const description = `${trigger.dataset.label}: ${label}`;
+    trigger.setAttribute("aria-label", description);
+    trigger.title = description;
+    document.querySelector<HTMLMetaElement>(
+      'meta[name="theme-color"]',
+    )!.content = getComputedStyle(root).backgroundColor;
+  }
+
+  control.addEventListener("change", (event) => {
+    const selected = event.target as HTMLInputElement;
+    root.dataset.theme = selected.value;
+    try {
+      if (selected.value === "system")
+        localStorage.removeItem("portfolio-theme");
+      else localStorage.setItem("portfolio-theme", selected.value);
+    } catch {
+      // Keep the selected theme for this page even when persistence is blocked.
+    }
+    update();
+  });
+  preference.addEventListener("change", update);
+  window.addEventListener("storage", (event) => {
+    if (event.key !== "portfolio-theme" && event.key !== null) return;
+    root.dataset.theme =
+      event.newValue === "light" || event.newValue === "dark"
+        ? event.newValue
+        : "system";
+    update();
+  });
+  document.addEventListener("click", (event) => {
+    if (!control.contains(event.target as Node)) control.open = false;
+  });
+  control.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && control.open) {
+      event.preventDefault();
+      control.open = false;
+      trigger.focus();
+    }
+  });
+  control.addEventListener("focusout", (event) => {
+    // Label clicks briefly blur the radio before activating it. Keep it mounted.
+    if (event.relatedTarget && !control.contains(event.relatedTarget as Node))
+      control.open = false;
+  });
+  update();
+  control.hidden = false;
+</script>
