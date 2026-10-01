@@ -1,0 +1,157 @@
+---
+import type { Language } from "../data/projects";
+interface Props {
+  lang: Language;
+}
+const { lang } = Astro.props;
+const pl = lang === "pl";
+const steps = pl
+  ? [
+      {
+        label: "Wspólny początek",
+        title: "Oba urządzenia znają tę samą rewizję.",
+        states: ["Odczytano r7", "Rewizja r7", "Odczytano r7"],
+        notes: [
+          "Historia na urządzeniu",
+          "Zaszyfrowana migawka",
+          "Historia na urządzeniu",
+        ],
+        caption:
+          "Urządzenia pobierają migawkę i odszyfrowują ją lokalnie. Numer rewizji wskazuje wersję, względem której mogą zapisać zmiany.",
+      },
+      {
+        label: "Niezależne zmiany",
+        title: "Jedno urządzenie zapisuje. Drugie nadal zmienia dane.",
+        states: ["Zapisano r8", "Rewizja r8", "Nadal na r7"],
+        notes: [
+          "Nowy ulubiony → szyfrowanie → zapis",
+          "Nowa zaszyfrowana migawka",
+          "Niezsynchronizowane lokalne zmiany",
+        ],
+        caption:
+          "Urządzenie A zapisuje względem r7. Serwer przyjmuje zapis i zmienia rewizję. Urządzenie B nadal pracuje na poprzedniej wersji.",
+      },
+      {
+        label: "Konflikt",
+        title: "Nieaktualny zapis nie nadpisuje nowych danych.",
+        states: ["Zapisano r8", "Rewizja r8", "Zapis odrzucony"],
+        notes: [
+          "Zmiany już zsynchronizowane",
+          "r7 nie jest bieżącą rewizją",
+          "Próba zapisu względem r7",
+        ],
+        caption:
+          "Urządzenie B wysyła zaszyfrowaną migawkę względem r7. Porównanie rewizji wykrywa konflikt i chroni zapis urządzenia A.",
+      },
+      {
+        label: "Scalenie i zapis",
+        title: "Scalenie odbywa się na urządzeniu.",
+        states: ["Może pobrać r9", "Rewizja r9", "Zapisano r9"],
+        notes: [
+          "Pobranie → lokalne odszyfrowanie",
+          "Scalona, zaszyfrowana migawka",
+          "Pobranie → scalenie → szyfrowanie",
+        ],
+        caption:
+          "B pobiera r8, odszyfrowuje i scala dane lokalnie, po czym szyfruje nową migawkę i zapisuje względem r8. Ilustracja zakłada, że nie pojawi się kolejny konflikt.",
+      },
+    ]
+  : [
+      {
+        label: "Start together",
+        title: "Both devices know the same revision.",
+        states: ["Read r7", "Revision r7", "Read r7"],
+        notes: [
+          "History stays on the device",
+          "Encrypted snapshot",
+          "History stays on the device",
+        ],
+        caption:
+          "Each device fetches the snapshot and decrypts it locally. The revision identifies the version its next write will be checked against.",
+      },
+      {
+        label: "Make changes",
+        title: "One device saves. The other keeps working.",
+        states: ["Saved r8", "Revision r8", "Still on r7"],
+        notes: [
+          "New favorite → encrypt → write",
+          "New encrypted snapshot",
+          "Independent local changes",
+        ],
+        caption:
+          "Device A writes against r7. The server accepts the write and advances the revision. Device B is still working from the previous version.",
+      },
+      {
+        label: "Reject stale write",
+        title: "A stale write cannot replace newer data.",
+        states: ["Saved r8", "Revision r8", "Write rejected"],
+        notes: [
+          "Changes already synchronized",
+          "r7 is no longer current",
+          "Attempts a write against r7",
+        ],
+        caption:
+          "Device B submits an encrypted snapshot against r7. The revision check detects the conflict and protects Device A’s write.",
+      },
+      {
+        label: "Merge and retry",
+        title: "The device resolves the conflict.",
+        states: ["Can fetch r9", "Revision r9", "Saved r9"],
+        notes: [
+          "Fetch → decrypt locally",
+          "Merged, encrypted snapshot",
+          "Fetch → merge → encrypt",
+        ],
+        caption:
+          "B fetches r8, decrypts and merges locally, then encrypts a new snapshot and writes against r8. This illustration assumes no further concurrent write.",
+      },
+    ];
+const names = pl
+  ? ["Urządzenie A", "Serwer synchronizacji", "Urządzenie B"]
+  : ["Device A", "Sync server", "Device B"];
+---
+
+<figure class="engineering-explanation sync-explanation">
+  <fieldset class="explanation-controls">
+    <legend>
+      {pl ? "Prześledź konflikt synchronizacji" : "Follow a sync conflict"}
+    </legend>
+    {steps.map((step, index) => (
+      <label>
+        <input
+          type="radio"
+          name="sync-step"
+          value={index}
+          checked={index === 0}
+          aria-controls={"sync-panel-" + index}
+        />
+        <span>
+          <span class="step-number">{index + 1}</span>
+          {step.label}
+        </span>
+      </label>
+    ))}
+  </fieldset>
+  <div class="explanation-panels">
+    {steps.map((step, index) => (
+      <div class="explanation-panel" id={"sync-panel-" + index}>
+        <h3>{step.title}</h3>
+        <dl class="sync-lanes">
+          {names.map((name, lane) => (
+            <div>
+              <dt>{name}</dt>
+              <dd class="sync-revision">{step.states[lane]}</dd>
+              <dd>{step.notes[lane]}</dd>
+            </div>
+          ))}
+        </dl>
+        <p class="explanation-caption">{step.caption}</p>
+      </div>
+    ))}
+  </div>
+  <figcaption>
+    {pl
+      ? "Ilustracja protokołu; r7–r9 to przykładowe rewizje. Serwer przechowuje zaszyfrowane dane. Widzi metadane połączeń, rozmiar i czas transferów."
+      : "Protocol illustration; r7–r9 are example revisions. The server stores encrypted data. Connection metadata, transfer size and timing remain visible to it."}
+  </figcaption>
+</figure>

@@ -1,0 +1,122 @@
+---
+import Arrow from "./Arrow.astro";
+import type { Language } from "../data/projects";
+interface Props {
+  lang: Language;
+}
+const { lang } = Astro.props;
+const pl = lang === "pl";
+const steps = pl
+  ? [
+      {
+        label: "Odtwarzanie",
+        title: "Jeden strumień. Muzyka gra.",
+        states: ["Główny strumień", "Odtwarzacz", "Muzyka"],
+        caption:
+          "Odtwarzacz korzysta z bieżącego adresu stacji. Alternatywny strumień pozostaje w zapasie.",
+      },
+      {
+        label: "Przerwa",
+        title: "Strumień się zatrzymuje. Odtwarzacz reaguje.",
+        states: [
+          "Błąd lub zatrzymanie",
+          "Kontrola limitu prób",
+          "Zapasowy adres MP3",
+        ],
+        caption:
+          "Zdarzenie error lub stalled może uruchomić przełączenie na zapasowy adres. Każda próba podlega limitowi.",
+      },
+      {
+        label: "Powrót",
+        title: "Zapasowy strumień przywraca odtwarzanie.",
+        states: ["Zapasowy strumień", "Odtwarzacz", "Muzyka"],
+        caption:
+          "Jeśli zapasowy adres działa, odtwarzanie wraca. To ilustrowana ścieżka powodzenia; zewnętrzny strumień też może zawieść.",
+      },
+      {
+        label: "Limit prób",
+        title: "Trzy próby w trzydzieści sekund. Potem granica.",
+        states: [
+          "Kolejna awaria",
+          "Limit 3 prób / 30 s",
+          "Brak kolejnej próby",
+        ],
+        caption:
+          "Po wykorzystaniu limitu kolejne automatyczne próby w tym oknie są blokowane. Odtwarzacz unika niekończącej się pętli przełączeń.",
+      },
+    ]
+  : [
+      {
+        label: "Playing",
+        title: "One stream. Music playing.",
+        states: ["Primary stream", "Player", "Music"],
+        caption:
+          "The player uses the station’s current stream address. An alternative mount stays in reserve.",
+      },
+      {
+        label: "Stream stalls",
+        title: "The stream stops. The player responds.",
+        states: ["Error or stall", "Check retry budget", "Alternate MP3 mount"],
+        caption:
+          "An error or stalled event can trigger a switch to an alternate mount. Each attempt is subject to the retry limit.",
+      },
+      {
+        label: "Recovery",
+        title: "An alternate stream restores playback.",
+        states: ["Alternate stream", "Player", "Music"],
+        caption:
+          "If the alternate mount works, playback resumes. This is the illustrated success path; an external stream can fail here too.",
+      },
+      {
+        label: "Retry limit",
+        title: "Three retries in thirty seconds. Then a boundary.",
+        states: ["Another failure", "3 retries / 30 s", "No further attempt"],
+        caption:
+          "Once the retry budget is used, further automatic attempts in that window are blocked. The player avoids an endless loop of stream switches.",
+      },
+    ];
+---
+
+<figure class="engineering-explanation stream-explanation">
+  <fieldset class="explanation-controls">
+    <legend>
+      {pl ? "Prześledź odzyskiwanie strumienia" : "Follow stream recovery"}
+    </legend>
+    {steps.map((step, index) => (
+      <label>
+        <input
+          type="radio"
+          name="stream-step"
+          value={index}
+          checked={index === 0}
+          aria-controls={"stream-panel-" + index}
+        />
+        <span>
+          <span class="step-number">{index + 1}</span>
+          {step.label}
+        </span>
+      </label>
+    ))}
+  </fieldset>
+  <div class="explanation-panels">
+    {steps.map((step, index) => (
+      <div class="explanation-panel" id={"stream-panel-" + index}>
+        <h3>{step.title}</h3>
+        <ol class="stream-flow">
+          {step.states.map((state, lane) => (
+            <li>
+              <span>{state}</span>
+              {lane < 2 && <Arrow />}
+            </li>
+          ))}
+        </ol>
+        <p class="explanation-caption">{step.caption}</p>
+      </div>
+    ))}
+  </div>
+  <figcaption>
+    {pl
+      ? "Ilustracja działania, bez odtwarzania audio. Limit dotyczy automatycznych prób odzyskania strumienia."
+      : "Behavior illustration, without audio playback. The limit applies to automatic stream recovery attempts."}
+  </figcaption>
+</figure>

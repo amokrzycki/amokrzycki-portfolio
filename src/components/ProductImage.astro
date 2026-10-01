@@ -13,8 +13,9 @@ const { slug, alt, lang, eager = false } = Astro.props;
 const source = slug === "random-frame" ? randomFrame : kajtek;
 ---
 
-<button
+<a
   class:list={["product-plate", slug]}
+  href={source.src}
   data-enlarge={source.src}
   aria-label={`${lang === "pl" ? "Powiększ zrzut" : "Enlarge screenshot"}: ${slug === "random-frame" ? "Random Frame" : "Kajtek"}`}
 >
@@ -40,4 +41,4 @@ const source = slug === "random-frame" ? randomFrame : kajtek;
       <path d="M2 6V2h4m4 0h4v4M14 10v4h-4M6 14H2v-4" />
     </svg>
   </span>
-</button>
+</a>

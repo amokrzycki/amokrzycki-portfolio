@@ -239,6 +239,7 @@ a:focus-visible .arrow {
   padding: clamp(30px, 5.8vw, 84px);
   background: var(--frame-ground);
   cursor: zoom-in;
+  text-decoration: none;
   overflow: hidden;
 }
 .product-plate img {
@@ -301,13 +302,15 @@ a:focus-visible .arrow {
   grid-column: 2;
   max-width: 590px;
 }
-.project-tagline {
+.project-identity .project-tagline {
+  max-width: 28ch;
+  margin-top: 22px;
   font-size: clamp(18px, 1.8vw, 24px);
   line-height: 1.4;
   letter-spacing: -0.018em;
   margin-bottom: 12px;
 }
-.project-caption > p:not(.project-tagline) {
+.project-caption > p {
   color: var(--muted);
   max-width: 53ch;
   font-size: 14px;
@@ -316,23 +319,49 @@ a:focus-visible .arrow {
 .project-caption .text-link {
   margin-top: 14px;
 }
+.spread-kajtek {
+  grid-template-columns: 4fr 8fr;
+  align-items: center;
+  column-gap: clamp(36px, 5vw, 72px);
+  row-gap: 20px;
+}
+.spread-kajtek .project-identity {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: end;
+}
+.spread-kajtek .project-caption {
+  grid-column: 1;
+  grid-row: 2;
+  align-self: start;
+}
+.spread-kajtek .product-plate {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  padding: clamp(36px, 5vw, 72px) clamp(24px, 3.3vw, 48px);
+}
 .approach {
   display: grid;
-  grid-template-columns: 7fr 5fr;
-  gap: 80px;
+  grid-template-columns: 5fr 7fr;
+  column-gap: 40px;
+  row-gap: 56px;
   margin-block: var(--section-gap);
 }
 .approach h2 {
-  max-width: 650px;
-  font-size: clamp(25px, 2.9vw, 39px);
-  line-height: 1.3;
+  grid-column: 1 / -1;
+  max-width: 1180px;
+  font-size: clamp(32px, 4.65vw, 64px);
+  line-height: 1.2;
+  letter-spacing: -0.035em;
 }
 .approach h2 span {
-  color: var(--muted);
+  display: block;
 }
-.approach > div > p {
-  max-width: 48ch;
-  margin-top: 24px;
+.approach h2 span + span {
+  margin-top: 12px;
+}
+.approach-note {
+  max-width: 40ch;
   color: var(--muted);
   font-size: 15px;
 }
@@ -490,6 +519,203 @@ a:focus-visible .arrow {
   font-size: clamp(22px, 2.1vw, 29px);
   max-width: 20ch;
 }
+.case-opening-kajtek {
+  display: grid;
+  grid-template-columns: 4fr 8fr;
+  gap: clamp(36px, 5vw, 72px);
+  align-items: center;
+  margin-top: 45px;
+}
+.case-opening-kajtek .case-heading {
+  grid-template-columns: 1fr;
+  gap: 28px;
+  padding-block: 0;
+}
+.case-opening-kajtek .case-tagline {
+  font-size: clamp(23px, 2.3vw, 32px);
+}
+.case-opening-kajtek .product-plate {
+  padding: clamp(36px, 5vw, 72px) clamp(24px, 3.3vw, 48px);
+}
+.engineering-details {
+  grid-column: 2;
+}
+.detail-category {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+}
+.detail-topic {
+  display: block;
+  font-size: 14px;
+  margin-top: 2px;
+}
+.engineering-details[open] summary {
+  border-bottom: 1px solid var(--rule);
+}
+.detail-content {
+  padding-block: 24px 12px;
+}
+.detail-content > div + div {
+  margin-top: 22px;
+}
+.detail-content dt {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.detail-content dd {
+  font-size: 15px;
+  color: var(--muted);
+  max-width: 65ch;
+}
+.engineering-explanation {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  margin-top: 40px;
+  padding: clamp(24px, 4vw, 56px);
+  background: var(--frame-ground);
+}
+.stream-explanation {
+  background: var(--kajtek-ground);
+}
+.explanation-panels {
+  order: 0;
+}
+.explanation-panel h3 {
+  font-size: clamp(21px, 2.3vw, 30px);
+  letter-spacing: -0.025em;
+  line-height: 1.3;
+  max-width: 34ch;
+}
+.sync-lanes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 36px;
+  margin-block: 36px;
+}
+.sync-lanes > div {
+  border-top: 1px solid var(--muted);
+  padding-top: 16px;
+}
+.sync-lanes dt {
+  font-size: 13px;
+}
+.sync-lanes dd {
+  color: var(--ink);
+  font-size: 13px;
+}
+.sync-lanes .sync-revision {
+  font-size: clamp(20px, 2.2vw, 30px);
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  margin-block: 14px 12px;
+  font-variant-numeric: tabular-nums;
+}
+.stream-flow {
+  display: flex;
+  gap: 24px;
+  list-style: none;
+  padding: 0;
+  margin-block: 44px;
+}
+.stream-flow li {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  font-size: clamp(18px, 1.85vw, 25px);
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+}
+.stream-flow .arrow {
+  width: 28px;
+  height: 28px;
+}
+.explanation-caption {
+  max-width: 70ch;
+  font-size: 15px;
+}
+.explanation-controls {
+  order: 1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  border: 0;
+  margin: 32px 0 0;
+  padding: 0;
+  min-width: 0;
+}
+.explanation-controls legend {
+  font-size: 13px;
+  padding: 0 0 12px;
+}
+.explanation-controls label {
+  position: relative;
+  cursor: pointer;
+}
+.explanation-controls input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+.explanation-controls label > span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 8px 0;
+  border-top: 1px solid var(--muted);
+  font-size: 13px;
+  transition:
+    border-color var(--duration),
+    color var(--duration);
+}
+.explanation-controls input:checked + span {
+  border-top: 2px solid var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+.explanation-controls input:focus-visible {
+  outline: none;
+}
+.explanation-controls input:focus-visible + span {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+.step-number {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.engineering-explanation figcaption {
+  order: 2;
+  margin-top: 24px;
+  max-width: 80ch;
+  font-size: 12px;
+  color: var(--ink);
+}
+@supports selector(:has(*)) {
+  .explanation-panels {
+    display: grid;
+  }
+  .explanation-panel {
+    grid-area: 1 / 1;
+    visibility: hidden;
+  }
+  .engineering-explanation:has(input[value="0"]:checked)
+    .explanation-panel:nth-child(1),
+  .engineering-explanation:has(input[value="1"]:checked)
+    .explanation-panel:nth-child(2),
+  .engineering-explanation:has(input[value="2"]:checked)
+    .explanation-panel:nth-child(3),
+  .engineering-explanation:has(input[value="3"]:checked)
+    .explanation-panel:nth-child(4) {
+    visibility: visible;
+  }
+}
 details {
   margin-top: 24px;
   border-top: 1px solid var(--rule);
@@ -565,10 +791,20 @@ details > p {
 .image-viewer::backdrop {
   background: #141d24bb;
 }
-.image-viewer form {
+.viewer-toolbar {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
   margin-bottom: 16px;
+}
+.viewer-scroll {
+  max-height: calc(100dvh - 140px);
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+body:has(.image-viewer[open]) {
+  overflow: hidden;
 }
 .image-viewer button {
   display: inline-flex;
@@ -581,12 +817,18 @@ details > p {
   border-radius: 2px;
   background: transparent;
   cursor: pointer;
+  padding-inline: 12px;
   font-size: 13px;
 }
 .viewer-image {
   width: 100%;
   max-height: calc(100dvh - 140px);
   object-fit: contain;
+}
+.viewer-expanded .viewer-image {
+  width: auto;
+  max-width: none;
+  max-height: none;
 }
 @view-transition {
   navigation: auto;
@@ -597,8 +839,7 @@ details > p {
 }
 @media (max-width: 1000px) {
   .approach {
-    gap: 40px;
-    grid-template-columns: 1fr 1fr;
+    row-gap: 40px;
   }
   .capabilities > div {
     grid-template-columns: 1fr;
@@ -668,7 +909,20 @@ details > p {
   }
   .project-spread {
     grid-template-columns: 1fr;
-    gap: 23px;
+    gap: 20px;
+  }
+  .spread-kajtek .project-identity {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .spread-kajtek .project-caption {
+    grid-column: 1;
+    grid-row: 3;
+  }
+  .spread-kajtek .product-plate {
+    grid-column: 1;
+    grid-row: 2;
+    padding: 32px 10px 48px;
   }
   .project-identity {
     grid-column: 1;
@@ -678,13 +932,13 @@ details > p {
     grid-column: 1;
     grid-row: 2;
     border-radius: 2px;
-    padding: 34px 18px 44px;
+    padding: 24px 10px 48px;
   }
   .product-plate.random-frame {
-    padding-inline: 18px;
+    padding-inline: 10px;
   }
   .product-plate.kajtek {
-    padding-block: 52px;
+    padding-block: 32px 48px;
   }
   .product-plate img {
     border-radius: 4px;
@@ -693,16 +947,18 @@ details > p {
     opacity: 1;
     right: 12px;
     bottom: 10px;
-    font-size: 10px;
+    font-size: 12px;
   }
   .project-caption {
     grid-column: 1;
     grid-row: 3;
   }
-  .project-tagline {
+  .project-identity .project-tagline {
     font-size: 20px;
+    margin-top: 12px;
+    margin-bottom: 0;
   }
-  .project-caption > p:not(.project-tagline) {
+  .project-caption > p {
     font-size: 14px;
   }
   .approach {
@@ -710,7 +966,9 @@ details > p {
     gap: 40px;
   }
   .approach h2 {
-    font-size: clamp(25px, 6vw, 35px);
+    font-size: clamp(30px, 8.2vw, 48px);
+    max-width: 18ch;
+    text-wrap: pretty;
   }
   .capabilities > div {
     grid-template-columns: 100px 1fr;
@@ -754,6 +1012,76 @@ details > p {
   }
   .case-heading h1 {
     font-size: clamp(2.8rem, 10vw, 4.5rem);
+  }
+  .case-opening-kajtek {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    margin-top: 30px;
+  }
+  .case-opening-kajtek .product-plate {
+    padding: 32px 10px 48px;
+  }
+  .engineering-details {
+    grid-column: 1;
+    margin-top: 0;
+  }
+  .case-explained {
+    row-gap: 24px;
+  }
+  .engineering-explanation {
+    margin-top: 0;
+    padding: 24px 18px;
+  }
+  .sync-lanes {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    margin-block: 28px;
+  }
+  .sync-lanes > div {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+    gap: 8px 16px;
+    padding-top: 12px;
+  }
+  .sync-lanes dt {
+    grid-row: 1 / 3;
+    padding-top: 3px;
+  }
+  .sync-lanes .sync-revision {
+    margin: 0;
+    font-size: 21px;
+  }
+  .stream-flow {
+    flex-direction: column;
+    gap: 20px;
+    margin-block: 28px;
+  }
+  .stream-flow li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    font-size: 23px;
+  }
+  .stream-flow .arrow {
+    transform: rotate(90deg);
+    width: 24px;
+    height: 24px;
+  }
+  .explanation-controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 20px;
+    margin-top: 28px;
+  }
+  .viewer-toolbar {
+    gap: 10px;
+  }
+  .image-viewer {
+    padding: 12px;
+  }
+  .image-viewer button {
+    font-size: 12px;
+    min-width: 72px;
+    padding-inline: 10px;
   }
   .case-tagline {
     font-size: 24px;

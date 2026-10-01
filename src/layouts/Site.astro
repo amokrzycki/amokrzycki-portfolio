@@ -115,34 +115,65 @@ const canonical = Astro.site
         pl ? "Powiększony zrzut aplikacji" : "Enlarged application screenshot"
       }
     >
-      <form method="dialog">
-        <button autofocus>
-          {pl ? "Zamknij" : "Close"}{" "}
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-            fill="none"
-            stroke="currentColor"
-            aria-hidden="true"
-          >
-            <path d="m3 3 10 10M13 3 3 13" />
-          </svg>
+      <div class="viewer-toolbar">
+        <button
+          type="button"
+          data-viewer-zoom
+          data-inspect={pl ? "Pokaż pełny rozmiar" : "Inspect at full size"}
+          data-fit={pl ? "Dopasuj obraz" : "Fit image"}
+          aria-pressed="false"
+        >
+          {pl ? "Pokaż pełny rozmiar" : "Inspect at full size"}
         </button>
-      </form>
+        <form method="dialog">
+          <button autofocus>
+            {pl ? "Zamknij" : "Close"}{" "}
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path d="m3 3 10 10M13 3 3 13" />
+            </svg>
+          </button>
+        </form>
+      </div>
+      <div
+        class="viewer-scroll"
+        tabindex="0"
+        aria-label={
+          pl
+            ? "Obszar zrzutu. W pełnym rozmiarze można przewijać obraz."
+            : "Screenshot area. At full size, scroll to inspect the image."
+        }
+      ></div>
     </dialog>
     <script>
       const viewer = document.querySelector<HTMLDialogElement>(".image-viewer");
       const image = document.createElement("img");
       image.className = "viewer-image";
-      viewer?.append(image);
+      viewer?.querySelector(".viewer-scroll")?.append(image);
+      const zoom =
+        viewer?.querySelector<HTMLButtonElement>("[data-viewer-zoom]");
+      zoom?.addEventListener("click", () => {
+        const expanded = viewer?.classList.toggle("viewer-expanded") ?? false;
+        zoom.setAttribute("aria-pressed", String(expanded));
+        zoom.textContent = expanded ? zoom.dataset.fit! : zoom.dataset.inspect!;
+      });
       document
-        .querySelectorAll<HTMLButtonElement>("[data-enlarge]")
-        .forEach((button) => {
-          button.addEventListener("click", () => {
-            const source = button.querySelector("img");
+        .querySelectorAll<HTMLAnchorElement>("[data-enlarge]")
+        .forEach((trigger) => {
+          trigger.addEventListener("click", (event) => {
+            const source = trigger.querySelector("img");
             if (!viewer || !image || !source) return;
-            image.src = button.dataset.enlarge || source.currentSrc;
+            event.preventDefault();
+            viewer.classList.remove("viewer-expanded");
+            zoom?.setAttribute("aria-pressed", "false");
+            if (zoom) zoom.textContent = zoom.dataset.inspect!;
+            image.src = trigger.dataset.enlarge || source.currentSrc;
             image.alt = source.alt;
             viewer.showModal();
           });

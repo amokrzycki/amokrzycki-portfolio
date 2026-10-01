@@ -24,6 +24,12 @@ typography:
     fontWeight: 500
     lineHeight: 1.04
     letterSpacing: "-0.035em"
+  approach:
+    fontFamily: "Manrope, sans-serif"
+    fontSize: "clamp(32px, 4.65vw, 64px)"
+    fontWeight: 500
+    lineHeight: 1.2
+    letterSpacing: "-0.035em"
   headline:
     fontFamily: "Manrope, sans-serif"
     fontSize: "clamp(1.75rem, 3vw, 2.75rem)"
@@ -120,7 +126,7 @@ This is an Experience surface: visitors understand the products before opening t
 - Full application captures with understated tonal grounds.
 - Native interactions and brief, optional motion.
 
-The first design review disposition is **SHIP**, with no material fixes. This is a reviewed first pass, not a production launch; the production hostname remains unresolved.
+The first-pass identity is preserved. The approved refinement adds composition, readable image inspection, topic-specific disclosures and native engineering walkthroughs. Desktop and mobile captures were inspected in a bounded pass. The production hostname remains unresolved.
 
 ## Colors
 
@@ -152,7 +158,7 @@ The type is expressive through scale and spacing. Display and heading roles use 
 
 - **Display:** the homepage statement; use the normative fluid display token, not an oversized greeting.
 - **Case display:** a smaller project-name scale that inherits display leading and tracking.
-- **Headline:** section titles. Case-body headings are more compact (`clamp(22px, 2.1vw, 29px)`); the ownership statement uses `clamp(25px, 2.9vw, 39px)` with more open leading (1.3).
+- **Headline:** section titles. Case-body headings are more compact (`clamp(22px, 2.1vw, 29px)`); the ownership statement uses the full-width approach token with 1.2 leading and both sentences in ink. Mobile uses `clamp(30px, 8.2vw, 48px)` and a measure of 18ch.
 - **Project title:** the name beneath a desktop capture, or above a mobile capture.
 - **Body / reading body:** base interface text and quieter narrative text. Reading columns stop at 70ch; project supporting copy stops at 53ch and uses slightly looser leading (1.8).
 - **Label / link / metadata:** navigation and viewer controls, text actions, then quiet project descriptors. There is no decorative all-caps label system.
@@ -161,16 +167,16 @@ At the mobile breakpoint the homepage display uses `clamp(3.25rem, 11.4vw, 4.75r
 
 ## Layout
 
-The content width is capped at 1280px; the outer shell includes the fluid gutters on both sides. Major spacing is fluid through the gutter and section-gap tokens. These are an open editorial layout, not a fixed twelve-column CSS grid: homepage positioning and ownership sections use a 7:5 split, while project captions and case-study rows use 5:7. Media spans both columns. Section rules establish rhythm without enclosing paragraphs in cards.
+The content width is capped at 1280px; the outer shell includes the fluid gutters on both sides. Major spacing is fluid through the gutter and section-gap tokens. These are an open editorial layout, not a fixed twelve-column CSS grid: homepage positioning uses a 7:5 split, while Random Frame captions, ownership supporting content and case-study rows use 5:7. Random Frame media spans both columns. Kajtek uses a 4:8 composition with its introduction beside the image on the homepage and case-study opening. The ownership statement spans the page above its supporting content. Each case study has one full-width engineering explanation. Section rules establish rhythm without enclosing paragraphs in cards.
 
 Two viewport breakpoints are implemented:
 
-- **At 1000px and below:** the ownership section becomes equal columns and its definition-list rows stack their labels above descriptions.
-- **At 700px and below:** the header wraps into a full-width navigation row; primary compositions become one column. Project order is identity, media, caption. The ownership list resumes a compact label/description split, and footer content stacks. Product-image corners tighten, enlargement labels stay visible, and explicit mobile spacing replaces selected fluid values.
+- **At 1000px and below:** capability definition-list rows stack their labels above descriptions.
+- **At 700px and below:** the header wraps into a full-width navigation row; primary compositions become one column. Project order is identity and premise, media, explanation and action. Plates use reduced padding. Engineering walkthroughs turn into vertical sequences, with a two-column set of controls below the visual. The ownership list resumes a compact label/description split, and footer content stacks. Product-image corners tighten, enlargement labels stay visible, and explicit mobile spacing replaces selected fluid values.
 
 There is no hidden hamburger navigation. Mobile navigation links receive at least 44px in each direction. Media remains uncropped, responsive and independently enlargeable.
 
-The completed verification supplied by the finish pass covers six static routes: `/`, `/pl/`, and both project case studies under `/work/` and `/pl/work/`. Homepage and representative case pages had no horizontal overflow at 320, 390, 768, 1024 and 1920px. Absolute canonical, hreflang and Open Graph URL metadata is conditional on configured `SITE_URL`; do not invent a production hostname.
+Verification covers six static routes: `/`, `/pl/`, and both project case studies under `/work/` and `/pl/work/`. All six routes had no horizontal overflow at 320, 768 and 1024px; English homepage and both case pages were also captured at 390 and 1440px, with Polish mobile captures at 390px. The four walkthrough stages, keyboard and pointer operation, structured disclosures, reduced motion, no-JavaScript walkthroughs, full-size mobile image scrolling, Escape, focus restoration and viewer reset were checked. Build and lint passed. Absolute canonical, hreflang and Open Graph URL metadata is conditional on configured `SITE_URL`; do not invent a production hostname.
 
 ## Elevation & Depth
 
@@ -185,7 +191,7 @@ The page is flat at rest. Tonal plates separate the application screenshots from
 
 ## Shapes
 
-Corners are gently softened, with separate plate, viewer and capture radii in the frontmatter. Captures tighten to the viewer radius on mobile. There is no pill-shaped component family. Fine borders are one pixel; the global keyboard outline is two pixels with a six-pixel offset. Product plates clip their contents, while the viewer contains the full image inside available viewport height.
+Corners are gently softened, with separate plate, viewer and capture radii in the frontmatter. Captures tighten to the viewer radius on mobile. There is no pill-shaped component family. Fine borders are one pixel; the global keyboard outline is two pixels with a six-pixel offset. Product plates clip their contents. The viewer offers a fitted image and full-size inspection inside a separately scrollable image area; controls remain outside the scroll area.
 
 ## Components
 
@@ -195,7 +201,7 @@ Actions remain plain text links with inline SVG arrows. Text links have a minimu
 
 ### Product plates
 
-A full-width native button places the authentic application capture on its project ground. The button has a translated accessible enlargement name, and the image retains descriptive alt text. Random Frame and Kajtek preserve distinct source widths and padding; these are project presentation variants, not additional generic card components. The first homepage capture and case-study captures load eagerly; other homepage media loads lazily through Astro responsive images.
+A native image link places the authentic application capture on its project ground. JavaScript enhances the link with a modal; without JavaScript it opens the source image. The link has a translated accessible enlargement name, and the image retains descriptive alt text. Random Frame and Kajtek preserve distinct source widths and padding; these are project presentation variants, not additional generic card components. The first homepage capture and case-study captures load eagerly; other homepage media loads lazily through Astro responsive images.
 
 The enlargement label appears on hover or keyboard focus and remains visible on mobile. On hover-capable devices only, the image lifts three pixels. No image is cropped to fill an arbitrary card ratio.
 
@@ -208,15 +214,23 @@ The enlargement label appears on hover or keyboard focus and remains visible on 
 
 The enlargement uses a native modal `dialog`, a translated accessible label, and an autofocus close button in a `method="dialog"` form. The viewer fits within viewport bounds, preserves the image's alt text, and uses `object-fit: contain`. Escape and outside-backdrop clicks close it; native modal behavior restores focus to the trigger. Escape, focus restoration and disclosure behavior passed the finish verification.
 
-The close control is quiet and rectangular, with a fine border and minimum 90×44px size. Its focus treatment is the common visible outline; there is no extra animated close state.
+The close and inspection controls are quiet and rectangular, with a fine border and minimum 44px height. Full-size inspection scrolls naturally in both axes and resets to fit when the viewer reopens. Its focus treatment is the common visible outline; there is no extra animated close state.
 
 ### Engineering disclosure
 
-Native `details`/`summary` reveals optional technical reading below the product explanation. A ruled boundary, blue summary text, minimum 44px target and inline plus icon establish the pattern. Opening rotates the plus by 45 degrees; the content remains ordinary selectable prose. Use browser semantics rather than a custom accordion runtime.
+Native `details`/`summary` reveals optional technical reading below the product explanation. A ruled boundary, blue summary text, minimum 44px target and inline plus icon establish the pattern. A specific topic follows the Engineering details label. Opening rotates the plus by 45 degrees and reveals a definition list for Decision, Mechanism and Constraint; the content remains selectable. Use browser semantics rather than a custom accordion runtime.
 
 ### Ownership list and editorial rows
 
-Capabilities use a definition list, with fine top rules and compact labels beside descriptions. Case sections and About/Contact use open two-column rows. Contact is a larger text link, and the next-project link closes a case study with generous type. There are no input fields, chips, or generic project cards in the implemented system.
+Capabilities use a definition list, with fine top rules and compact labels beside descriptions. Case sections and About/Contact use open two-column rows. Contact is a larger text link, and the next-project link closes a case study with generous type. The approach statement is a separate typographic pause. About describes concrete working habits rather than listing technologies. There are no chips or generic project cards.
+
+### Engineering explanations
+
+Random Frame compares Device A, the encrypted sync server and Device B across four selected stages: shared revision, independent changes, stale-write rejection, and client-side merge/retry. Example revisions r7–r9 are explicitly illustrative; encryption and the server's metadata visibility are stated.
+
+Kajtek shows primary playback, a stalled/error event, alternate-stream recovery, and the three-retry/thirty-second boundary as a directional flow. This is a labeled behavior illustration without audio playback.
+
+Both use native radio groups with visible selected and keyboard focus states. CSS selects the displayed panel and reserves its layout space. They need no JavaScript, dependency or automatic motion. Without selector support, the stages remain readable as a static sequence.
 
 ### Motion and accessibility
 

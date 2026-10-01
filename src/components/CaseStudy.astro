@@ -2,6 +2,8 @@
 import Site from "../layouts/Site.astro";
 import Arrow from "./Arrow.astro";
 import ProductImage from "./ProductImage.astro";
+import SyncExplanation from "./SyncExplanation.astro";
+import StreamExplanation from "./StreamExplanation.astro";
 import { projects, type ProjectSlug, type Language } from "../data/projects";
 interface Props {
   slug: ProjectSlug;
@@ -35,17 +37,19 @@ const next = slug === "random-frame" ? "kajtek" : "random-frame";
     </svg>
     {pl ? "Wybrane projekty" : "Selected work"}
   </a>
-  <header class="case-heading">
-    <div>
-      <h1>{project.name}</h1>
-      <p class="metadata">{c.kind}</p>
-    </div>
-    <p class="case-tagline">{c.tagline}</p>
-  </header>
-  <figure class="case-figure">
-    <ProductImage slug={slug} alt={c.alt} lang={lang} eager />
-    <figcaption>{c.capture}</figcaption>
-  </figure>
+  <div class:list={["case-opening", "case-opening-" + slug]}>
+    <header class="case-heading">
+      <div>
+        <h1>{project.name}</h1>
+        <p class="metadata">{c.kind}</p>
+      </div>
+      <p class="case-tagline">{c.tagline}</p>
+    </header>
+    <figure class="case-figure">
+      <ProductImage slug={slug} alt={c.alt} lang={lang} eager />
+      <figcaption>{c.capture}</figcaption>
+    </figure>
+  </div>
   <section class="case-intro editorial-row">
     <h2>{c.intro}</h2>
     <div class="reading-copy">
@@ -58,29 +62,59 @@ const next = slug === "random-frame" ? "kajtek" : "random-frame";
     </div>
   </section>
   <div class="case-body">
-    {c.sections.map((section) => (
-      <section class="case-section editorial-row">
+    {c.sections.map((section, index) => (
+      <section
+        class:list={[
+          "case-section",
+          "editorial-row",
+          { "case-explained": index === 2 },
+        ]}
+      >
         <h2>{section.title}</h2>
         <div class="reading-copy">
           <p>{section.text}</p>
-          <details>
-            <summary>
-              {pl ? "Szczegóły techniczne" : "Engineering details"}
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.2"
-                aria-hidden="true"
-              >
-                <path d="M8 2v12M2 8h12" />
-              </svg>
-            </summary>
-            <p>{section.detail}</p>
-          </details>
         </div>
+        {index === 2 &&
+          (slug === "random-frame" ? (
+            <SyncExplanation lang={lang} />
+          ) : (
+            <StreamExplanation lang={lang} />
+          ))}
+        <details class="engineering-details">
+          <summary>
+            <span>
+              <span class="detail-category">
+                {pl ? "Szczegóły techniczne" : "Engineering details"}
+              </span>
+              <span class="detail-topic">{section.detail.topic}</span>
+            </span>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.2"
+              aria-hidden="true"
+            >
+              <path d="M8 2v12M2 8h12" />
+            </svg>
+          </summary>
+          <dl class="detail-content">
+            <div>
+              <dt>{pl ? "Decyzja" : "Decision"}</dt>
+              <dd>{section.detail.decision}</dd>
+            </div>
+            <div>
+              <dt>{pl ? "Mechanizm" : "Mechanism"}</dt>
+              <dd>{section.detail.mechanism}</dd>
+            </div>
+            <div>
+              <dt>{pl ? "Ograniczenie" : "Constraint"}</dt>
+              <dd>{section.detail.constraint}</dd>
+            </div>
+          </dl>
+        </details>
       </section>
     ))}
   </div>
