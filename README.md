@@ -1,20 +1,39 @@
-# Adrian Mokrzycki — portfolio
+# Adrian Mokrzycki’s portfolio
 
-Astro, static pages, custom CSS. English and Polish homepages and case studies for Random Frame and Kajtek. Native image enlargement and technical disclosures; no UI framework or animation dependency.
+A bilingual portfolio built with Astro. It presents two personal projects, Random Frame and Kajtek, with case studies covering their interfaces and the engineering behind them.
 
-- [Product context](PRODUCT.md)
-- [Design constitution](docs/portfolio-direction.md)
+## Stack
 
-## Development
+- Astro 7 with static generation
+- TypeScript and custom CSS
+- No UI framework or runtime dependency beyond Astro
+- Self-hosted Manrope font
+
+## Projects
+
+- [Random Frame](https://github.com/amokrzycki/random-frame): a desktop image viewer with local history and optional encrypted sync.
+- [Kajtek](https://github.com/amokrzycki/kajtek): an internet radio player with a cassette-inspired interface and integrations for Polish radio providers.
+
+The site includes English and Polish homepages and project pages. Project copy and metadata live in `src/data/projects.ts`; the pages are generated from the project slugs.
+
+## Run locally
+
+Requires Node.js 22.12 or newer.
 
 ```sh
+npm install
 npm run dev -- --background
+```
+
+Astro’s background server can be managed with:
+
+```sh
 npm run astro -- dev status
 npm run astro -- dev logs
 npm run astro -- dev stop
 ```
 
-## Build
+## Build and checks
 
 ```sh
 npm run build
@@ -22,8 +41,10 @@ npm run lint
 npm run check:site
 ```
 
-Set `SITE_URL` to the confirmed production origin before building for deployment. It enables absolute canonical and language-alternate URLs. A launch still needs social artwork and sitemap/robots metadata for the confirmed origin.
+Set `SITE_URL` to the production origin when building for deployment. Astro uses it to generate canonical, language alternate and social metadata URLs.
 
-## Imagery
+## License
 
-Product imagery uses the existing lossless PNG captures, with selected editorial crops and responsive PNG delivery. A native dialog provides fitted and actual-size inspection through stable public originals. Random Frame uses image-free states with empty local data. Kajtek shows its complete cassette, catalog controls and a reviewed recorded playlist. [Capture notes and dimensions](src/assets/README.md) document the sources and controlled capture setup. Manrope is self-hosted under its included OFL license.
+The portfolio source is released under the MIT License. See [LICENSE](LICENSE). The Manrope font is distributed under the SIL Open Font License; its license is in `public/fonts/OFL.txt`.
+
+© 2026 Adrian Mokrzycki
