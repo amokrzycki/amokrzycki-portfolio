@@ -2,43 +2,32 @@
 import { Image } from "astro:assets";
 import randomFrame from "../assets/random-frame.webp";
 import kajtek from "../assets/kajtek.webp";
-import type { Language, ProjectSlug } from "../data/projects";
+import type { ImageMetadata } from "astro";
+import type { ProjectSlug } from "../data/projects";
 interface Props {
   slug: ProjectSlug;
   alt: string;
-  lang: Language;
+  source?: ImageMetadata;
   eager?: boolean;
 }
-const { slug, alt, lang, eager = false } = Astro.props;
-const source = slug === "random-frame" ? randomFrame : kajtek;
+const {
+  slug,
+  alt,
+  source = slug === "random-frame" ? randomFrame : kajtek,
+  eager = false,
+} = Astro.props;
 ---
 
-<a
-  class:list={["product-plate", slug]}
-  href={source.src}
-  data-enlarge={source.src}
-  aria-label={`${lang === "pl" ? "Powiększ zrzut" : "Enlarge screenshot"}: ${slug === "random-frame" ? "Random Frame" : "Kajtek"}`}
->
+<div class:list={["product-plate", slug]}>
   <Image
     src={source}
     alt={alt}
-    widths={[480, 828, 1100]}
-    sizes="(max-width: 700px) 90vw, 75vw"
+    widths={[...new Set([480, 828, 1100, source.width])].filter(
+      (width) => width <= source.width,
+    )}
+    style={`--capture-width: ${source.width}px`}
+    sizes="(max-width: 700px) 90vw, (max-width: 1400px) 85vw, 1280px"
     loading={eager ? "eager" : "lazy"}
     decoding="async"
   />
-  <span class="enlarge-label">
-    {lang === "pl" ? "Powiększ" : "Enlarge"}{" "}
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="1.2"
-      aria-hidden="true"
-    >
-      <path d="M2 6V2h4m4 0h4v4M14 10v4h-4M6 14H2v-4" />
-    </svg>
-  </span>
-</a>
+</div>

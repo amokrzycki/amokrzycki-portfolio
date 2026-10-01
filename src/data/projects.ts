@@ -5,24 +5,21 @@ export const projects = {
     repo: "https://github.com/amokrzycki/random-frame",
     en: {
       kind: "Desktop application",
-      tagline: "A small window into a very large internet.",
+      tagline: "Public images, one frame at a time.",
       summary:
-        "Random public images, one at a time. A quiet desktop application with local history, keyboard-first interaction and optional encrypted sync.",
-      scope: "Product UI · Desktop · Synchronization · Infrastructure",
-      alt: "Random Frame’s desktop interface: a quiet image stage, history and tools, and a Draw control. Shown in its empty state.",
-      capture:
-        "The existing application frontend, shown in its empty state. Captured in a browser without the Tauri backend.",
-      intro: "A simple interface. A substantial system.",
+        "A desktop gallery for exploring public images from Prnt.sc. I built the browsing interface and the encrypted sync that keeps history and favorites across devices.",
+      alt: "Random Frame before the first draw, with its image stage and Draw control.",
+      intro: "Browsing without losing your place.",
       overview:
-        "Random Frame is a desktop application for browsing public images from Prnt.sc. One image occupies the stage. Drawing another, revisiting a frame and keeping a favorite are the central actions. The interface stays small while the application takes responsibility for persistence, distribution and synchronization.",
+        "Random Frame draws a public image from Prnt.sc and lets you keep exploring, revisit earlier frames, or save a favorite. I built it around that short browsing loop, then worked through the harder part: keeping a reliable history on the desktop and merging changes between devices without exposing their contents to the sync server.",
       sections: [
         {
           title: "Keep the image at the centre.",
-          text: "The stage is the product. Custom window chrome keeps the surrounding controls compact; history, statistics and settings sit behind deliberate actions. Keyboard shortcuts support the browsing loop without adding permanent instructions to every control.",
+          text: "I kept the image visible and put history, statistics, and sync behind separate controls. You can draw another frame or return to an earlier one from the keyboard, without opening a menu.",
           detail: {
             topic: "Desktop interaction",
             decision:
-              "Keep the image stage clear; put secondary tools behind deliberate actions.",
+              "Keep history and sync accessible without covering the current image.",
             mechanism:
               "N, Space or Enter draws; arrows move through history; F toggles a favorite. Tauri connects TypeScript controls to the Rust image-fetching backend.",
             constraint:
@@ -30,8 +27,8 @@ export const projects = {
           },
         },
         {
-          title: "Local first. Sync by choice.",
-          text: "Browsing history and favorites belong on the device. Synchronization is optional. Settings and statistics stay local, even when sync is enabled.",
+          title: "Keep history on the device.",
+          text: "History and favorites work without a sync account. I made synchronization optional and encrypt each snapshot on the device before sending it. Settings and statistics stay local.",
           detail: {
             topic: "Encryption boundary",
             decision:
@@ -44,7 +41,7 @@ export const projects = {
         },
         {
           title: "Two devices, one evolving history.",
-          text: "Synchronization is more than transferring a file. Devices can change their state independently, and those changes need to merge without silently replacing one another.",
+          text: "If two devices save at once, the later write must preserve the earlier changes. I used revision checks to reject stale writes, then merge and retry on the device.",
           detail: {
             topic: "Conflict resolution",
             decision: "Check each write against the revision the client read.",
@@ -55,12 +52,11 @@ export const projects = {
           },
         },
         {
-          title: "The application includes its delivery.",
-          text: "Linux and Windows packages, automatic updates and an independently deployed sync service are part of the same ownership boundary.",
+          title: "Releasing the desktop app.",
+          text: "I package the app for Linux and Windows, publish automatic updates, and maintain the sync service separately from the desktop releases.",
           detail: {
             topic: "Distribution and operations",
-            decision:
-              "Treat desktop distribution and the sync service as part of the product.",
+            decision: "Release the app and sync service independently.",
             mechanism:
               "Rust/Axum and SQLite run behind authentication, nginx and systemd, supported by backups and operational tooling.",
             constraint:
@@ -68,26 +64,20 @@ export const projects = {
           },
         },
       ],
-      result:
-        "A restrained desktop product spanning interface design, Rust integration, local persistence, client-side cryptography and service operations.",
-      note: "Images come from an unmoderated external source. Random Frame is independent of Prnt.sc and Lightshot.",
     },
     pl: {
       kind: "Aplikacja desktopowa",
-      tagline: "Małe okno na ogromny internet.",
+      tagline: "Publiczne obrazy, po jednym.",
       summary:
-        "Losowe publiczne obrazy, po jednym. Spokojny interfejs, lokalna historia, obsługa klawiaturą i opcjonalna szyfrowana synchronizacja.",
-      scope: "Interfejs · Desktop · Synchronizacja · Infrastruktura",
-      alt: "Interfejs Random Frame: obszar obrazu, historia, narzędzia i przycisk Draw. Aplikacja przed wylosowaniem pierwszego obrazu.",
-      capture:
-        "Istniejący frontend aplikacji przed wylosowaniem pierwszego obrazu. Zrzut z przeglądarki, bez backendu Tauri.",
-      intro: "Prosty interfejs. Rozbudowany system.",
+        "Galeria desktopowa do odkrywania publicznych obrazów z Prnt.sc. Zbudowałem interfejs przeglądania i szyfrowaną synchronizację historii oraz ulubionych między urządzeniami.",
+      alt: "Random Frame przed pierwszym losowaniem, z głównym obszarem obrazu i przyciskiem Draw.",
+      intro: "Przeglądanie z pamięcią.",
       overview:
-        "Random Frame to aplikacja desktopowa do przeglądania publicznych obrazów z Prnt.sc. Jeden obraz zajmuje główny obszar. Losowanie kolejnego, powrót do historii i zapisywanie ulubionych to podstawowe działania. Interfejs pozostaje niewielki, a aplikacja odpowiada za trwałość danych, dystrybucję i synchronizację.",
+        "Random Frame losuje publiczny obraz z Prnt.sc. Możesz losować dalej, wrócić do poprzednich obrazów lub zapisać ulubiony. Wokół tego zbudowałem interfejs. Kolejnym zadaniem było trwałe przechowywanie historii i scalanie zmian między urządzeniami, bez ujawniania ich zawartości serwerowi synchronizacji.",
       sections: [
         {
           title: "Obraz pozostaje w centrum.",
-          text: "Główny obszar obrazu jest sercem produktu. Własny pasek okna ogranicza otaczające kontrolki. Historia, statystyki i ustawienia pojawiają się dopiero na żądanie. Skróty klawiaturowe wspierają przeglądanie.",
+          text: "Obraz zajmuje główny obszar, a historia, statystyki i synchronizacja mają osobne kontrolki. Kolejny obraz i powrót do poprzedniego są dostępne z klawiatury, bez otwierania menu.",
           detail: {
             topic: "Obsługa desktopu",
             decision:
@@ -99,8 +89,8 @@ export const projects = {
           },
         },
         {
-          title: "Lokalne dane. Synchronizacja z wyboru.",
-          text: "Historia i ulubione należą do urządzenia. Synchronizacja jest opcjonalna. Ustawienia i statystyki pozostają lokalne także po jej włączeniu.",
+          title: "Historia zostaje na urządzeniu.",
+          text: "Historia i ulubione działają bez konta synchronizacji. Synchronizacja jest opcjonalna, a każda migawka zostaje zaszyfrowana na urządzeniu przed wysłaniem. Ustawienia i statystyki zostają lokalnie.",
           detail: {
             topic: "Granica szyfrowania",
             decision:
@@ -113,7 +103,7 @@ export const projects = {
         },
         {
           title: "Dwa urządzenia, wspólna historia.",
-          text: "Synchronizacja to więcej niż przesłanie pliku. Urządzenia mogą zmieniać dane niezależnie. Zmiany trzeba połączyć bez cichego nadpisywania.",
+          text: "Gdy dwa urządzenia zapisują jednocześnie, późniejszy zapis musi zachować wcześniejsze zmiany. Sprawdzam rewizję, odrzucam nieaktualny zapis i scalam dane na urządzeniu przed ponowną próbą.",
           detail: {
             topic: "Rozwiązywanie konfliktów",
             decision:
@@ -125,12 +115,12 @@ export const projects = {
           },
         },
         {
-          title: "Dostarczenie też jest częścią aplikacji.",
-          text: "Pakiety Linux i Windows, automatyczne aktualizacje oraz niezależnie wdrożona usługa synchronizacji należą do tego samego zakresu odpowiedzialności.",
+          title: "Wydania aplikacji desktopowej.",
+          text: "Przygotowuję pakiety dla Linuksa i Windowsa, publikuję automatyczne aktualizacje i utrzymuję usługę synchronizacji niezależnie od wydań desktopowych.",
           detail: {
             topic: "Dystrybucja i utrzymanie",
             decision:
-              "Dystrybucja desktopu i usługa synchronizacji należą do produktu.",
+              "Aplikacja desktopowa i usługa synchronizacji mają niezależne wydania.",
             mechanism:
               "Rust/Axum i SQLite działają z uwierzytelnianiem, nginx i systemd, wspierane przez kopie zapasowe i narzędzia operacyjne.",
             constraint:
@@ -138,9 +128,6 @@ export const projects = {
           },
         },
       ],
-      result:
-        "Powściągliwy produkt obejmujący projektowanie interfejsu, integrację z Rust, lokalne dane, kryptografię po stronie klienta i utrzymanie serwera.",
-      note: "Obrazy pochodzą z zewnętrznego, niemoderowanego źródła. Random Frame nie jest powiązany z Prnt.sc ani Lightshot.",
     },
   },
   kajtek: {
@@ -148,24 +135,20 @@ export const projects = {
     repo: "https://github.com/amokrzycki/kajtek",
     en: {
       kind: "Web application",
-      tagline: "Internet radio. A familiar feeling.",
+      tagline: "Internet radio in a cassette player.",
       summary:
-        "A lightweight radio player with a cassette-player soul. Tactile controls, animated mechanics and the engineering to keep the music playing.",
-      scope: "Product design · TypeScript · Audio · Integrations",
-      alt: "Kajtek’s red cassette-inspired radio player, with a speaker grille, cassette reels, playback control and a stereo label.",
-      capture:
-        "The actual Kajtek interface, shown ready to play. Inspired by the Polish Unitra PS-101 cassette player.",
-      intro: "An old familiar object. A new set of problems.",
+        "A browser radio inspired by the Unitra PS-101. I designed the player and connected station catalogs, live track information, and stream recovery behind its controls.",
+      alt: "Kajtek playing RMF FM in its red cassette interface, with a live audio meter and station information.",
+      intro: "A radio you can leave playing.",
       overview:
-        "Kajtek brings the character of a Polish cassette player to internet radio. Its interface is intentionally physical; its frontend is deliberately framework-light. Behind the play control are live audio streams, provider integrations and behavior designed around the interruptions of real radio.",
+        "Kajtek plays internet radio through an interface inspired by the Polish Unitra PS-101 cassette player. I designed its controls and playback behavior, then connected providers whose catalogs, track information, and streams work differently. The main engineering problem was keeping playback useful when those services stall or fail.",
       sections: [
         {
           title: "Make the controls feel like the object.",
-          text: "The cassette mechanics, VU meter and shell themes give the player a coherent identity. The interface is playful because its behavior belongs to a radio, rather than because decoration has been added around it.",
+          text: "The reels turn during playback and the meter responds to audio. I kept those signals tied to the player’s state, so the cassette interface shows what the radio is doing.",
           detail: {
             topic: "Mechanics and audio analysis",
-            decision:
-              "Let the player’s behavior give its physical interface meaning.",
+            decision: "Use the meter and reels to indicate playback.",
             mechanism:
               "Cassette reels animate during playback. Web Audio spectrum analysis drives the visualization. Themes and case colors keep the same interaction model.",
             constraint:
@@ -173,8 +156,8 @@ export const projects = {
           },
         },
         {
-          title: "Stay light, stay explicit.",
-          text: "Plain TypeScript and custom CSS keep the application close to the browser. Product UI, state and playback are separated into focused modules without a large frontend framework.",
+          title: "Keep station changes in step.",
+          text: "Changing station affects the stream, artwork, track information, and controls together. I separated playback from rendering and connected both through shared state, so the interface follows the selected station.",
           detail: {
             topic: "State and rendering",
             decision:
@@ -182,7 +165,7 @@ export const projects = {
             mechanism:
               "The state store connects playback, provider metadata and rendering. Favorites, track history, sleep timer and station catalog extend that model.",
             constraint:
-              "esbuild produces the frontend; CI and deployment workflows handle checks and releases without a large UI framework.",
+              "Track information arrives separately from audio and may be missing even while a stream is playing.",
           },
         },
         {
@@ -199,8 +182,8 @@ export const projects = {
           },
         },
         {
-          title: "Work with the services that exist.",
-          text: "The integrations bring together different station catalogs, metadata formats and stream behavior. Understanding external services is part of making the product work.",
+          title: "Different stations, different APIs.",
+          text: "I investigated the RMF, ESKA, and Trójka APIs and gave each provider its own integration. That keeps their catalog and metadata differences out of the player controls.",
           detail: {
             topic: "Provider boundaries",
             decision:
@@ -212,30 +195,23 @@ export const projects = {
           },
         },
       ],
-      result:
-        "A lightweight web product joining interface craft, audio APIs, unreliable streams and external integrations into one listening experience.",
-      note: "An independent project inspired by Unitra hardware. Station content and artwork belong to their respective owners.",
     },
     pl: {
       kind: "Aplikacja webowa",
-      tagline: "Radio internetowe. Znajome uczucie.",
+      tagline: "Radio internetowe w magnetofonie.",
       summary:
-        "Lekki odtwarzacz z duszą magnetofonu. Fizyczne kontrolki, animowane mechanizmy i rozwiązania, dzięki którym muzyka gra dalej.",
-      scope: "Projektowanie produktu · TypeScript · Audio · Integracje",
-      alt: "Czerwony odtwarzacz Kajtek inspirowany magnetofonem: maskownica głośnika, szpule kasety, przycisk odtwarzania i napis stereo.",
-      capture:
-        "Rzeczywisty interfejs Kajtka, gotowy do odtwarzania. Inspiracją jest polski magnetofon Unitra PS-101.",
-      intro: "Znajomy przedmiot. Nowe problemy.",
+        "Radio w przeglądarce inspirowane Unitrą PS-101. Zaprojektowałem odtwarzacz i połączyłem katalogi stacji, informacje o utworach oraz obsługę przerw w strumieniu.",
+      alt: "Kajtek odtwarza RMF FM w czerwonym interfejsie magnetofonu, ze wskaźnikiem audio i informacjami o stacji.",
+      intro: "Radio do codziennego słuchania.",
       overview:
-        "Kajtek przenosi charakter polskiego magnetofonu do radia internetowego. Interfejs celowo przypomina fizyczne urządzenie, a frontend pozostaje lekki. Za przyciskiem odtwarzania kryją się strumienie audio, integracje i zachowanie dostosowane do przerw w prawdziwym radiu.",
+        "Kajtek odtwarza radio internetowe w interfejsie inspirowanym polskim magnetofonem Unitra PS-101. Zaprojektowałem kontrolki i obsługę odtwarzania, a następnie połączyłem dostawców z różnymi katalogami, metadanymi i strumieniami. Głównym problemem technicznym była obsługa sytuacji, gdy te usługi przestają odpowiadać.",
       sections: [
         {
           title: "Kontrolki pasujące do przedmiotu.",
-          text: "Mechanizmy kasety, wskaźnik VU i kolory obudowy tworzą spójną tożsamość. Charakter wynika z zachowania odtwarzacza i jego funkcji.",
+          text: "Szpule obracają się podczas odtwarzania, a wskaźnik reaguje na dźwięk. Powiązałem te sygnały ze stanem odtwarzacza, żeby interfejs magnetofonu pokazywał, co robi radio.",
           detail: {
             topic: "Mechanizmy i analiza audio",
-            decision:
-              "Zachowanie odtwarzacza nadaje fizycznemu interfejsowi znaczenie.",
+            decision: "Wskaźnik i szpule sygnalizują odtwarzanie.",
             mechanism:
               "Szpule animują się podczas odtwarzania. Analiza widma Web Audio steruje wizualizacją. Motywy i kolory zachowują ten sam model interakcji.",
             constraint:
@@ -243,8 +219,8 @@ export const projects = {
           },
         },
         {
-          title: "Lekko i jawnie.",
-          text: "TypeScript i własny CSS utrzymują aplikację blisko przeglądarki. Interfejs, stan i odtwarzanie mają osobne moduły bez dużego frameworka.",
+          title: "Spójny stan po zmianie stacji.",
+          text: "Zmiana stacji wpływa jednocześnie na strumień, okładkę, informacje o utworze i kontrolki. Oddzieliłem odtwarzanie od renderowania i połączyłem je wspólnym stanem, żeby interfejs podążał za wybraną stacją.",
           detail: {
             topic: "Stan i renderowanie",
             decision:
@@ -252,7 +228,7 @@ export const projects = {
             mechanism:
               "Magazyn stanu łączy odtwarzanie, metadane i renderowanie. Ulubione, historia, wyłącznik czasowy i katalog stacji rozszerzają ten model.",
             constraint:
-              "esbuild buduje frontend, a CI i workflow wdrożeniowy obsługują wydania bez dużego frameworka UI.",
+              "Informacje o utworze przychodzą niezależnie od audio i mogą być niedostępne nawet wtedy, gdy stacja gra.",
           },
         },
         {
@@ -269,8 +245,8 @@ export const projects = {
           },
         },
         {
-          title: "Integracja z tym, co istnieje.",
-          text: "Dostawcy różnią się katalogami, formatami metadanych i zachowaniem strumieni. Zrozumienie zewnętrznych usług jest częścią budowania produktu.",
+          title: "Różne stacje, różne API.",
+          text: "Zbadałem API RMF, ESKI i Trójki i przygotowałem osobną integrację dla każdego dostawcy. Różnice w katalogach i metadanych są obsługiwane poza kontrolkami odtwarzacza.",
           detail: {
             topic: "Granice dostawców",
             decision:
@@ -282,9 +258,6 @@ export const projects = {
           },
         },
       ],
-      result:
-        "Lekki produkt webowy łączący dopracowany interfejs, API audio, zawodne strumienie i zewnętrzne integracje w jedno doświadczenie słuchania.",
-      note: "Niezależny projekt inspirowany sprzętem Unitra. Treści stacji i grafiki należą do ich właścicieli.",
     },
   },
 } as const;

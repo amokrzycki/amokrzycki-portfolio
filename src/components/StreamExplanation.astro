@@ -31,11 +31,12 @@ const steps = pl
         title: "Zapasowy strumień przywraca odtwarzanie.",
         states: ["Zapasowy strumień", "Odtwarzacz", "Muzyka"],
         caption:
-          "Jeśli zapasowy adres działa, odtwarzanie wraca. To ilustrowana ścieżka powodzenia; zewnętrzny strumień też może zawieść.",
+          "Odtwarzanie wraca, jeśli zapasowy strumień jest dostępny. W przeciwnym razie kolejna próba korzysta z pozostałego limitu.",
       },
       {
         label: "Limit prób",
-        title: "Trzy próby w trzydzieści sekund. Potem granica.",
+        title:
+          "Po trzech próbach w trzydzieści sekund odtwarzacz przestaje ponawiać.",
         states: [
           "Kolejna awaria",
           "Limit 3 prób / 30 s",
@@ -65,11 +66,11 @@ const steps = pl
         title: "An alternate stream restores playback.",
         states: ["Alternate stream", "Player", "Music"],
         caption:
-          "If the alternate mount works, playback resumes. This is the illustrated success path; an external stream can fail here too.",
+          "Playback resumes if the alternate stream is available. Otherwise, the next attempt uses the remaining retry budget.",
       },
       {
         label: "Retry limit",
-        title: "Three retries in thirty seconds. Then a boundary.",
+        title: "Stop after three retries in thirty seconds.",
         states: ["Another failure", "3 retries / 30 s", "No further attempt"],
         caption:
           "Once the retry budget is used, further automatic attempts in that window are blocked. The player avoids an endless loop of stream switches.",
@@ -116,7 +117,7 @@ const steps = pl
   </div>
   <figcaption>
     {pl
-      ? "Ilustracja działania, bez odtwarzania audio. Limit dotyczy automatycznych prób odzyskania strumienia."
-      : "Behavior illustration, without audio playback. The limit applies to automatic stream recovery attempts."}
+      ? "Automatyczne odzyskiwanie ma limit trzech prób w trzydzieści sekund."
+      : "Automatic recovery is limited to three retries in thirty seconds."}
   </figcaption>
 </figure>

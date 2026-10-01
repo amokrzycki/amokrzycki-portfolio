@@ -2,6 +2,7 @@
 import Site from "../layouts/Site.astro";
 import Arrow from "./Arrow.astro";
 import ProductImage from "./ProductImage.astro";
+import { screenshots } from "../data/screenshots";
 import SyncExplanation from "./SyncExplanation.astro";
 import StreamExplanation from "./StreamExplanation.astro";
 import { projects, type ProjectSlug, type Language } from "../data/projects";
@@ -46,15 +47,13 @@ const next = slug === "random-frame" ? "kajtek" : "random-frame";
       <p class="case-tagline">{c.tagline}</p>
     </header>
     <figure class="case-figure">
-      <ProductImage slug={slug} alt={c.alt} lang={lang} eager />
-      <figcaption>{c.capture}</figcaption>
+      <ProductImage slug={slug} alt={c.alt} eager />
     </figure>
   </div>
   <section class="case-intro editorial-row">
     <h2>{c.intro}</h2>
     <div class="reading-copy">
       <p class="lead">{c.overview}</p>
-      <p class="scope">{c.scope}</p>
       <a class="text-link" href={project.repo}>
         {pl ? "Kod źródłowy" : "View source"}
         <Arrow external />
@@ -118,12 +117,18 @@ const next = slug === "random-frame" ? "kajtek" : "random-frame";
       </section>
     ))}
   </div>
-  <section class="case-close editorial-row">
-    <h2>{pl ? "Całość ma znaczenie." : "The whole thing matters."}</h2>
-    <div class="reading-copy">
-      <p class="lead">{c.result}</p>
-      <p class="source-note">{c.note}</p>
-    </div>
+  <section class="project-gallery" aria-labelledby="gallery-heading">
+    <h2 id="gallery-heading">{pl ? "W aplikacji" : "Inside the app"}</h2>
+    {screenshots[slug].map((shot) => (
+      <figure>
+        <ProductImage
+          slug={slug}
+          source={shot.source}
+          alt={`${project.name}: ${shot[lang]}`}
+        />
+        <figcaption>{shot[lang]}</figcaption>
+      </figure>
+    ))}
   </section>
   <a class="next-project" href={`${base}/work/${next}/`}>
     <span>{pl ? "Drugi projekt" : "The other project"}</span>

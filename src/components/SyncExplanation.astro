@@ -53,7 +53,7 @@ const steps = pl
           "Pobranie → scalenie → szyfrowanie",
         ],
         caption:
-          "B pobiera r8, odszyfrowuje i scala dane lokalnie, po czym szyfruje nową migawkę i zapisuje względem r8. Ilustracja zakłada, że nie pojawi się kolejny konflikt.",
+          "B pobiera r8, scala lokalnie, szyfruje i zapisuje względem r8. Kolejny konflikt uruchamia ten sam proces.",
       },
     ]
   : [
@@ -103,7 +103,7 @@ const steps = pl
           "Fetch → merge → encrypt",
         ],
         caption:
-          "B fetches r8, decrypts and merges locally, then encrypts a new snapshot and writes against r8. This illustration assumes no further concurrent write.",
+          "B fetches r8, merges locally, encrypts, and writes against r8. Another conflict repeats the same process.",
       },
     ];
 const names = pl
@@ -151,7 +151,7 @@ const names = pl
   </div>
   <figcaption>
     {pl
-      ? "Ilustracja protokołu; r7–r9 to przykładowe rewizje. Serwer przechowuje zaszyfrowane dane. Widzi metadane połączeń, rozmiar i czas transferów."
-      : "Protocol illustration; r7–r9 are example revisions. The server stores encrypted data. Connection metadata, transfer size and timing remain visible to it."}
+      ? "Serwer sprawdza rewizje bez odszyfrowywania historii."
+      : "The server checks revisions without decrypting the history."}
   </figcaption>
 </figure>
