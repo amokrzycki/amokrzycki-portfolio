@@ -88,6 +88,10 @@ const selected: ProjectSlug[] = ["random-frame", "kajtek"];
     <div class="reading-copy">
       <p>{c.aboutText}</p>
       <p>{c.aboutTools}</p>
+      <a class="text-link" href={`${base}/about/`}>
+        {pl ? "Więcej o mnie" : "More about me"}
+        <Arrow />
+      </a>
     </div>
   </section>
   <section class="selected-work" id="work" aria-labelledby="work-heading">

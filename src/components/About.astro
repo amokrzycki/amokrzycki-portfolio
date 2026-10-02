@@ -1,0 +1,275 @@
+---
+import Site from "../layouts/Site.astro";
+import Arrow from "./Arrow.astro";
+import type { Language } from "../data/projects";
+
+interface Props {
+  lang?: Language;
+}
+const { lang = "en" } = Astro.props;
+const pl = lang === "pl";
+const home = pl ? "/pl/" : "/";
+const c = pl
+  ? {
+      title: "O mnie",
+      intro: [
+        "Jestem full-stack developerem z frontendowym backgroundem i zawodowo pracuję przy oprogramowaniu od 2021 roku. Zwykle śledzę problem przez kolejne warstwy aplikacji, zamiast traktować interfejs jako granicę systemu.",
+      ],
+      experience: "Doświadczenie",
+      jobs: [
+        {
+          company: "Railwaymen",
+          role: "Frontend Developer",
+          date: "mar 2026 — obecnie",
+          scope:
+            "Pracuję głównie przy frontendzie i aplikacjach opartych o Rails, rozwijając i utrzymując funkcje produktowe bez traktowania interfejsu jako odseparowanej warstwy.",
+        },
+        {
+          company: "GumGum",
+          role: "Frontend Developer",
+          date: "sty 2023 — mar 2026",
+          scope:
+            "Pracowałem przy produkcyjnych aplikacjach webowych z mocnym naciskiem na frontend, rozwijając i utrzymując funkcjonalności widoczne dla użytkowników.",
+        },
+        {
+          company: "GumGum",
+          role: "Junior Frontend Developer",
+          date: "cze 2021 — sty 2023",
+          scope:
+            "Tutaj rozpocząłem zawodową pracę przy oprogramowaniu, stopniowo przejmując odpowiedzialność za coraz większe fragmenty produkcyjnych aplikacji.",
+        },
+      ],
+      education: "Wykształcenie",
+      degree: "Mgr inż. informatyki · Cyberbezpieczeństwo · 2026",
+      thesis:
+        "Praca magisterska dotyczyła implementacji i oceny mechanizmów wieloskładnikowego uwierzytelniania w webowej aplikacji e-commerce.",
+      range: "Zakres pracy",
+      tools: [
+        {
+          name: "React i TypeScript",
+          text: "Technologie, z których korzystam najczęściej — zarówno zawodowo, jak i we własnym oprogramowaniu.",
+        },
+        {
+          name: "Rails",
+          text: "Część mojej obecnej pracy komercyjnej w Railwaymen, szczególnie tam, gdzie frontend spotyka się z backendem.",
+        },
+        {
+          name: "Node.js i Rust",
+          text: "Wykorzystuję je przede wszystkim we własnych projektach, gdy problem wykracza poza przeglądarkę albo lepiej pasuje do innego środowiska.",
+        },
+        {
+          name: "API, dane i infrastruktura",
+          text: "Jeśli źródło problemu znajduje się poza interfejsem, jestem przyzwyczajony do przechodzenia przez kolejne warstwy aplikacji.",
+        },
+      ],
+      personal: "Własne oprogramowanie",
+      personalText:
+        "Najczęściej buduję rzeczy, których później sam używam. Dzięki temu niedokończone założenia, niewygodne przepływy i skróty architektoniczne szybko wychodzą na jaw, a projekty rozwijają się przez kolejne iteracje zamiast kończyć na pierwszej działającej wersji.",
+      selected: "Wybrane projekty",
+      contact: "Kontakt",
+    }
+  : {
+      title: "About me",
+      intro: [
+        "I’m a full-stack engineer with a frontend background, working professionally in software since 2021. I tend to follow problems across application boundaries rather than treating the interface as the end of the system.",
+      ],
+      experience: "Experience",
+      jobs: [
+        {
+          company: "Railwaymen",
+          role: "Frontend Developer",
+          date: "Mar 2026 — present",
+          scope:
+            "I work primarily across frontend and Rails applications, building and maintaining product features rather than treating the interface as an isolated layer.",
+        },
+        {
+          company: "GumGum",
+          role: "Frontend Developer",
+          date: "Jan 2023 — Mar 2026",
+          scope:
+            "Worked on production web applications with a strong frontend focus, developing and maintaining user-facing product functionality over several years.",
+        },
+        {
+          company: "GumGum",
+          role: "Junior Frontend Developer",
+          date: "Jun 2021 — Jan 2023",
+          scope:
+            "Started my professional software career working on frontend development and gradually taking ownership of larger parts of production applications.",
+        },
+      ],
+      education: "Education",
+      degree: "M.Sc. Eng. in Information Technology · Cybersecurity · 2026",
+      thesis:
+        "My master’s work focused on cybersecurity, including the implementation and evaluation of multi-factor authentication mechanisms in a web e-commerce application.",
+      range: "Working range",
+      tools: [
+        {
+          name: "React & TypeScript",
+          text: "The tools I use most often, both professionally and in my own software.",
+        },
+        {
+          name: "Rails",
+          text: "Part of my current commercial work at Railwaymen, where frontend and backend concerns often meet.",
+        },
+        {
+          name: "Node.js & Rust",
+          text: "Used primarily in my own projects when the problem extends beyond the browser or benefits from a different runtime.",
+        },
+        {
+          name: "APIs, data & infrastructure",
+          text: "I’m comfortable following a problem across application boundaries when its source sits outside the interface.",
+        },
+      ],
+      personal: "Personal engineering",
+      personalText:
+        "I tend to build software that I actually keep using. That makes unfinished assumptions, awkward state transitions and architectural shortcuts difficult to ignore, so projects often evolve through repeated use rather than stopping once the first version works.",
+      selected: "Selected work",
+      contact: "Contact",
+    };
+---
+
+<Site
+  lang={lang}
+  title={`${c.title} — Adrian Mokrzycki`}
+  description={c.intro[0]}
+>
+  <div class="profile">
+    <section
+      class="profile-opening editorial-row"
+      aria-labelledby="about-title"
+    >
+      <h1 id="about-title">{c.title}</h1>
+      <div class="reading-copy">
+        {c.intro.map((paragraph) => (
+          <p>{paragraph}</p>
+        ))}
+      </div>
+    </section>
+    <section class="profile-section editorial-row" aria-labelledby="experience">
+      <h2 id="experience">{c.experience}</h2>
+      <div class="reading-copy experience-entries">
+        {c.jobs.map((job) => (
+          <article class="experience-entry">
+            <h3>{job.company}</h3>
+            <p class="entry-role">{job.role}</p>
+            <p class="entry-date">{job.date}</p>
+            <p class="entry-scope">{job.scope}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+    <section class="profile-section editorial-row" aria-labelledby="education">
+      <h2 id="education">{c.education}</h2>
+      <div class="reading-copy education-entry">
+        <h3>Wyższa Szkoła Informatyki i Zarządzania w Rzeszowie</h3>
+        <p class="entry-degree">{c.degree}</p>
+        <p class="entry-scope">{c.thesis}</p>
+      </div>
+    </section>
+    <section
+      class="profile-section editorial-row"
+      aria-labelledby="working-range"
+    >
+      <h2 id="working-range">{c.range}</h2>
+      <dl class="reading-copy working-range">
+        {c.tools.map((tool) => (
+          <div>
+            <dt>{tool.name}</dt>
+            <dd>{tool.text}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+    <section class="profile-section editorial-row" aria-labelledby="personal">
+      <h2 id="personal">{c.personal}</h2>
+      <div class="reading-copy">
+        <p>{c.personalText}</p>
+      </div>
+    </section>
+    <div class="profile-closing editorial-row">
+      <div class="profile-links">
+        <a class="text-link" href={`${home}#work`}>
+          {c.selected}
+          <Arrow />
+        </a>
+        <a class="text-link" href={`${home}#contact`}>
+          {c.contact}
+          <Arrow />
+        </a>
+      </div>
+    </div>
+  </div>
+</Site>
+
+<style>
+  .profile-opening {
+    padding-block: 45px 60px;
+  }
+  .profile-opening h1 {
+    font-size: clamp(3rem, 6vw, 5rem);
+  }
+  .profile-section {
+    padding-block: 50px;
+    border-top: 1px solid var(--rule);
+  }
+  .profile h3 {
+    font-size: clamp(20px, 1.8vw, 24px);
+    line-height: 1.4;
+    letter-spacing: -0.018em;
+  }
+  .experience-entry + .experience-entry {
+    margin-top: 40px;
+  }
+  .profile .entry-role,
+  .profile .entry-degree {
+    margin-top: 8px;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .profile .entry-date {
+    margin-top: 4px;
+    font-size: 13px;
+  }
+  .profile .entry-scope {
+    margin-top: 18px;
+  }
+  .working-range {
+    font-size: 15px;
+  }
+  .working-range > div + div {
+    margin-top: 24px;
+  }
+  .working-range dt {
+    font-weight: 600;
+  }
+  .working-range dd {
+    margin-top: 8px;
+    color: var(--muted);
+  }
+  .profile-closing {
+    padding-bottom: 60px;
+  }
+  .profile-links {
+    grid-column: 2;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 40px;
+  }
+  @media (max-width: 700px) {
+    .profile-opening {
+      padding-block: 48px 38px;
+    }
+    .profile-opening h1 {
+      font-size: clamp(2.8rem, 10vw, 4.5rem);
+    }
+    .profile-section {
+      padding-block: 38px;
+    }
+    .profile-closing {
+      padding-bottom: 38px;
+    }
+    .profile-links {
+      grid-column: 1;
+    }
+  }
+</style>
