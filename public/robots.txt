@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://amokrzycki.ovh/sitemap-index.xml
