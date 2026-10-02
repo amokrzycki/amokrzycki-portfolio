@@ -3,7 +3,7 @@ import { log } from "node:console";
 import { existsSync, readFileSync } from "node:fs";
 import { runInNewContext } from "node:vm";
 
-const routes = ["/", "/work/random-frame/", "/work/kajtek/"];
+const routes = ["/", "/about/", "/work/random-frame/", "/work/kajtek/"];
 for (const route of [...routes, ...routes.map((route) => `/pl${route}`)]) {
   const html = readFileSync(`dist${route}index.html`, "utf8");
   assert.equal((html.match(/<h1\b/g) ?? []).length, 1, `${route}: one h1`);
@@ -27,6 +27,30 @@ for (const route of [...routes, ...routes.map((route) => `/pl${route}`)]) {
     }
   }
   const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)?.[1];
+  if (route.endsWith("/about/")) {
+    const home = route.startsWith("/pl/") ? "/pl/" : "/";
+    const sections = [
+      "about-title",
+      "experience",
+      "education",
+      "working-range",
+      "personal",
+    ].map((id) => main.indexOf(`id="${id}"`));
+    assert.ok(sections.every((position) => position >= 0));
+    assert.deepEqual(
+      sections,
+      [...sections].sort((a, b) => a - b),
+    );
+    assert.equal((main.match(/<article\b/g) ?? []).length, 3);
+    assert.equal((main.match(/<dt\b/g) ?? []).length, 4);
+    assert.ok(main.includes(`href="${home}#work"`));
+    assert.ok(main.includes(`href="${home}#contact"`));
+    const homepage = readFileSync(`dist${home}index.html`, "utf8");
+    assert.ok(homepage.includes(`href="${route}"`));
+    assert.ok(
+      html.includes(`href="${home === "/" ? "/pl/about/" : "/about/"}"`),
+    );
+  }
   for (const [tag] of main.matchAll(/<img\b[^>]*>/g)) {
     assert.ok(/alt="[^"]+"/.test(tag), `${route}: missing image description`);
     assert.ok(/width="\d+"/.test(tag) && /height="\d+"/.test(tag));
@@ -125,5 +149,5 @@ for (const relatedTarget of [null, inside, {}]) {
   );
 }
 log(
-  "Six routes: links, images, landmarks, both theme contrasts and pre-paint theme restoration passed.",
+  "Eight routes: links, images, landmarks, both theme contrasts and pre-paint theme restoration passed.",
 );

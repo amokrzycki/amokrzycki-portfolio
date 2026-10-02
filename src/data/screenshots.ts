@@ -1,7 +1,21 @@
+import type { ImageMetadata } from "astro";
+import type { ProjectSlug, Language } from "./projects";
 import frameSync from "../assets/random-frame-sync-detail.png";
 import radioCatalog from "../assets/kajtek-catalog-detail.png";
 import radioPlaylist from "../assets/kajtek-playlist-detail.png";
 import radioPlaylistMobile from "../assets/kajtek-playlist-mobile.png";
+
+type Screenshot = {
+  section: number;
+  source: ImageMetadata;
+  mobileSource?: ImageMetadata;
+  original: string;
+  focusY: number;
+  wide: boolean;
+  en: string;
+  pl: string;
+  alt: Record<Language, string>;
+};
 
 export const screenshots = {
   "random-frame": [
@@ -48,4 +62,4 @@ export const screenshots = {
       },
     },
   ],
-};
+} satisfies Record<ProjectSlug, Screenshot[]>;

@@ -477,9 +477,8 @@ a:focus-visible .arrow {
   margin-bottom: var(--section-gap);
   border-top: 1px solid var(--rule);
 }
-.reading-copy .education {
-  font-size: 13px;
-  margin-top: 24px;
+.about .reading-copy p {
+  text-wrap: pretty;
 }
 .contact {
   padding-block: 60px 80px;
