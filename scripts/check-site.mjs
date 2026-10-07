@@ -3,8 +3,14 @@ import { log } from "node:console";
 import { existsSync, readFileSync } from "node:fs";
 import { runInNewContext } from "node:vm";
 
-const routes = ["/", "/about/", "/work/random-frame/", "/work/kajtek/"];
-for (const route of [...routes, ...routes.map((route) => `/pl${route}`)]) {
+const projectSlugs = ["random-frame", "kajtek", "zielony-koszyk"];
+const routes = [
+  "/",
+  "/about/",
+  ...projectSlugs.map((slug) => `/work/${slug}/`),
+];
+const allRoutes = [...routes, ...routes.map((route) => `/pl${route}`)];
+for (const route of allRoutes) {
   const html = readFileSync(`dist${route}index.html`, "utf8");
   assert.equal((html.match(/<h1\b/g) ?? []).length, 1, `${route}: one h1`);
   assert.ok(html.includes(`lang="${route.startsWith("/pl/") ? "pl" : "en"}"`));
@@ -27,6 +33,71 @@ for (const route of [...routes, ...routes.map((route) => `/pl${route}`)]) {
     }
   }
   const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)?.[1];
+  const base = route.startsWith("/pl/") ? "/pl" : "";
+  const slug = route.match(/\/work\/([^/]+)\//)?.[1];
+  if (slug) {
+    const next =
+      projectSlugs[(projectSlugs.indexOf(slug) + 1) % projectSlugs.length];
+    assert.ok(
+      /class="next-project"/.test(main) &&
+        main.includes(`href="${base}/work/${next}/"`),
+      `${route}: next project follows selected-work order`,
+    );
+    assert.ok(
+      main.includes(`href="/images/${slug}.png"`),
+      `${route}: correct opening image`,
+    );
+  }
+  if (route === "/" || route === "/pl/") {
+    assert.equal((main.match(/<article\b/g) ?? []).length, projectSlugs.length);
+    for (const project of projectSlugs) {
+      assert.ok(main.includes(`href="${base}/work/${project}/"`));
+      assert.ok(main.includes(`href="/images/${project}.png"`));
+    }
+  }
+  if (slug === "zielony-koszyk") {
+    assert.ok(
+      !/research|thesis|test bed|JMeter|Web Vitals|\bE[123]\b|badawcz|badań|magister|inżyniersk/i.test(
+        main,
+      ),
+      `${route}: product story has no research framing`,
+    );
+    assert.equal(
+      (main.match(/data-image-viewer/g) ?? []).length,
+      4,
+      `${route}: storefront, product editor, order and MFA captures`,
+    );
+    assert.ok(
+      main.includes('href="/images/zielony-koszyk-product-editor.png"'),
+    );
+    const projectLinks = main.match(
+      /<div class="project-links">([\s\S]*?)<\/div>/,
+    )?.[1];
+    assert.ok(projectLinks, `${route}: project source links`);
+    assert.deepEqual(
+      [...projectLinks.matchAll(/href="([^"]+)"/g)].map((link) => link[1]),
+      [
+        "https://github.com/amokrzycki/zielony-koszyk",
+        "https://github.com/amokrzycki/zielony-koszyk-backend",
+      ],
+      `${route}: project actions are exactly the two source repositories`,
+    );
+    for (const repo of ["zielony-koszyk", "zielony-koszyk-backend"]) {
+      assert.ok(
+        main.includes(`href="https://github.com/amokrzycki/${repo}"`),
+        `${route}: source ${repo}`,
+      );
+    }
+    assert.equal((main.match(/class="engineering-details"/g) ?? []).length, 3);
+    assert.ok(
+      !main.includes("engineering-explanation"),
+      `${route}: no unrelated walkthrough`,
+    );
+    assert.ok(
+      !/href="[^"]*(?:\/releases\/|zielony\.amokrzycki\.ovh)/.test(main),
+      `${route}: source-only project actions`,
+    );
+  }
   if (route.endsWith("/about/")) {
     const home = route.startsWith("/pl/") ? "/pl/" : "/";
     const sections = [
@@ -84,6 +155,7 @@ for (const theme of ["light", "dark"]) {
       "hover-ground",
       "frame-ground",
       "kajtek-ground",
+      "basket-ground",
     ]) {
       const values = [
         luminance(color(foreground, theme)),
@@ -122,7 +194,7 @@ for (const saved of [null, "light", "dark", "system", "invalid", "blocked"]) {
     ["light", "dark"].includes(saved) ? saved : "system",
   );
 }
-for (const route of [...routes, ...routes.map((route) => `/pl${route}`)]) {
+for (const route of allRoutes) {
   const html = readFileSync(`dist${route}index.html`, "utf8");
   assert.ok(
     html.indexOf(bootstrap.trim()) >= 0 &&
@@ -149,5 +221,5 @@ for (const relatedTarget of [null, inside, {}]) {
   );
 }
 log(
-  "Eight routes: links, images, landmarks, both theme contrasts and pre-paint theme restoration passed.",
+  `${allRoutes.length} routes: project navigation, sources, links, images, landmarks, both theme contrasts and pre-paint theme restoration passed.`,
 );

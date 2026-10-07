@@ -37,6 +37,7 @@ export const projects = {
         },
         {
           title: "Two devices, one evolving history.",
+          explanation: "sync",
           text: "If two devices save at once, the later write must preserve the earlier changes. I used revision checks to reject stale writes, then merge and retry on the device.",
           detail: {
             topic: "Conflict resolution",
@@ -93,6 +94,7 @@ export const projects = {
         },
         {
           title: "Dwa urządzenia, wspólna historia.",
+          explanation: "sync",
           text: "Gdy dwa urządzenia zapisują zmiany w tym samym czasie, jedno może nadpisać dane drugiego. Dlatego serwer sprawdza numer wersji danych i odrzuca nieaktualny zapis. Aplikacja pobiera wtedy nowszą wersję, łączy ją z lokalnymi zmianami i próbuje ponownie.",
           detail: {
             topic: "Rozwiązywanie konfliktów",
@@ -153,6 +155,7 @@ export const projects = {
         },
         {
           title: "Two sources can name different songs.",
+          explanation: "metadata",
           text: "ESKA’s API supplies track names; timing lives in a private HLS stream tag. The sources can change songs a few seconds apart. I compare their titles before combining them, so the new song does not inherit the previous one’s clock.",
           detail: {
             topic: "Reconciling REST and HLS",
@@ -209,6 +212,7 @@ export const projects = {
         },
         {
           title: "Dwa źródła mogą wskazywać różne utwory.",
+          explanation: "metadata",
           text: "API ESKI podaje tytuły utworów, a informacje o czasie są zapisane w prywatnym tagu strumienia HLS. Dane z obu źródeł mogą zaktualizować się w odstępie kilku sekund. Przed ich połączeniem porównuję tytuły, żeby do nowego utworu nie przypisać czasu poprzedniego.",
           detail: {
             topic: "Łączenie danych z REST i HLS",
@@ -232,5 +236,105 @@ export const projects = {
       ],
     },
   },
+  "zielony-koszyk": {
+    name: "Zielony Koszyk",
+    repo: "https://github.com/amokrzycki/zielony-koszyk",
+    backendRepo: "https://github.com/amokrzycki/zielony-koszyk-backend",
+    en: {
+      kind: "Full-stack web application",
+      tagline: "Groceries, from basket to order.",
+      summary:
+        "A grocery application in English and Polish. Customers build a basket and return to saved orders; staff manage the catalogue and order details. Built with React and NestJS.",
+      alt: "Zielony Koszyk’s English fruit catalogue with category and price filters, search, quantities and Add to cart controls.",
+      intro: "Both sides of a grocery order.",
+      overview:
+        "I built Zielony Koszyk around the handoff from choosing groceries to handling an order. Customers shop in English or Polish, use saved delivery details and return to their orders and invoices. Staff work with the same catalogue and order records in an admin workspace. This is a personal project without a payment gateway or commercial launch.",
+      sections: [
+        {
+          title: "One catalogue, two languages.",
+          text: "Search, categories and price filters help customers find groceries in their language. Filters stay in the URL, and the basket survives a reload. Staff edit Polish and English names and descriptions together, with one shared price and stock level for each product.",
+          detail: {
+            topic: "Localized data, shared products",
+            mechanism:
+              "React and TypeScript use RTK Query for API data. The active language is part of each localized query’s cache key and travels to NestJS in Accept-Language. PostgreSQL stores product translations separately from price and stock; search and name sorting use the requested translation. Redux Persist keeps only the basket.",
+            constraint:
+              "Missing translations fall back to Polish. The admin interface distinguishes roles, but several management endpoints still need server-side role and ownership checks before the application can be used commercially.",
+          },
+        },
+        {
+          title: "Checkout leaves a record.",
+          text: "Checkout starts with saved addresses and ends with an order the customer can revisit. The account shows its products, delivery charge and current status, with a PDF invoice to download. Staff can review that same order and update its details and status.",
+          detail: {
+            topic: "Saving the order and its language",
+            mechanism:
+              "TypeORM saves addresses, line items and stock deductions in a PostgreSQL transaction. Each order keeps the language chosen at checkout and a snapshot of its product names. Later catalogue edits do not rewrite those names. Invoice generation and the confirmation email template use the stored language after the transaction commits.",
+            constraint:
+              "Prices still come from checkout, and stock checks do not lock product rows. Invoice generation happens after the order commits; later staff edits do not regenerate that PDF. These are limits to address before taking real orders.",
+          },
+        },
+        {
+          title: "Make the extra login step clear.",
+          text: "Customers can choose an email code, an authenticator app or a platform authenticator in their account settings. With MFA enabled, a correct password leads to a separate confirmation step. The customer can go back and start again; access to the account waits until verification succeeds.",
+          detail: {
+            topic: "Pending login and session boundaries",
+            mechanism:
+              "Pending login credentials stay in React memory. The pending token cannot access account endpoints or refresh a session. A login challenge expires after five minutes and allows five failed attempts. Verification locks and consumes the challenge in a database transaction before issuing the session.",
+            constraint:
+              "WebAuthn uses a compatible platform authenticator after the password. Refresh sessions have no server-side revocation registry, and request throttling is local to one backend instance.",
+          },
+        },
+      ],
+    },
+    pl: {
+      kind: "Aplikacja webowa full-stack",
+      tagline: "Zakupy spożywcze, od koszyka do zamówienia.",
+      summary:
+        "Sklep spożywczy po polsku i angielsku. Klienci kompletują koszyk i wracają do zapisanych zamówień, a obsługa zarządza katalogiem i danymi zamówień. React i NestJS.",
+      alt: "Angielski katalog owoców w Zielonym Koszyku z filtrami kategorii i ceny, wyszukiwarką, wyborem ilości i przyciskami dodania do koszyka.",
+      intro: "Zamówienie z perspektywy klienta i obsługi.",
+      overview:
+        "W Zielonym Koszyku połączyłem wybór produktów z późniejszą obsługą zamówienia. Klient robi zakupy po polsku lub angielsku, korzysta z zapisanych adresów i wraca do swoich zamówień oraz faktur. Obsługa pracuje na tych samych produktach i zamówieniach w panelu administracyjnym. To projekt osobisty, bez bramki płatności i wdrożenia komercyjnego.",
+      sections: [
+        {
+          title: "Jeden katalog w dwóch językach.",
+          text: "Wyszukiwarka, kategorie i filtry ceny pomagają znaleźć produkty w wybranym języku. Filtry zostają w adresie strony, a koszyk przetrwa jej odświeżenie. Obsługa edytuje polskie i angielskie nazwy oraz opisy w jednym formularzu. Cena i stan magazynowy są wspólne dla obu wersji produktu.",
+          detail: {
+            topic: "Tłumaczenia i wspólne dane produktu",
+            mechanism:
+              "Frontend w React i TypeScript pobiera dane przez RTK Query. Język jest częścią klucza pamięci podręcznej i trafia do NestJS w nagłówku Accept-Language. PostgreSQL przechowuje tłumaczenia osobno od ceny i stanu magazynowego. Wyszukiwanie i sortowanie po nazwie korzystają z wybranego tłumaczenia. Redux Persist zachowuje tylko koszyk.",
+            constraint:
+              "Jeśli brakuje tłumaczenia, aplikacja używa polskiego tekstu. Panel rozróżnia role użytkowników, ale część endpointów zarządzania wymaga jeszcze sprawdzania roli i dostępu do konkretnych danych po stronie serwera przed użyciem komercyjnym.",
+          },
+        },
+        {
+          title: "Do zamówienia można wrócić.",
+          text: "Przy składaniu zamówienia klient korzysta z zapisanych adresów. Później na koncie widzi produkty, koszt dostawy i bieżący status oraz może pobrać fakturę PDF. Obsługa otwiera to samo zamówienie, żeby sprawdzić jego dane lub zmienić szczegóły i status.",
+          detail: {
+            topic: "Zapis zamówienia i jego języka",
+            mechanism:
+              "TypeORM zapisuje adresy, pozycje zamówienia i zmniejszenie zapasu w jednej transakcji PostgreSQL. Zamówienie zachowuje język wybrany przy zakupie i kopię nazw produktów. Późniejsza edycja katalogu nie zmienia tych nazw. Generowanie faktury i szablon e-maila z potwierdzeniem korzystają z zapisanego języka po zatwierdzeniu transakcji.",
+            constraint:
+              "Ceny nadal pochodzą z danych przesłanych przy zakupie, a sprawdzenie zapasu nie blokuje wierszy produktów. Faktura powstaje po zapisaniu zamówienia; późniejsza edycja przez obsługę nie generuje jej ponownie. Te ograniczenia trzeba usunąć przed przyjmowaniem rzeczywistych zamówień.",
+          },
+        },
+        {
+          title: "Dodatkowy krok logowania ma jasny cel.",
+          text: "W ustawieniach konta klient może wybrać kod z e-maila, aplikację uwierzytelniającą lub uwierzytelniacz urządzenia. Przy włączonym MFA poprawne hasło prowadzi do osobnego ekranu potwierdzenia. Można wrócić i zacząć od nowa, a dostęp do konta pojawia się dopiero po poprawnej weryfikacji.",
+          detail: {
+            topic: "Oczekujące logowanie i dostęp do sesji",
+            mechanism:
+              "Dane oczekującego logowania pozostają w pamięci Reacta. Token tego etapu nie pozwala korzystać z endpointów konta ani odświeżyć sesji. Weryfikacja wygasa po pięciu minutach i dopuszcza pięć błędnych prób. Serwer blokuje rekord weryfikacji w transakcji bazy danych i oznacza go jako wykorzystany, zanim wyda sesję.",
+            constraint:
+              "WebAuthn działa po podaniu hasła i wymaga zgodnego uwierzytelniacza urządzenia. Serwer nie prowadzi rejestru unieważnionych sesji refresh, a ograniczanie liczby żądań działa w pamięci jednej instancji backendu.",
+          },
+        },
+      ],
+    },
+  },
 } as const;
 export type ProjectSlug = keyof typeof projects;
+export const projectOrder = [
+  "random-frame",
+  "kajtek",
+  "zielony-koszyk",
+] as const satisfies readonly ProjectSlug[];

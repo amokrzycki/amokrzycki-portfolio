@@ -2,6 +2,7 @@
 import { Image, getImage } from "astro:assets";
 import randomFrame from "../assets/random-frame.png";
 import kajtek from "../assets/kajtek.png";
+import zielonyKoszyk from "../assets/zielony-koszyk.png";
 import type { ImageMetadata } from "astro";
 import type { ProjectSlug } from "../data/projects";
 interface Props {
@@ -14,15 +15,20 @@ interface Props {
   mobileSource?: ImageMetadata;
   focusY?: number;
 }
+const projectImages = {
+  "random-frame": randomFrame,
+  kajtek,
+  "zielony-koszyk": zielonyKoszyk,
+} satisfies Record<ProjectSlug, ImageMetadata>;
 const {
   slug,
   alt,
-  source = slug === "random-frame" ? randomFrame : kajtek,
+  source = projectImages[slug],
   eager = false,
   original = `/images/${slug}.png`,
   mobileSource,
   focusY = 0.5,
-  sizes = slug === "random-frame"
+  sizes = slug !== "kajtek"
     ? "(max-width: 700px) calc(100vw - 64px), (max-width: 1400px) 75vw, 1000px"
     : "(max-width: 700px) calc(100vw - 64px), (max-width: 1400px) 50vw, 880px",
 } = Astro.props;

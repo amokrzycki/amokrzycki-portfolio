@@ -1,6 +1,6 @@
 # Adrian Mokrzycki’s portfolio
 
-A bilingual portfolio built with Astro. It presents two personal projects, Random Frame and Kajtek, with case studies covering their interfaces and the engineering behind them.
+A bilingual portfolio built with Astro. It presents three personal projects, Random Frame, Kajtek and Zielony Koszyk, with case studies covering their interfaces and the engineering behind them.
 
 ## Stack
 
@@ -13,6 +13,7 @@ A bilingual portfolio built with Astro. It presents two personal projects, Rando
 
 - [Random Frame](https://github.com/amokrzycki/random-frame): a desktop image viewer with local history and optional encrypted sync.
 - [Kajtek](https://github.com/amokrzycki/kajtek): an internet radio player with a cassette-inspired interface and integrations for Polish radio providers.
+- Zielony Koszyk: a grocery application in English and Polish, with customer checkout, saved orders and PDF invoices, a bilingual catalogue editor and optional MFA. Sources: [frontend](https://github.com/amokrzycki/zielony-koszyk) and [backend](https://github.com/amokrzycki/zielony-koszyk-backend).
 
 The site includes English and Polish homepages and project pages. Project copy and metadata live in `src/data/projects.ts`; the pages are generated from the project slugs.
 
@@ -39,6 +40,7 @@ npm run astro -- dev stop
 npm run build
 npm run lint
 npm run check:site
+npm run format:check
 ```
 
 Set `SITE_URL` to the production origin when building for deployment. Astro uses it to generate canonical, language alternate and social metadata URLs.

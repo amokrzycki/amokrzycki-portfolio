@@ -2,7 +2,7 @@
 import Site from "../layouts/Site.astro";
 import Arrow from "./Arrow.astro";
 import ProductImage from "./ProductImage.astro";
-import { projects, type Language, type ProjectSlug } from "../data/projects";
+import { projects, projectOrder, type Language } from "../data/projects";
 interface Props {
   lang?: Language;
 }
@@ -49,7 +49,6 @@ const c = pl
       contact: "Let’s talk",
       contactText: "Email me about a project or working together.",
     };
-const selected: ProjectSlug[] = ["random-frame", "kajtek"];
 ---
 
 <Site
@@ -61,8 +60,8 @@ const selected: ProjectSlug[] = ["random-frame", "kajtek"];
   }
   description={
     pl
-      ? "Adrian Mokrzycki, programista full-stack skupiony na frontendzie. Zobacz moje projekty: Random Frame i Kajtek."
-      : "Adrian Mokrzycki, a full-stack engineer with a focus on interfaces. Personal projects: Random Frame and Kajtek."
+      ? "Adrian Mokrzycki, programista full-stack skupiony na frontendzie. Projekty: Random Frame, Kajtek i Zielony Koszyk."
+      : "Adrian Mokrzycki, a full-stack engineer with a focus on interfaces. Projects: Random Frame, Kajtek and Zielony Koszyk."
   }
 >
   <section class="hero" aria-labelledby="hero-heading">
@@ -99,7 +98,7 @@ const selected: ProjectSlug[] = ["random-frame", "kajtek"];
       <h2 id="work-heading">{c.selected}</h2>
       <p>{c.selectedNote}</p>
     </div>
-    {selected.map((slug, index) => {
+    {projectOrder.map((slug, index) => {
       const project = projects[slug];
       const content = project[lang];
       return (

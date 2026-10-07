@@ -25,6 +25,7 @@
   --rule: light-dark(#d9dfe1, #41413c);
   --frame-ground: light-dark(#e7ecef, #292d2d);
   --kajtek-ground: light-dark(#e9ece4, #2c2e27);
+  --basket-ground: light-dark(#e5eeea, #27312d);
   --subtle: light-dark(#5f6970, #a9a89f);
   --surface: light-dark(#ffffff, #262623);
   --hover-ground: light-dark(#edf0f1, #33332e);
@@ -392,6 +393,28 @@ a:focus-visible .arrow {
 .product-plate.kajtek img {
   max-width: 880px;
 }
+.product-plate.zielony-koszyk {
+  background: var(--basket-ground);
+  padding: clamp(18px, 3.4vw, 48px);
+}
+.product-plate.zielony-koszyk .capture-link,
+.product-plate.zielony-koszyk img {
+  max-width: 1140px;
+}
+.spread-zielony-koszyk {
+  padding-top: 36px;
+  border-top: 1px solid var(--rule);
+}
+.spread-zielony-koszyk .project-identity,
+.spread-zielony-koszyk .project-caption {
+  grid-row: 1;
+}
+.spread-zielony-koszyk .project-caption {
+  align-self: end;
+}
+.spread-zielony-koszyk .product-plate {
+  grid-row: 2;
+}
 .project-identity {
   grid-column: 1;
 }
@@ -546,6 +569,16 @@ a:focus-visible .arrow {
 }
 .case-heading h1 {
   font-size: clamp(3rem, 6vw, 5rem);
+}
+.case-opening-zielony-koszyk .case-heading {
+  grid-template-columns: 7fr 5fr;
+}
+.case-opening-zielony-koszyk .product-plate {
+  padding: clamp(14px, 2.8vw, 40px);
+}
+.case-opening-zielony-koszyk .capture-link,
+.case-opening-zielony-koszyk img {
+  max-width: none;
 }
 .case-tagline {
   max-width: 24ch;
@@ -844,8 +877,10 @@ details > p {
 .approach h2 {
   max-width: 20ch;
 }
-.download-link {
-  margin-left: 24px;
+.project-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 24px;
 }
 .case-intro .text-link {
   margin-top: 20px;
@@ -880,6 +915,9 @@ details > p {
 .section-media .capture-link,
 .section-media img {
   max-width: none;
+}
+.section-media.media-portrait .capture-link {
+  max-width: 480px;
 }
 .section-media figcaption {
   grid-column: 1;
@@ -1135,6 +1173,12 @@ details > p {
     grid-template-columns: 1fr;
     gap: 20px;
   }
+  .spread-zielony-koszyk .project-caption {
+    grid-row: 3;
+  }
+  .spread-zielony-koszyk .product-plate {
+    padding: 16px 10px;
+  }
   .spread-kajtek .project-identity {
     grid-column: 1;
     grid-row: 1;
@@ -1211,6 +1255,9 @@ details > p {
     grid-template-columns: 1fr;
     gap: 25px;
     padding-block: 30px 36px;
+  }
+  .case-opening-zielony-koszyk .case-heading {
+    grid-template-columns: 1fr;
   }
   .case-heading h1 {
     font-size: clamp(2.8rem, 10vw, 4.5rem);

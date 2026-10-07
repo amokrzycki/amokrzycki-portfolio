@@ -4,6 +4,9 @@ import frameSync from "../assets/random-frame-sync-detail.png";
 import radioCatalog from "../assets/kajtek-catalog-detail.png";
 import radioPlaylist from "../assets/kajtek-playlist-detail.png";
 import radioPlaylistMobile from "../assets/kajtek-playlist-mobile.png";
+import basketOrder from "../assets/zielony-koszyk-order-detail.png";
+import basketMfa from "../assets/zielony-koszyk-mfa-detail.png";
+import basketEditor from "../assets/zielony-koszyk-product-editor-detail.png";
 
 type Screenshot = {
   section: number;
@@ -59,6 +62,47 @@ export const screenshots = {
       alt: {
         en: "Kajtek’s RMF playlist with a previous song, a news break, the current ATB track and the upcoming Laura Branigan track.",
         pl: "Playlista RMF w Kajtku: poprzedni utwór, przerwa na wiadomości, bieżący utwór ATB i następny utwór Laury Branigan.",
+      },
+    },
+  ],
+  "zielony-koszyk": [
+    {
+      section: 0,
+      source: basketEditor,
+      original: "/images/zielony-koszyk-product-editor.png",
+      focusY: 0.5,
+      wide: false,
+      en: "Staff edit both language versions in one place. Price, category and stock belong to the shared product; the Polish fields are intentional in this English interface.",
+      pl: "Obsługa edytuje oba tłumaczenia w jednym formularzu. Cena, kategoria i zapas należą do wspólnego produktu. Polskie pola są celowo widoczne w angielskim interfejsie.",
+      alt: {
+        en: "English Edit product window for American Blueberries, with shared stock, price and category above separate Polish and English name and description fields.",
+        pl: "Angielski formularz edycji borówki amerykańskiej ze wspólnym zapasem, ceną i kategorią oraz osobnymi polami nazwy i opisu po polsku i angielsku.",
+      },
+    },
+    {
+      section: 1,
+      source: basketOrder,
+      original: "/images/zielony-koszyk-order.png",
+      focusY: 0.3,
+      wide: true,
+      en: "The saved order separates products from delivery and keeps the invoice within reach. This order was placed through the English checkout with synthetic local data.",
+      pl: "Zapisane zamówienie pokazuje osobno produkty i dostawę oraz pozwala pobrać fakturę. Powstało przez angielski formularz zakupu, z lokalnymi danymi testowymi.",
+      alt: {
+        en: "English order 1 with New status, an Electronic invoice action, American Blueberries, Banana and Champion Apples, delivery and a PLN 49.50 total. All customer data is synthetic.",
+        pl: "Angielski widok zamówienia nr 1 ze statusem New, przyciskiem faktury, borówką amerykańską, bananem, jabłkami Champion, dostawą i sumą 49,50 zł. Dane klienta są testowe.",
+      },
+    },
+    {
+      section: 2,
+      source: basketMfa,
+      original: "/images/zielony-koszyk-mfa-login.png",
+      focusY: 0.34,
+      wide: false,
+      en: "After the password check, login waits for the email code. The account is still unauthenticated; Back lets the customer restart.",
+      pl: "Po sprawdzeniu hasła logowanie czeka na kod z e-maila. Konto nie jest jeszcze uwierzytelnione, a przycisk Back pozwala zacząć od nowa.",
+      alt: {
+        en: "English email MFA step with an empty One-time code field, Back button and disabled Confirm button. No credentials or code are shown.",
+        pl: "Angielski etap MFA z pustym polem One-time code, przyciskiem Back i nieaktywnym Confirm. Bez danych logowania ani kodu.",
       },
     },
   ],
