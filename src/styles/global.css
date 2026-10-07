@@ -664,6 +664,45 @@ a:focus-visible .arrow {
 .metadata-explanation {
   background: var(--kajtek-ground);
 }
+.auth-explanation {
+  background: var(--basket-ground);
+}
+.auth-boundary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 36px;
+  margin-block: 32px 24px;
+}
+.auth-boundary > div {
+  border-top: 1px solid var(--muted);
+  padding-top: 16px;
+}
+.auth-boundary dt,
+.auth-boundary dd {
+  font-size: 13px;
+  color: var(--ink);
+}
+.auth-boundary .auth-state {
+  font-size: clamp(20px, 2.2vw, 30px);
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  margin-block: 14px 12px;
+}
+.auth-access {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--muted);
+  font-size: 13px;
+}
+.auth-access + .explanation-caption {
+  margin-top: 12px;
+}
+.auth-access strong {
+  color: var(--accent);
+  font-weight: 600;
+}
 .explanation-panels {
 }
 .explanation-panel h3 {
@@ -1280,6 +1319,15 @@ details > p {
   .engineering-explanation {
     margin-top: 0;
     padding: 24px 18px;
+  }
+  .auth-boundary {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-block: 28px 20px;
+  }
+  .auth-boundary .auth-state {
+    font-size: 23px;
+    margin-block: 10px 8px;
   }
   .sync-lanes {
     grid-template-columns: 1fr;

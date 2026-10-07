@@ -64,8 +64,8 @@ for (const route of allRoutes) {
     );
     assert.equal(
       (main.match(/data-image-viewer/g) ?? []).length,
-      4,
-      `${route}: storefront, product editor, order and MFA captures`,
+      3,
+      `${route}: storefront, product editor and saved order captures`,
     );
     assert.ok(
       main.includes('href="/images/zielony-koszyk-product-editor.png"'),
@@ -90,12 +90,36 @@ for (const route of allRoutes) {
     }
     assert.equal((main.match(/class="engineering-details"/g) ?? []).length, 3);
     assert.ok(
-      !main.includes("engineering-explanation"),
-      `${route}: no unrelated walkthrough`,
+      main.includes("auth-explanation") &&
+        (main.match(/name="auth-step"/g) ?? []).length === 4,
+      `${route}: four-stage auth walkthrough`,
+    );
+    assert.ok(
+      !main.includes("zielony-koszyk-mfa-login.png"),
+      `${route}: MFA form retired`,
     );
     assert.ok(
       !/href="[^"]*(?:\/releases\/|zielony\.amokrzycki\.ovh)/.test(main),
       `${route}: source-only project actions`,
+    );
+  }
+  if (slug) {
+    const explanation = {
+      "random-frame": "sync",
+      kajtek: "metadata",
+      "zielony-koszyk": "auth",
+    }[slug];
+    assert.equal(
+      (main.match(new RegExp(`name="${explanation}-step"`, "g")) ?? []).length,
+      4,
+    );
+    for (let index = 0; index < 4; index++) {
+      assert.ok(main.includes(`aria-controls="${explanation}-panel-${index}"`));
+      assert.ok(main.includes(`id="${explanation}-panel-${index}"`));
+    }
+    assert.ok(
+      main.indexOf('class="explanation-controls"') <
+        main.indexOf('class="explanation-panels"'),
     );
   }
   if (route.endsWith("/about/")) {

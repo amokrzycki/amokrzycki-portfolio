@@ -242,90 +242,92 @@ export const projects = {
     backendRepo: "https://github.com/amokrzycki/zielony-koszyk-backend",
     en: {
       kind: "Full-stack web application",
-      tagline: "Groceries, from basket to order.",
+      tagline: "From mutable catalogue to durable order.",
       summary:
-        "A grocery application in English and Polish. Customers build a basket and return to saved orders; staff manage the catalogue and order details. Built with React and NestJS.",
+        "A grocery application in Polish and English. Shared product data, order snapshots and the boundary between a pending MFA login and an authenticated session. React, NestJS and PostgreSQL.",
       alt: "Zielony Koszyk’s English fruit catalogue with category and price filters, search, quantities and Add to cart controls.",
-      intro: "Both sides of a grocery order.",
+      intro: "Deciding what the server can trust.",
       overview:
-        "I built Zielony Koszyk around the handoff from choosing groceries to handling an order. Customers shop in English or Polish, use saved delivery details and return to their orders and invoices. Staff work with the same catalogue and order records in an admin workspace. This is a personal project without a payment gateway or commercial launch.",
+        "I built a grocery application in Polish and English with React and NestJS. The catalogue can change; an order has to keep the data captured at checkout. Login has a similar boundary: accepting a password can still leave login pending. These decisions connect the interface to what the backend can store and authorize. This is a personal project without payment processing or a commercial launch.",
       sections: [
         {
-          title: "One catalogue, two languages.",
-          text: "Search, categories and price filters help customers find groceries in their language. Filters stay in the URL, and the basket survives a reload. Staff edit Polish and English names and descriptions together, with one shared price and stock level for each product.",
+          title: "One product, multiple representations.",
+          text: "Polish and English names describe the same product. I store translations separately from its identity, price, category and stock. The active language follows the request through the frontend cache and API to the database, so switching language changes the text while keeping the same product.",
           detail: {
-            topic: "Localized data, shared products",
+            topic: "Locale across cache, API and storage",
             mechanism:
-              "React and TypeScript use RTK Query for API data. The active language is part of each localized query’s cache key and travels to NestJS in Accept-Language. PostgreSQL stores product translations separately from price and stock; search and name sorting use the requested translation. Redux Persist keeps only the basket.",
+              "RTK Query includes locale in the cache key and sends that value in Accept-Language. NestJS resolves it to Polish or English. PostgreSQL joins the requested product translation with the shared product; search and name sorting use that text, with a Polish fallback. The editor updates both translations under one product ID.",
             constraint:
-              "Missing translations fall back to Polish. The admin interface distinguishes roles, but several management endpoints still need server-side role and ownership checks before the application can be used commercially.",
+              "Polish is the default and fallback language. A missing English translation keeps the product visible, but can put Polish text in an English catalogue. Adding a language also requires extending the supported locales and supplying product translations.",
           },
         },
         {
-          title: "Checkout leaves a record.",
-          text: "Checkout starts with saved addresses and ends with an order the customer can revisit. The account shows its products, delivery charge and current status, with a PDF invoice to download. Staff can review that same order and update its details and status.",
+          title: "The order outlives the catalogue.",
+          text: "The catalogue can change while a basket is open. At checkout, the backend reads current prices and reduces stock in the transaction that saves the order. It copies product names and prices into the order and keeps its language. Later catalogue edits do not rewrite what the customer bought.",
           detail: {
-            topic: "Saving the order and its language",
+            topic: "A transaction, then a historical record",
             mechanism:
-              "TypeORM saves addresses, line items and stock deductions in a PostgreSQL transaction. Each order keeps the language chosen at checkout and a snapshot of its product names. Later catalogue edits do not rewrite those names. Invoice generation and the confirmation email template use the stored language after the transaction commits.",
+              "TypeORM locks product rows in ID order before checking stock. Prices come from those records, regardless of the checkout payload. Addresses, name and price snapshots, and stock deductions commit together in PostgreSQL; an unavailable line rolls them all back. The invoice and confirmation email use the saved order’s locale, even if a later request uses another language.",
             constraint:
-              "Prices still come from checkout, and stock checks do not lock product rows. Invoice generation happens after the order commits; later staff edits do not regenerate that PDF. These are limits to address before taking real orders.",
+              "Invoice files and email are produced after commit. Their failure leaves the order saved; reliable retries would need a persisted delivery job. Staff can amend an order, but those amendments do not regenerate the original PDF.",
           },
         },
         {
-          title: "Make the extra login step clear.",
-          text: "Customers can choose an email code, an authenticator app or a platform authenticator in their account settings. With MFA enabled, a correct password leads to a separate confirmation step. The customer can go back and start again; access to the account waits until verification succeeds.",
+          title: "A password is not a session yet.",
+          explanation: "auth",
+          text: "With MFA enabled, accepting a password starts a pending login. Email OTP, TOTP and WebAuthn share that boundary: verify the selected method, consume the challenge once, then issue a normal session. The backend rejects pending credentials at account endpoints.",
           detail: {
-            topic: "Pending login and session boundaries",
+            topic: "Verification and access are separate",
             mechanism:
-              "Pending login credentials stay in React memory. The pending token cannot access account endpoints or refresh a session. A login challenge expires after five minutes and allows five failed attempts. Verification locks and consumes the challenge in a database transaction before issuing the session.",
+              "React keeps pending login data in memory. The MFA token ties a user and method to a stored login challenge; it cannot access the account or refresh a session. Verification locks that challenge in a transaction. TOTP also records the accepted time step; WebAuthn checks the origin and requires user verification. Normal access still requires an owner or admin check.",
             constraint:
-              "WebAuthn uses a compatible platform authenticator after the password. Refresh sessions have no server-side revocation registry, and request throttling is local to one backend instance.",
+              "WebAuthn is a second factor after the password. Refresh tokens have no server-side revocation registry, and request throttling lives in one backend instance; multiple instances would need shared rate-limit storage.",
           },
         },
       ],
     },
     pl: {
       kind: "Aplikacja webowa full-stack",
-      tagline: "Zakupy spożywcze, od koszyka do zamówienia.",
+      tagline: "Katalog się zmienia. Zamówienie zachowuje dane.",
       summary:
-        "Sklep spożywczy po polsku i angielsku. Klienci kompletują koszyk i wracają do zapisanych zamówień, a obsługa zarządza katalogiem i danymi zamówień. React i NestJS.",
+        "Sklep spożywczy po polsku i angielsku. Wspólne dane produktów, zapis danych zakupu i granica między oczekującą weryfikacją MFA a pełną sesją. React, NestJS i PostgreSQL.",
       alt: "Angielski katalog owoców w Zielonym Koszyku z filtrami kategorii i ceny, wyszukiwarką, wyborem ilości i przyciskami dodania do koszyka.",
-      intro: "Zamówienie z perspektywy klienta i obsługi.",
+      intro: "Dane, którym może zaufać serwer.",
       overview:
-        "W Zielonym Koszyku połączyłem wybór produktów z późniejszą obsługą zamówienia. Klient robi zakupy po polsku lub angielsku, korzysta z zapisanych adresów i wraca do swoich zamówień oraz faktur. Obsługa pracuje na tych samych produktach i zamówieniach w panelu administracyjnym. To projekt osobisty, bez bramki płatności i wdrożenia komercyjnego.",
+        "Zbudowałem sklep spożywczy po polsku i angielsku w React i NestJS. Katalog może się zmieniać, ale zamówienie musi zachować dane z chwili zakupu. Podobna granica istnieje przy logowaniu: poprawne hasło może jeszcze nie dawać pełnej sesji. Te decyzje łączą interfejs z tym, co backend zapisuje i do czego udziela dostępu. To projekt osobisty, bez obsługi płatności i wdrożenia komercyjnego.",
       sections: [
         {
-          title: "Jeden katalog w dwóch językach.",
-          text: "Wyszukiwarka, kategorie i filtry ceny pomagają znaleźć produkty w wybranym języku. Filtry zostają w adresie strony, a koszyk przetrwa jej odświeżenie. Obsługa edytuje polskie i angielskie nazwy oraz opisy w jednym formularzu. Cena i stan magazynowy są wspólne dla obu wersji produktu.",
+          title: "Jeden produkt, różne wersje językowe.",
+          text: "Polska i angielska nazwa opisują ten sam produkt. Tłumaczenia przechowuję osobno od jego identyfikatora, ceny, kategorii i zapasu. Język przechodzi przez pamięć podręczną frontendu i API aż do bazy danych. Zmiana języka zmienia tekst, a produkt pozostaje ten sam.",
           detail: {
-            topic: "Tłumaczenia i wspólne dane produktu",
+            topic: "Język w pamięci podręcznej, API i bazie",
             mechanism:
-              "Frontend w React i TypeScript pobiera dane przez RTK Query. Język jest częścią klucza pamięci podręcznej i trafia do NestJS w nagłówku Accept-Language. PostgreSQL przechowuje tłumaczenia osobno od ceny i stanu magazynowego. Wyszukiwanie i sortowanie po nazwie korzystają z wybranego tłumaczenia. Redux Persist zachowuje tylko koszyk.",
+              "RTK Query uwzględnia język w kluczu pamięci podręcznej i wysyła tę samą wartość w Accept-Language. NestJS rozpoznaje polski lub angielski. PostgreSQL łączy wybrane tłumaczenie ze wspólnym rekordem produktu. Wyszukiwanie i sortowanie po nazwie korzystają z tego tekstu, z polskim tłumaczeniem jako fallbackiem. Edytor zapisuje oba tłumaczenia pod jednym ID produktu.",
             constraint:
-              "Jeśli brakuje tłumaczenia, aplikacja używa polskiego tekstu. Panel rozróżnia role użytkowników, ale część endpointów zarządzania wymaga jeszcze sprawdzania roli i dostępu do konkretnych danych po stronie serwera przed użyciem komercyjnym.",
+              "Polski jest językiem domyślnym i zastępuje brakujące tłumaczenie. Produkt pozostaje widoczny, ale w angielskim katalogu może pojawić się polski tekst. Kolejny język wymaga rozszerzenia listy obsługiwanych języków i uzupełnienia tłumaczeń produktów.",
           },
         },
         {
-          title: "Do zamówienia można wrócić.",
-          text: "Przy składaniu zamówienia klient korzysta z zapisanych adresów. Później na koncie widzi produkty, koszt dostawy i bieżący status oraz może pobrać fakturę PDF. Obsługa otwiera to samo zamówienie, żeby sprawdzić jego dane lub zmienić szczegóły i status.",
+          title: "Zmiany katalogu nie zmieniają historii zakupu.",
+          text: "Katalog może się zmienić, gdy klient ma już produkty w koszyku. Przy zakupie backend odczytuje aktualne ceny i zmniejsza zapas w transakcji zapisującej zamówienie. Zapisuje w nim kopię nazw i cen produktów oraz język zakupu. Późniejsza edycja katalogu nie zmienia tych danych.",
           detail: {
-            topic: "Zapis zamówienia i jego języka",
+            topic: "Transakcja i zapis danych zakupu",
             mechanism:
-              "TypeORM zapisuje adresy, pozycje zamówienia i zmniejszenie zapasu w jednej transakcji PostgreSQL. Zamówienie zachowuje język wybrany przy zakupie i kopię nazw produktów. Późniejsza edycja katalogu nie zmienia tych nazw. Generowanie faktury i szablon e-maila z potwierdzeniem korzystają z zapisanego języka po zatwierdzeniu transakcji.",
+              "TypeORM blokuje wiersze produktów w kolejności ich ID przed sprawdzeniem zapasu. Ceny pochodzą z tych rekordów, niezależnie od danych przesłanych przez klienta. Adresy, kopie nazw i cen oraz zmniejszenie zapasu zapisują się razem w PostgreSQL. Brak jednej pozycji wycofuje całą transakcję. Faktura i e-mail z potwierdzeniem korzystają z języka zapisanego zamówienia, nawet gdy późniejsze żądanie ma inny język.",
             constraint:
-              "Ceny nadal pochodzą z danych przesłanych przy zakupie, a sprawdzenie zapasu nie blokuje wierszy produktów. Faktura powstaje po zapisaniu zamówienia; późniejsza edycja przez obsługę nie generuje jej ponownie. Te ograniczenia trzeba usunąć przed przyjmowaniem rzeczywistych zamówień.",
+              "Plik faktury i e-mail powstają po zatwierdzeniu transakcji. Ich błąd nie cofa zamówienia; niezawodne ponawianie wymagałoby trwałego zapisu zadania wysyłki. Obsługa może poprawić zamówienie, ale te zmiany nie generują ponownie pierwotnej faktury PDF.",
           },
         },
         {
-          title: "Dodatkowy krok logowania ma jasny cel.",
-          text: "W ustawieniach konta klient może wybrać kod z e-maila, aplikację uwierzytelniającą lub uwierzytelniacz urządzenia. Przy włączonym MFA poprawne hasło prowadzi do osobnego ekranu potwierdzenia. Można wrócić i zacząć od nowa, a dostęp do konta pojawia się dopiero po poprawnej weryfikacji.",
+          title: "Poprawne hasło to jeszcze nie sesja.",
+          explanation: "auth",
+          text: "Przy włączonym MFA poprawne hasło rozpoczyna oczekujące logowanie. Kod z e-maila, TOTP i WebAuthn korzystają z tej samej granicy: sprawdzenie wybranej metody, jednorazowe wykorzystanie rekordu weryfikacji i dopiero potem wydanie pełnej sesji. Backend odrzuca dane oczekującego logowania przy dostępie do konta.",
           detail: {
-            topic: "Oczekujące logowanie i dostęp do sesji",
+            topic: "Weryfikacja i dostęp to osobne etapy",
             mechanism:
-              "Dane oczekującego logowania pozostają w pamięci Reacta. Token tego etapu nie pozwala korzystać z endpointów konta ani odświeżyć sesji. Weryfikacja wygasa po pięciu minutach i dopuszcza pięć błędnych prób. Serwer blokuje rekord weryfikacji w transakcji bazy danych i oznacza go jako wykorzystany, zanim wyda sesję.",
+              "React trzyma dane oczekującego logowania w pamięci. Token MFA wiąże użytkownika i metodę z zapisanym rekordem weryfikacji; nie pozwala korzystać z konta ani odświeżyć sesji. Weryfikacja blokuje ten rekord w transakcji. TOTP zapisuje też wykorzystany krok czasowy, a WebAuthn sprawdza origin i wymaga weryfikacji użytkownika. Pełna sesja nadal wymaga sprawdzenia właściciela danych lub roli administratora.",
             constraint:
-              "WebAuthn działa po podaniu hasła i wymaga zgodnego uwierzytelniacza urządzenia. Serwer nie prowadzi rejestru unieważnionych sesji refresh, a ograniczanie liczby żądań działa w pamięci jednej instancji backendu.",
+              "WebAuthn jest drugim składnikiem po haśle. Serwer nie prowadzi rejestru unieważnionych tokenów refresh, a ograniczanie żądań działa w jednej instancji backendu. Kilka instancji wymagałoby wspólnego magazynu limitów.",
           },
         },
       ],

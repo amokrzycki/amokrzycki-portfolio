@@ -13,7 +13,7 @@ A bilingual portfolio built with Astro. It presents three personal projects, Ran
 
 - [Random Frame](https://github.com/amokrzycki/random-frame): a desktop image viewer with local history and optional encrypted sync.
 - [Kajtek](https://github.com/amokrzycki/kajtek): an internet radio player with a cassette-inspired interface and integrations for Polish radio providers.
-- Zielony Koszyk: a grocery application in English and Polish, with customer checkout, saved orders and PDF invoices, a bilingual catalogue editor and optional MFA. Sources: [frontend](https://github.com/amokrzycki/zielony-koszyk) and [backend](https://github.com/amokrzycki/zielony-koszyk-backend).
+- Zielony Koszyk: a grocery application in English and Polish, with shared product identity across languages, transactional order snapshots and a pending MFA boundary before session issuance. Sources: [frontend](https://github.com/amokrzycki/zielony-koszyk) and [backend](https://github.com/amokrzycki/zielony-koszyk-backend).
 
 The site includes English and Polish homepages and project pages. Project copy and metadata live in `src/data/projects.ts`; the pages are generated from the project slugs.
 

@@ -1,0 +1,155 @@
+---
+import type { Language } from "../data/projects";
+interface Props {
+  lang: Language;
+}
+const { lang } = Astro.props;
+const pl = lang === "pl";
+const steps = pl
+  ? [
+      {
+        label: "Poprawne hasło",
+        title: "Hasło pasuje, ale MFA nadal czeka na weryfikację.",
+        credential: "Hasło sprawdzone",
+        credentialNote: "Backend nie wydaje jeszcze tokenów sesji.",
+        record: "MFA włączone",
+        recordNote: "Metoda zapisana na koncie użytkownika.",
+        access: "Zablokowany",
+        caption:
+          "Serwer potwierdza pierwszy składnik. Przy aktywnym MFA odpowiedź logowania zawiera dane oczekującej weryfikacji. Tokeny sesji pojawią się po jej zakończeniu.",
+      },
+      {
+        label: "Oczekujący token",
+        title: "Token pozwala tylko dokończyć weryfikację.",
+        credential: "Token MFA",
+        credentialNote: "Użytkownik, metoda i ID rekordu weryfikacji.",
+        record: "Rekord weryfikacji",
+        recordNote: "5 minut ważności, do 5 błędnych prób.",
+        access: "Zablokowany",
+        caption:
+          "Frontend trzyma mfa_token w pamięci. Backend sprawdza jego powiązanie z rekordem w bazie. Ten token nie pozwala odczytać zamówień ani użyć endpointu odświeżania sesji.",
+      },
+      {
+        label: "Jednorazowa weryfikacja",
+        title: "Poprawna weryfikacja zużywa zapisany rekord.",
+        credential: "Token MFA + odpowiedź",
+        credentialNote: "Kod z e-maila, TOTP albo odpowiedź WebAuthn.",
+        record: "Blokada → usunięcie",
+        recordNote: "Sprawdzenie i wykorzystanie w jednej transakcji.",
+        access: "Jeszcze zablokowany",
+        caption:
+          "Serwer blokuje rekord, sprawdza ważność i liczbę prób, a następnie odpowiedź dla wybranej metody. Błąd zwiększa licznik. Sukces usuwa rekord w tej samej transakcji, więc ponowna weryfikacja nie może go wykorzystać.",
+      },
+      {
+        label: "Pełna sesja",
+        title: "Dopiero teraz serwer wydaje pełną sesję.",
+        credential: "Access + refresh",
+        credentialNote: "Token dostępu: 15 minut. Refresh: 7 dni.",
+        record: "Rekord usunięty",
+        recordNote: "Ta weryfikacja nie może wydać drugiej sesji.",
+        access: "Sesja + uprawnienia",
+        caption:
+          "Po zatwierdzeniu weryfikacji backend ponownie odczytuje konto i wydaje zwykłe tokeny. Klient może pobrać swoje zamówienia. Endpointy nadal sprawdzają właściciela danych lub wymaganą rolę administratora.",
+      },
+    ]
+  : [
+      {
+        label: "Password accepted",
+        title: "The password passes. MFA still needs verification.",
+        credential: "Password checked",
+        credentialNote: "The backend has not issued session tokens.",
+        record: "MFA enabled",
+        recordNote: "The account specifies the required method.",
+        access: "Blocked",
+        caption:
+          "The server confirms the first factor. With MFA enabled, the login response carries pending verification data. Session tokens wait until verification completes.",
+      },
+      {
+        label: "Challenge issued",
+        title: "A token for completing verification only.",
+        credential: "Pending MFA token",
+        credentialNote: "User, method and challenge ID.",
+        record: "Stored challenge",
+        recordNote: "Expires in 5 minutes; at most 5 failed attempts.",
+        access: "Blocked",
+        caption:
+          "The frontend keeps mfa_token in memory. The backend checks its binding to the database challenge. This token cannot read orders or use the session refresh endpoint.",
+      },
+      {
+        label: "Consume challenge",
+        title: "One verification can consume this challenge.",
+        credential: "MFA token + response",
+        credentialNote: "Email code, TOTP or a WebAuthn assertion.",
+        record: "Lock → delete",
+        recordNote: "Verify and consume in one transaction.",
+        access: "Still blocked",
+        caption:
+          "Under the row lock, the server checks expiry, attempts and the selected method. Failed verification increments the count; success deletes the challenge before commit. Another verifier then finds no challenge.",
+      },
+      {
+        label: "Session issued",
+        title: "Only now does the server issue a full session.",
+        credential: "Access + refresh",
+        credentialNote: "Access token: 15 minutes. Refresh: 7 days.",
+        record: "Challenge deleted",
+        recordNote: "This verification cannot issue a second session.",
+        access: "Session + permissions",
+        caption:
+          "After verification commits, the backend reloads the account and issues normal tokens. The customer can read their orders. Endpoints still check ownership or require the admin role.",
+      },
+    ];
+---
+
+<figure class="engineering-explanation auth-explanation">
+  <fieldset class="explanation-controls">
+    <legend>
+      {pl
+        ? "Od hasła do pełnej sesji przy MFA"
+        : "From password to session with MFA"}
+    </legend>
+    {steps.map((step, index) => (
+      <label>
+        <input
+          type="radio"
+          name="auth-step"
+          value={index}
+          checked={index === 0}
+          aria-controls={"auth-panel-" + index}
+        />
+        <span>
+          <span class="step-number">{index + 1}</span>
+          {step.label}
+        </span>
+      </label>
+    ))}
+  </fieldset>
+  <div class="explanation-panels">
+    {steps.map((step, index) => (
+      <div class="explanation-panel" id={"auth-panel-" + index}>
+        <h3>{step.title}</h3>
+        <dl class="auth-boundary">
+          <div>
+            <dt>{pl ? "Dane po stronie klienta" : "Client credentials"}</dt>
+            <dd class="auth-state">{step.credential}</dd>
+            <dd>{step.credentialNote}</dd>
+          </div>
+          <div>
+            <dt>{pl ? "Stan po stronie serwera" : "Server state"}</dt>
+            <dd class="auth-state">{step.record}</dd>
+            <dd>{step.recordNote}</dd>
+          </div>
+        </dl>
+        <p class="auth-access">
+          <span>{pl ? "Dostęp do konta" : "Account access"}</span>
+          <strong>{step.access}</strong>
+        </p>
+        <p class="explanation-caption">{step.caption}</p>
+      </div>
+    ))}
+  </div>
+  <figcaption>
+    {pl
+      ? "Przebieg logowania z aktywnym MFA. Różne metody weryfikacji korzystają z tego samego modelu oczekującego logowania."
+      : "Login with MFA enabled. Different verification methods share the same pending-login model."}
+  </figcaption>
+</figure>

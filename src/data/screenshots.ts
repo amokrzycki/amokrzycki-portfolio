@@ -5,7 +5,6 @@ import radioCatalog from "../assets/kajtek-catalog-detail.png";
 import radioPlaylist from "../assets/kajtek-playlist-detail.png";
 import radioPlaylistMobile from "../assets/kajtek-playlist-mobile.png";
 import basketOrder from "../assets/zielony-koszyk-order-detail.png";
-import basketMfa from "../assets/zielony-koszyk-mfa-detail.png";
 import basketEditor from "../assets/zielony-koszyk-product-editor-detail.png";
 
 type Screenshot = {
@@ -85,24 +84,11 @@ export const screenshots = {
       original: "/images/zielony-koszyk-order.png",
       focusY: 0.3,
       wide: true,
-      en: "The saved order separates products from delivery and keeps the invoice within reach. This order was placed through the English checkout with synthetic local data.",
-      pl: "Zapisane zamówienie pokazuje osobno produkty i dostawę oraz pozwala pobrać fakturę. Powstało przez angielski formularz zakupu, z lokalnymi danymi testowymi.",
+      en: "The order keeps its checkout names and prices. Its saved language also determines the invoice and confirmation email. Customer data in this capture is synthetic.",
+      pl: "Zamówienie zachowuje nazwy i ceny z chwili zakupu. Zapisany język określa też język faktury i potwierdzenia e-mail. Dane klienta na zrzucie są testowe.",
       alt: {
         en: "English order 1 with New status, an Electronic invoice action, American Blueberries, Banana and Champion Apples, delivery and a PLN 49.50 total. All customer data is synthetic.",
         pl: "Angielski widok zamówienia nr 1 ze statusem New, przyciskiem faktury, borówką amerykańską, bananem, jabłkami Champion, dostawą i sumą 49,50 zł. Dane klienta są testowe.",
-      },
-    },
-    {
-      section: 2,
-      source: basketMfa,
-      original: "/images/zielony-koszyk-mfa-login.png",
-      focusY: 0.34,
-      wide: false,
-      en: "After the password check, login waits for the email code. The account is still unauthenticated; Back lets the customer restart.",
-      pl: "Po sprawdzeniu hasła logowanie czeka na kod z e-maila. Konto nie jest jeszcze uwierzytelnione, a przycisk Back pozwala zacząć od nowa.",
-      alt: {
-        en: "English email MFA step with an empty One-time code field, Back button and disabled Confirm button. No credentials or code are shown.",
-        pl: "Angielski etap MFA z pustym polem One-time code, przyciskiem Back i nieaktywnym Confirm. Bez danych logowania ani kodu.",
       },
     },
   ],

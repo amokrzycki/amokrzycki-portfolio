@@ -28,7 +28,7 @@ Astro, TypeScript, static HTML, custom CSS and a small native-dialog image viewe
 
 ## Evidence on Hand
 
-The direction notes and sibling project sources establish the facts. The repository contains reviewed image-free Random Frame captures, controlled Kajtek views and English Playwright captures of Zielony Koszyk’s storefront, saved order, bilingual product editor and pending MFA step, using synthetic local customer data. Public contact and GitHub identity are documented in Random Frame's README. Capture framing is documented in src/assets/README.md.
+The direction notes and sibling project sources establish the facts. The repository contains reviewed image-free Random Frame captures, controlled Kajtek views and English Playwright captures of Zielony Koszyk’s storefront, saved order and bilingual product editor, using synthetic local customer data. Public contact and GitHub identity are documented in Random Frame's README. Capture framing is documented in src/assets/README.md.
 
 ## Open Decisions
 
