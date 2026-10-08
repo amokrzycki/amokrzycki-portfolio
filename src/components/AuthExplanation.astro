@@ -1,0 +1,155 @@
+---
+import type { Language } from "../data/projects";
+interface Props {
+  lang: Language;
+}
+const { lang } = Astro.props;
+const pl = lang === "pl";
+const steps = pl
+  ? [
+      {
+        label: "Poprawne hasło",
+        title: "Hasło się zgadza, ale zostaje jeszcze drugi składnik.",
+        credential: "Hasło sprawdzone",
+        credentialNote: "Bez tokenów sesji.",
+        record: "MFA włączone",
+        recordNote: "Konto ma ustawioną metodę MFA.",
+        access: "Zablokowany",
+        caption:
+          "Serwer potwierdza pierwszy składnik. Konto ma włączone MFA, więc zamiast sesji odpowiedź zawiera tymczasowy token.",
+      },
+      {
+        label: "Wyzwanie MFA",
+        title: "Ten token służy tylko do dokończenia logowania.",
+        credential: "Token MFA",
+        credentialNote: "Użytkownik, metoda i ID wyzwania.",
+        record: "Zapisane wyzwanie",
+        recordNote: "Ważne 5 minut, najwyżej 5 błędnych prób.",
+        access: "Zablokowany",
+        caption:
+          "Frontend trzyma mfa_token w pamięci, a serwer sprawdza, czy pasuje do wyzwania w bazie. Tym tokenem nie da się pobrać zamówień ani odświeżyć sesji.",
+      },
+      {
+        label: "Jednorazowe użycie",
+        title: "Po poprawnej odpowiedzi wyzwanie znika.",
+        credential: "Token MFA + odpowiedź",
+        credentialNote: "Kod z e-maila, kod TOTP albo odpowiedź WebAuthn.",
+        record: "Blokada, potem usunięcie",
+        recordNote: "Sprawdzenie i usunięcie w jednej transakcji.",
+        access: "Nadal zablokowany",
+        caption:
+          "Serwer blokuje wiersz i sprawdza ważność, liczbę prób oraz odpowiedź. Błędna odpowiedź zwiększa licznik. Poprawna usuwa wyzwanie przed zatwierdzeniem transakcji, więc równoległa próba nie ma już czego użyć.",
+      },
+      {
+        label: "Pełna sesja",
+        title: "Dopiero teraz serwer otwiera sesję.",
+        credential: "Access + refresh",
+        credentialNote: "Token dostępu: 15 minut. Refresh: 7 dni.",
+        record: "Wyzwanie usunięte",
+        recordNote: "Nie da się go użyć drugi raz.",
+        access: "Sesja + uprawnienia",
+        caption:
+          "Po zatwierdzeniu transakcji serwer ponownie wczytuje konto i wydaje zwykłe tokeny. Klient widzi swoje zamówienia, a endpointy nadal sprawdzają właściciela danych albo rolę administratora.",
+      },
+    ]
+  : [
+      {
+        label: "Password accepted",
+        title: "The password is right, but MFA isn’t done.",
+        credential: "Password checked",
+        credentialNote: "No session tokens yet.",
+        record: "MFA enabled",
+        recordNote: "The account has an MFA method set up.",
+        access: "Blocked",
+        caption:
+          "The server confirms the first factor. The account has MFA on, so the login response carries a pending token instead of a session.",
+      },
+      {
+        label: "Challenge issued",
+        title: "This token can only finish the login.",
+        credential: "Pending MFA token",
+        credentialNote: "User, method and challenge ID.",
+        record: "Stored challenge",
+        recordNote: "Valid for 5 minutes; at most 5 failed attempts.",
+        access: "Blocked",
+        caption:
+          "The frontend keeps mfa_token in memory, and the server checks that it matches a challenge in the database. The token can’t read orders or refresh a session.",
+      },
+      {
+        label: "Challenge used",
+        title: "A correct answer uses up the challenge.",
+        credential: "MFA token + answer",
+        credentialNote: "Email code, TOTP code or WebAuthn assertion.",
+        record: "Locked, then deleted",
+        recordNote: "Checked and deleted in one transaction.",
+        access: "Still blocked",
+        caption:
+          "With the row locked, the server checks expiry, the attempt count and the answer. A wrong answer adds an attempt. A correct one deletes the challenge before commit, so a parallel attempt finds nothing to use.",
+      },
+      {
+        label: "Session issued",
+        title: "Now the server issues a session.",
+        credential: "Access + refresh",
+        credentialNote: "Access token: 15 minutes. Refresh: 7 days.",
+        record: "Challenge deleted",
+        recordNote: "It can’t issue a second session.",
+        access: "Session + permissions",
+        caption:
+          "After the commit, the server reloads the account and issues normal tokens. The customer can open their orders, and endpoints still check ownership or the admin role.",
+      },
+    ];
+---
+
+<figure class="engineering-explanation auth-explanation">
+  <fieldset class="explanation-controls">
+    <legend>
+      {pl
+        ? "Logowanie z MFA krok po kroku"
+        : "Logging in with MFA, step by step"}
+    </legend>
+    {steps.map((step, index) => (
+      <label>
+        <input
+          type="radio"
+          name="auth-step"
+          value={index}
+          checked={index === 0}
+          aria-controls={"auth-panel-" + index}
+        />
+        <span>
+          <span class="step-number">{index + 1}</span>
+          {step.label}
+        </span>
+      </label>
+    ))}
+  </fieldset>
+  <div class="explanation-panels">
+    {steps.map((step, index) => (
+      <div class="explanation-panel" id={"auth-panel-" + index}>
+        <h3>{step.title}</h3>
+        <dl class="auth-boundary">
+          <div>
+            <dt>{pl ? "W przeglądarce" : "In the browser"}</dt>
+            <dd class="auth-state">{step.credential}</dd>
+            <dd>{step.credentialNote}</dd>
+          </div>
+          <div>
+            <dt>{pl ? "Na serwerze" : "On the server"}</dt>
+            <dd class="auth-state">{step.record}</dd>
+            <dd>{step.recordNote}</dd>
+          </div>
+        </dl>
+        <p class="auth-access">
+          <span>{pl ? "Dostęp do konta" : "Account access"}</span>
+          <strong>{step.access}</strong>
+        </p>
+        <p class="explanation-caption">{step.caption}</p>
+      </div>
+    ))}
+  </div>
+  <figcaption>
+    {pl
+      ? "Logowanie przy włączonym MFA. Kroki są takie same dla kodu z e-maila, TOTP i WebAuthn."
+      : "Login with MFA turned on. The steps are the same for email codes, TOTP and WebAuthn."}
+  </figcaption>
+</figure>
