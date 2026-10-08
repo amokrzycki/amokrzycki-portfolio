@@ -65,7 +65,7 @@ for (const route of allRoutes) {
     assert.equal(
       (main.match(/data-image-viewer/g) ?? []).length,
       3,
-      `${route}: storefront, product editor and saved order captures`,
+      `${route}: homepage, product editor and saved order captures`,
     );
     assert.ok(
       main.includes('href="/images/zielony-koszyk-product-editor.png"'),

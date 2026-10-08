@@ -9,93 +9,93 @@ const steps = pl
   ? [
       {
         label: "Poprawne hasło",
-        title: "Hasło pasuje, ale MFA nadal czeka na weryfikację.",
+        title: "Hasło się zgadza, ale zostaje jeszcze drugi składnik.",
         credential: "Hasło sprawdzone",
-        credentialNote: "Backend nie wydaje jeszcze tokenów sesji.",
+        credentialNote: "Bez tokenów sesji.",
         record: "MFA włączone",
-        recordNote: "Metoda zapisana na koncie użytkownika.",
+        recordNote: "Konto ma ustawioną metodę MFA.",
         access: "Zablokowany",
         caption:
-          "Serwer potwierdza pierwszy składnik. Przy aktywnym MFA odpowiedź logowania zawiera dane oczekującej weryfikacji. Tokeny sesji pojawią się po jej zakończeniu.",
+          "Serwer potwierdza pierwszy składnik. Konto ma włączone MFA, więc zamiast sesji odpowiedź zawiera tymczasowy token.",
       },
       {
-        label: "Oczekujący token",
-        title: "Token pozwala tylko dokończyć weryfikację.",
+        label: "Wyzwanie MFA",
+        title: "Ten token służy tylko do dokończenia logowania.",
         credential: "Token MFA",
-        credentialNote: "Użytkownik, metoda i ID rekordu weryfikacji.",
-        record: "Rekord weryfikacji",
-        recordNote: "5 minut ważności, do 5 błędnych prób.",
+        credentialNote: "Użytkownik, metoda i ID wyzwania.",
+        record: "Zapisane wyzwanie",
+        recordNote: "Ważne 5 minut, najwyżej 5 błędnych prób.",
         access: "Zablokowany",
         caption:
-          "Frontend trzyma mfa_token w pamięci. Backend sprawdza jego powiązanie z rekordem w bazie. Ten token nie pozwala odczytać zamówień ani użyć endpointu odświeżania sesji.",
+          "Frontend trzyma mfa_token w pamięci, a serwer sprawdza, czy pasuje do wyzwania w bazie. Tym tokenem nie da się pobrać zamówień ani odświeżyć sesji.",
       },
       {
-        label: "Jednorazowa weryfikacja",
-        title: "Poprawna weryfikacja zużywa zapisany rekord.",
+        label: "Jednorazowe użycie",
+        title: "Po poprawnej odpowiedzi wyzwanie znika.",
         credential: "Token MFA + odpowiedź",
-        credentialNote: "Kod z e-maila, TOTP albo odpowiedź WebAuthn.",
-        record: "Blokada → usunięcie",
-        recordNote: "Sprawdzenie i wykorzystanie w jednej transakcji.",
-        access: "Jeszcze zablokowany",
+        credentialNote: "Kod z e-maila, kod TOTP albo odpowiedź WebAuthn.",
+        record: "Blokada, potem usunięcie",
+        recordNote: "Sprawdzenie i usunięcie w jednej transakcji.",
+        access: "Nadal zablokowany",
         caption:
-          "Serwer blokuje rekord, sprawdza ważność i liczbę prób, a następnie odpowiedź dla wybranej metody. Błąd zwiększa licznik. Sukces usuwa rekord w tej samej transakcji, więc ponowna weryfikacja nie może go wykorzystać.",
+          "Serwer blokuje wiersz i sprawdza ważność, liczbę prób oraz odpowiedź. Błędna odpowiedź zwiększa licznik. Poprawna usuwa wyzwanie przed zatwierdzeniem transakcji, więc równoległa próba nie ma już czego użyć.",
       },
       {
         label: "Pełna sesja",
-        title: "Dopiero teraz serwer wydaje pełną sesję.",
+        title: "Dopiero teraz serwer otwiera sesję.",
         credential: "Access + refresh",
         credentialNote: "Token dostępu: 15 minut. Refresh: 7 dni.",
-        record: "Rekord usunięty",
-        recordNote: "Ta weryfikacja nie może wydać drugiej sesji.",
+        record: "Wyzwanie usunięte",
+        recordNote: "Nie da się go użyć drugi raz.",
         access: "Sesja + uprawnienia",
         caption:
-          "Po zatwierdzeniu weryfikacji backend ponownie odczytuje konto i wydaje zwykłe tokeny. Klient może pobrać swoje zamówienia. Endpointy nadal sprawdzają właściciela danych lub wymaganą rolę administratora.",
+          "Po zatwierdzeniu transakcji serwer ponownie wczytuje konto i wydaje zwykłe tokeny. Klient widzi swoje zamówienia, a endpointy nadal sprawdzają właściciela danych albo rolę administratora.",
       },
     ]
   : [
       {
         label: "Password accepted",
-        title: "The password passes. MFA still needs verification.",
+        title: "The password is right, but MFA isn’t done.",
         credential: "Password checked",
-        credentialNote: "The backend has not issued session tokens.",
+        credentialNote: "No session tokens yet.",
         record: "MFA enabled",
-        recordNote: "The account specifies the required method.",
+        recordNote: "The account has an MFA method set up.",
         access: "Blocked",
         caption:
-          "The server confirms the first factor. With MFA enabled, the login response carries pending verification data. Session tokens wait until verification completes.",
+          "The server confirms the first factor. The account has MFA on, so the login response carries a pending token instead of a session.",
       },
       {
         label: "Challenge issued",
-        title: "A token for completing verification only.",
+        title: "This token can only finish the login.",
         credential: "Pending MFA token",
         credentialNote: "User, method and challenge ID.",
         record: "Stored challenge",
-        recordNote: "Expires in 5 minutes; at most 5 failed attempts.",
+        recordNote: "Valid for 5 minutes; at most 5 failed attempts.",
         access: "Blocked",
         caption:
-          "The frontend keeps mfa_token in memory. The backend checks its binding to the database challenge. This token cannot read orders or use the session refresh endpoint.",
+          "The frontend keeps mfa_token in memory, and the server checks that it matches a challenge in the database. The token can’t read orders or refresh a session.",
       },
       {
-        label: "Consume challenge",
-        title: "One verification can consume this challenge.",
-        credential: "MFA token + response",
-        credentialNote: "Email code, TOTP or a WebAuthn assertion.",
-        record: "Lock → delete",
-        recordNote: "Verify and consume in one transaction.",
+        label: "Challenge used",
+        title: "A correct answer uses up the challenge.",
+        credential: "MFA token + answer",
+        credentialNote: "Email code, TOTP code or WebAuthn assertion.",
+        record: "Locked, then deleted",
+        recordNote: "Checked and deleted in one transaction.",
         access: "Still blocked",
         caption:
-          "Under the row lock, the server checks expiry, attempts and the selected method. Failed verification increments the count; success deletes the challenge before commit. Another verifier then finds no challenge.",
+          "With the row locked, the server checks expiry, the attempt count and the answer. A wrong answer adds an attempt. A correct one deletes the challenge before commit, so a parallel attempt finds nothing to use.",
       },
       {
         label: "Session issued",
-        title: "Only now does the server issue a full session.",
+        title: "Now the server issues a session.",
         credential: "Access + refresh",
         credentialNote: "Access token: 15 minutes. Refresh: 7 days.",
         record: "Challenge deleted",
-        recordNote: "This verification cannot issue a second session.",
+        recordNote: "It can’t issue a second session.",
         access: "Session + permissions",
         caption:
-          "After verification commits, the backend reloads the account and issues normal tokens. The customer can read their orders. Endpoints still check ownership or require the admin role.",
+          "After the commit, the server reloads the account and issues normal tokens. The customer can open their orders, and endpoints still check ownership or the admin role.",
       },
     ];
 ---
@@ -104,8 +104,8 @@ const steps = pl
   <fieldset class="explanation-controls">
     <legend>
       {pl
-        ? "Od hasła do pełnej sesji przy MFA"
-        : "From password to session with MFA"}
+        ? "Logowanie z MFA krok po kroku"
+        : "Logging in with MFA, step by step"}
     </legend>
     {steps.map((step, index) => (
       <label>
@@ -129,12 +129,12 @@ const steps = pl
         <h3>{step.title}</h3>
         <dl class="auth-boundary">
           <div>
-            <dt>{pl ? "Dane po stronie klienta" : "Client credentials"}</dt>
+            <dt>{pl ? "W przeglądarce" : "In the browser"}</dt>
             <dd class="auth-state">{step.credential}</dd>
             <dd>{step.credentialNote}</dd>
           </div>
           <div>
-            <dt>{pl ? "Stan po stronie serwera" : "Server state"}</dt>
+            <dt>{pl ? "Na serwerze" : "On the server"}</dt>
             <dd class="auth-state">{step.record}</dd>
             <dd>{step.recordNote}</dd>
           </div>
@@ -149,7 +149,7 @@ const steps = pl
   </div>
   <figcaption>
     {pl
-      ? "Przebieg logowania z aktywnym MFA. Różne metody weryfikacji korzystają z tego samego modelu oczekującego logowania."
-      : "Login with MFA enabled. Different verification methods share the same pending-login model."}
+      ? "Logowanie przy włączonym MFA. Kroki są takie same dla kodu z e-maila, TOTP i WebAuthn."
+      : "Login with MFA turned on. The steps are the same for email codes, TOTP and WebAuthn."}
   </figcaption>
 </figure>

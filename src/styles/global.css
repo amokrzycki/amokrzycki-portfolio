@@ -395,11 +395,6 @@ a:focus-visible .arrow {
 }
 .product-plate.zielony-koszyk {
   background: var(--basket-ground);
-  padding: clamp(18px, 3.4vw, 48px);
-}
-.product-plate.zielony-koszyk .capture-link,
-.product-plate.zielony-koszyk img {
-  max-width: 1140px;
 }
 .spread-zielony-koszyk {
   padding-top: 36px;
@@ -1214,9 +1209,6 @@ details > p {
   }
   .spread-zielony-koszyk .project-caption {
     grid-row: 3;
-  }
-  .spread-zielony-koszyk .product-plate {
-    padding: 16px 10px;
   }
   .spread-kajtek .project-identity {
     grid-column: 1;
