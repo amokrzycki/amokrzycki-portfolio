@@ -9,7 +9,8 @@ const steps = pl
   ? [
       {
         label: "Poprawne hasło",
-        title: "Hasło się zgadza, ale zostaje jeszcze drugi składnik.",
+        title:
+          "Hasło jest poprawne. Logowanie wymaga jeszcze drugiego składnika.",
         credential: "Hasło sprawdzone",
         credentialNote: "Bez tokenów sesji.",
         record: "MFA włączone",
@@ -27,7 +28,7 @@ const steps = pl
         recordNote: "Ważne 5 minut, najwyżej 5 błędnych prób.",
         access: "Zablokowany",
         caption:
-          "Frontend trzyma mfa_token w pamięci, a serwer sprawdza, czy pasuje do wyzwania w bazie. Tym tokenem nie da się pobrać zamówień ani odświeżyć sesji.",
+          "Frontend przechowuje mfa_token w pamięci, a serwer sprawdza, czy pasuje do wyzwania w bazie. Tym tokenem nie da się pobrać zamówień ani odświeżyć sesji.",
       },
       {
         label: "Jednorazowe użycie",
@@ -42,9 +43,9 @@ const steps = pl
       },
       {
         label: "Pełna sesja",
-        title: "Dopiero teraz serwer otwiera sesję.",
+        title: "Po weryfikacji MFA serwer wydaje tokeny sesji.",
         credential: "Access + refresh",
-        credentialNote: "Token dostępu: 15 minut. Refresh: 7 dni.",
+        credentialNote: "Token dostępu: 15 minut. Token odświeżania: 7 dni.",
         record: "Wyzwanie usunięte",
         recordNote: "Nie da się go użyć drugi raz.",
         access: "Sesja + uprawnienia",
@@ -55,14 +56,14 @@ const steps = pl
   : [
       {
         label: "Password accepted",
-        title: "The password is right, but MFA isn’t done.",
+        title: "The password is correct. The second factor is still required.",
         credential: "Password checked",
         credentialNote: "No session tokens yet.",
         record: "MFA enabled",
         recordNote: "The account has an MFA method set up.",
         access: "Blocked",
         caption:
-          "The server confirms the first factor. The account has MFA on, so the login response carries a pending token instead of a session.",
+          "The server confirms the first factor. The account has MFA enabled, so the login response carries a pending token instead of a session.",
       },
       {
         label: "Challenge issued",
@@ -77,7 +78,7 @@ const steps = pl
       },
       {
         label: "Challenge used",
-        title: "A correct answer uses up the challenge.",
+        title: "Successful verification deletes the challenge.",
         credential: "MFA token + answer",
         credentialNote: "Email code, TOTP code or WebAuthn assertion.",
         record: "Locked, then deleted",
@@ -88,9 +89,9 @@ const steps = pl
       },
       {
         label: "Session issued",
-        title: "Now the server issues a session.",
+        title: "The server issues session tokens after MFA verification.",
         credential: "Access + refresh",
-        credentialNote: "Access token: 15 minutes. Refresh: 7 days.",
+        credentialNote: "Access token: 15 minutes. Refresh token: 7 days.",
         record: "Challenge deleted",
         recordNote: "It can’t issue a second session.",
         access: "Session + permissions",
@@ -150,6 +151,6 @@ const steps = pl
   <figcaption>
     {pl
       ? "Logowanie przy włączonym MFA. Kroki są takie same dla kodu z e-maila, TOTP i WebAuthn."
-      : "Login with MFA turned on. The steps are the same for email codes, TOTP and WebAuthn."}
+      : "Login with MFA enabled. The steps are the same for email codes, TOTP and WebAuthn."}
   </figcaption>
 </figure>

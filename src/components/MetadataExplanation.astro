@@ -32,7 +32,7 @@ const steps = pl
       },
       {
         label: "Zgodne dane",
-        title: "Tytuł z API uzupełnia czas ze strumienia.",
+        title: "Tytuł z API i czas ze strumienia trafiają do jednego modelu.",
         states: [
           "REST: tytuł i wykonawca",
           "HLS: początek i długość",
@@ -74,18 +74,18 @@ const steps = pl
       },
       {
         label: "Combine data",
-        title: "Readable names, timing tied to the audio.",
+        title: "Combine the API title with stream timing.",
         states: [
           "REST: artist and title",
           "HLS: start and duration",
           "One track with timing",
         ],
         caption:
-          "Timing comes from the segment playback has just entered. Deriving the block start from the segment timestamp keeps repeated reads from moving the song’s clock.",
+          "Timing comes from the segment playback has just entered. Deriving the block start from the segment timestamp keeps the calculated start time consistent across repeated reads.",
       },
       {
         label: "Expire stale tags",
-        title: "An old clock should not stay on screen.",
+        title: "HLS timing expires after 30 seconds.",
         states: ["No fresh tag", "Expire after 30 s", "REST data"],
         caption:
           "Pausing or stalling can stop new tags arriving. After thirty seconds, the integration discards HLS metadata; timing remains optional.",

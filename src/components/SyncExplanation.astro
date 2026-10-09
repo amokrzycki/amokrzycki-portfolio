@@ -59,7 +59,7 @@ const steps = pl
   : [
       {
         label: "Start together",
-        title: "Both devices know the same revision.",
+        title: "Both devices have the same revision.",
         states: ["Read r7", "Revision r7", "Read r7"],
         notes: [
           "History stays on the device",
@@ -67,7 +67,7 @@ const steps = pl
           "History stays on the device",
         ],
         caption:
-          "Each device fetches the snapshot and decrypts it locally. The revision identifies the version its next write will be checked against.",
+          "Each device fetches the snapshot and decrypts it locally. When saving, each device sends that revision so the server can check whether its data is still current.",
       },
       {
         label: "Make changes",
@@ -95,7 +95,7 @@ const steps = pl
       },
       {
         label: "Merge and retry",
-        title: "The device resolves the conflict.",
+        title: "Device B merges the changes and retries.",
         states: ["Can fetch r9", "Revision r9", "Saved r9"],
         notes: [
           "Fetch → decrypt locally",
@@ -154,6 +154,6 @@ const names = pl
   <figcaption>
     {pl
       ? "r7, r8 i r9 to przykładowe numery wersji danych. Serwer nie odszyfrowuje historii."
-      : "Revisions r7–r9 illustrate the exchange; the server never decrypts the history."}
+      : "r7, r8 and r9 are example revision numbers. The server never decrypts the history."}
   </figcaption>
 </figure>

@@ -71,8 +71,8 @@ export const screenshots = {
       original: "/images/zielony-koszyk-product-editor.png",
       focusY: 0.5,
       wide: false,
-      en: "The product editor in the admin panel, with stock, price, category and the name and description in both languages. The Polish fields are product data, so they stay Polish in the English interface.",
-      pl: "Edytor produktu w panelu administracyjnym ze stanem magazynowym, ceną, kategorią oraz nazwą i opisem w obu językach. Polskie pola to dane produktu, więc w angielskim interfejsie też są po polsku.",
+      en: "The product editor in the admin panel, with stock, price, category and the name and description in both languages. The Polish name and description remain editable when the interface is in English.",
+      pl: "Edytor produktu w panelu administracyjnym ze stanem magazynowym, ceną, kategorią oraz nazwą i opisem w obu językach. Polską nazwę i opis można edytować również wtedy, gdy interfejs jest po angielsku.",
       alt: {
         en: "English Edit product window for American Blueberries, with shared stock, price and category above separate Polish and English name and description fields.",
         pl: "Angielski formularz edycji borówki amerykańskiej ze stanem magazynowym, ceną i kategorią oraz osobnymi polami nazwy i opisu po polsku i angielsku.",
