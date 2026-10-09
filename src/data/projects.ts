@@ -11,10 +11,10 @@ export const projects = {
       alt: "Random Frame before the first draw, with its image stage and Draw control.",
       intro: "Browsing without losing your place.",
       overview:
-        "Random Frame draws an image from Prnt.sc, lets you revisit earlier frames and save favorites. I kept that browsing loop small. The deeper work is in local persistence and merging changes across devices while the sync server stores only encrypted data.",
+        "Random Frame draws an image from Prnt.sc, lets you revisit earlier frames and save favorites. I kept the browsing controls simple. Most of the work went into storing data locally and merging changes across devices while the sync server stores only encrypted data.",
       sections: [
         {
-          title: "Keep the image at the centre.",
+          title: "The image fills the window.",
           text: "The image has the main window to itself. History and other tools open when needed; drawing and moving through earlier frames work from the keyboard. A TypeScript interface calls into Rust through Tauri for image fetching and local storage.",
           detail: {
             topic: "Desktop interaction",
@@ -25,7 +25,7 @@ export const projects = {
           },
         },
         {
-          title: "Keep history on the device.",
+          title: "History stays on the device.",
           text: "History and favorites work locally from the first launch. Sync is optional. Each snapshot is encrypted on the device before it leaves; settings and statistics stay local.",
           detail: {
             topic: "Encryption boundary",
@@ -36,7 +36,7 @@ export const projects = {
           },
         },
         {
-          title: "Two devices, one evolving history.",
+          title: "A shared history across devices.",
           explanation: "sync",
           text: "If two devices save at once, the later write must preserve the earlier changes. I used revision checks to reject stale writes, then merge and retry on the device.",
           detail: {
@@ -48,8 +48,8 @@ export const projects = {
           },
         },
         {
-          title: "A deletion is a change too.",
-          text: "Merging lists is easy until someone deletes an entry. I store additions with unique operation IDs and keep records of removals, so fetching an older snapshot does not simply restore a deleted favorite. Undo creates a fresh operation.",
+          title: "Preserving deletions during sync.",
+          text: "Merging data from two devices could bring a deleted favorite back. I give each addition a unique operation ID and keep removal records, so the client can recognize a deleted entry in an older snapshot. Undo creates a fresh operation.",
           detail: {
             topic: "Merging additions and removals",
             mechanism:
@@ -125,15 +125,15 @@ export const projects = {
       kind: "Web application",
       tagline: "Internet radio in a cassette player.",
       summary:
-        "A browser radio inspired by the Unitra PS-101. The cassette controls bring together live audio, station catalogs and track information from several providers.",
+        "A browser radio inspired by the Unitra PS-101. It combines live audio, station catalogs and track information from several providers in one player.",
       alt: "Kajtek’s complete red cassette player, ready to select a station, with reels, audio meter and playback controls.",
       intro: "What’s playing, and how do you know?",
       overview:
-        "Kajtek brings internet radio into a cassette-inspired interface. The controls are familiar; the information behind them is less consistent. I built integrations for RMF, ESKA and Trójka so their different catalogs, playlists and audio metadata could work in one player.",
+        "Kajtek brings internet radio into a cassette-inspired interface. Each provider publishes station and track data differently. I built integrations for RMF, ESKA and Trójka so their different catalogs, playlists and audio metadata could work in one player.",
       sections: [
         {
-          title: "The cassette follows the audio.",
-          text: "The reels indicate playback, while Web Audio analysis drives the meter. Both belong to the player’s state: a station change has to update the stream, the track display and the physical controls together.",
+          title: "Playback drives the reels and meter.",
+          text: "The reels indicate playback, while Web Audio analysis drives the meter. Both belong to the player’s state: a station change has to update the stream, the track display and the playback controls together.",
           detail: {
             topic: "Playback and visualization",
             mechanism:
@@ -143,7 +143,7 @@ export const projects = {
           },
         },
         {
-          title: "Keep provider rules out of the controls.",
+          title: "One player for several providers.",
           text: "RMF publishes timed playlists. ESKA splits track information between an API and its audio stream. Trójka has separate schedules and song lists. I normalize these sources into a shared track model, keeping provider rules separate from playback and rendering in vanilla TypeScript.",
           detail: {
             topic: "A shared track model",
@@ -156,7 +156,7 @@ export const projects = {
         {
           title: "Two sources can name different songs.",
           explanation: "metadata",
-          text: "ESKA’s API supplies track names; timing lives in a private HLS stream tag. The sources can change songs a few seconds apart. I compare their titles before combining them, so the new song does not inherit the previous one’s clock.",
+          text: "ESKA’s API supplies track names; timing lives in a private HLS stream tag. The sources can change songs a few seconds apart. I compare their titles before combining them, so a new song does not get the previous song’s timing.",
           detail: {
             topic: "Reconciling REST and HLS",
             mechanism:
@@ -166,8 +166,8 @@ export const projects = {
           },
         },
         {
-          title: "A gap in the playlist needs context.",
-          text: "Missing song data can mean speech, news or a break. I use RMF’s timing gaps and Trójka’s programme schedule to give that absence context. When a song ends, the display can move to the programme instead of leaving an old title on screen.",
+          title: "What to show between songs.",
+          text: "Missing song data can mean speech, news or a break. I use gaps in RMF’s playlist and Trójka’s programme schedule to work out what to display. When a song ends, the display can move to the programme instead of leaving an old title on screen.",
           detail: {
             topic: "Schedules and incomplete metadata",
             mechanism:
@@ -242,17 +242,17 @@ export const projects = {
     backendRepo: "https://github.com/amokrzycki/zielony-koszyk-backend",
     en: {
       kind: "Full-stack web application",
-      tagline: "An online grocery store, back office included.",
+      tagline: "An online grocery store with an admin panel.",
       summary:
         "An online grocery store with checkout, customer accounts and an admin panel for products, orders and users. Built with React, NestJS and PostgreSQL, with stock-aware checkout, PDF invoices and MFA.",
       alt: "Zielony Koszyk’s English homepage: a carousel slide of red apples headed Daily deliveries, with Browse products and About us buttons, above notes on local delivery, organic farms and wholesale prices.",
-      intro: "The parts a customer never sees.",
+      intro: "Building the store and its backend.",
       overview:
         "Zielony Koszyk is an online grocery store with an admin panel behind it. Customers check out and keep their addresses, orders and invoices in an account; staff manage products, orders and users. I built both the React frontend and the NestJS backend. Most of the work went into checkout, where the server has the final word on price and stock, and into login with a second factor. It is a personal project, without payments or a commercial launch.",
       sections: [
         {
-          title: "One catalogue, both sides of the counter.",
-          text: "Customers browse, search and filter the catalogue. Staff edit the same products in the admin panel, where price, stock and category sit next to the Polish and English names and descriptions. The endpoints for managing products check the admin role on the server, whatever the interface shows.",
+          title: "A shared catalogue for customers and staff.",
+          text: "Customers browse, search and filter the catalogue. Staff edit the same products in the admin panel, where price, stock and category sit next to the Polish and English names and descriptions. The product management endpoints check the admin role on the server, independently of the interface.",
           detail: {
             topic: "Products, translations and admin access",
             mechanism:
@@ -273,7 +273,7 @@ export const projects = {
           },
         },
         {
-          title: "A password is not a session yet.",
+          title: "Completing login with a second factor.",
           explanation: "auth",
           text: "With MFA turned on, the right password only starts the login. The user still confirms it with an emailed code, an authenticator app (TOTP) or WebAuthn, and each confirmation can open only one session. Until then, account endpoints reject the pending token.",
           detail: {
@@ -288,21 +288,21 @@ export const projects = {
     },
     pl: {
       kind: "Aplikacja webowa full-stack",
-      tagline: "Sklep spożywczy online razem z zapleczem.",
+      tagline: "Sklep spożywczy online z panelem administracyjnym.",
       summary:
-        "Sklep spożywczy online z koszykiem, kontami klientów i panelem do zarządzania produktami, zamówieniami i użytkownikami. React, NestJS i PostgreSQL obsługują checkout ze stanami magazynowymi, faktury PDF i MFA.",
+        "Sklep spożywczy online z koszykiem, kontami klientów i panelem do zarządzania produktami, zamówieniami i użytkownikami. Zbudowany w React, NestJS i PostgreSQL, ze sprawdzaniem dostępności przy zamówieniu, fakturami PDF i MFA.",
       alt: "Angielska strona główna Zielonego Koszyka: slajd karuzeli z jabłkami i nagłówkiem Daily deliveries, przyciski Browse products i About us oraz informacje o lokalnej dostawie, ekologicznych gospodarstwach i cenach hurtowych.",
-      intro: "Czego klient nie widzi.",
+      intro: "Sklep od interfejsu po backend.",
       overview:
-        "Zielony Koszyk to sklep spożywczy online z panelem administracyjnym. Klient ma konto z adresami, historią zamówień i fakturami. Pracownicy sklepu zarządzają w panelu produktami, zamówieniami i użytkownikami. Napisałem frontend w React i backend w NestJS. Najwięcej pracy wymagały składanie zamówień, przy którym o cenie i dostępności decyduje serwer, oraz logowanie dwuskładnikowe. To mój własny projekt: nie ma płatności online i nie został uruchomiony komercyjnie.",
+        "Zielony Koszyk to sklep spożywczy online z panelem administracyjnym. Klient ma konto z adresami, historią zamówień i fakturami. Pracownicy sklepu zarządzają w panelu produktami, zamówieniami i użytkownikami. Napisałem frontend w React i backend w NestJS. Najwięcej pracy poświęciłem składaniu zamówień, podczas którego serwer ustala cenę i sprawdza dostępność produktów, oraz logowaniu z drugim składnikiem. To mój własny projekt: nie ma płatności online i nie został uruchomiony komercyjnie.",
       sections: [
         {
-          title: "Ten sam katalog po obu stronach lady.",
+          title: "Wspólny katalog dla klientów i obsługi sklepu.",
           text: "Klienci przeglądają, wyszukują i filtrują produkty, a pracownicy sklepu edytują te same produkty w panelu administracyjnym. Cena, stan magazynowy i kategoria są zapisane przy produkcie, obok polskiej i angielskiej nazwy oraz opisu. Endpointy do zarządzania produktami sprawdzają rolę administratora na serwerze, niezależnie od tego, co pokazuje interfejs.",
           detail: {
             topic: "Produkty, tłumaczenia i uprawnienia",
             mechanism:
-              "Tłumaczenia są w osobnej tabeli, z kluczem złożonym z ID produktu i języka. RTK Query dodaje język do klucza cache i wysyła go w nagłówku Accept-Language. NestJS dołącza pasujące tłumaczenie, a gdy go brakuje, bierze polskie. Wyszukiwanie i sortowanie po nazwie korzystają z tego tekstu. Dodawanie, edycja i usuwanie produktów wymagają zalogowanego administratora.",
+              "Tłumaczenia są w osobnej tabeli, z kluczem złożonym z ID produktu i języka. RTK Query dodaje język do klucza pamięci podręcznej i wysyła go w nagłówku Accept-Language. NestJS dołącza pasujące tłumaczenie, a gdy go brakuje, korzysta z polskiego. Wyszukiwanie i sortowanie po nazwie korzystają z tego tekstu. Dodawanie, edycja i usuwanie produktów wymagają zalogowanego administratora.",
             constraint:
               "Jeśli brakuje angielskiego tłumaczenia, produkt nadal jest widoczny, ale w angielskim katalogu ma polski tekst. Trzeci język wymagałby rozszerzenia listy obsługiwanych języków i przetłumaczenia wszystkich produktów.",
           },
@@ -313,21 +313,21 @@ export const projects = {
           detail: {
             topic: "Blokady wierszy i zapisane zamówienie",
             mechanism:
-              "TypeORM zakłada blokady zapisu na wiersze produktów w kolejności ich ID, żeby dwa zamówienia z tymi samymi produktami nie wpadły w deadlock. Ilości muszą być dodatnimi liczbami całkowitymi. Zamówienie przechowuje kopię nazwy i ceny każdego produktu w języku klienta, więc późniejsze zmiany w katalogu nie ruszają starych zamówień. Faktura i e-mail z potwierdzeniem też są w tym języku.",
+              "TypeORM zakłada blokady zapisu na wiersze produktów w kolejności ich ID, aby uniknąć zakleszczenia dwóch transakcji zamawiających te same produkty. Ilości muszą być dodatnimi liczbami całkowitymi. Zamówienie przechowuje kopię nazwy i ceny każdego produktu w języku klienta, więc późniejsze zmiany w katalogu nie zmieniają wcześniejszych zamówień. Faktura i e-mail z potwierdzeniem też są w tym języku.",
             constraint:
-              "Faktura PDF i e-mail powstają po zatwierdzeniu transakcji. Jeśli coś się przy tym nie uda, zamówienie i tak zostaje zapisane. Żeby to pewnie ponawiać, trzeba by zapisywać zadania wysyłki. Pracownik sklepu może później poprawić zamówienie, ale pierwotna faktura PDF nie jest wtedy generowana od nowa.",
+              "Faktura PDF i e-mail powstają po zatwierdzeniu transakcji. Jeśli coś się przy tym nie uda, zamówienie i tak zostaje zapisane. Niezawodne ponawianie tych operacji wymagałoby zapisywania zadań do późniejszego wykonania. Pracownik sklepu może później poprawić zamówienie, ale pierwotna faktura PDF nie jest wtedy generowana od nowa.",
           },
         },
         {
-          title: "Poprawne hasło to jeszcze nie sesja.",
+          title: "Logowanie z drugim składnikiem.",
           explanation: "auth",
           text: "Przy włączonym MFA poprawne hasło tylko rozpoczyna logowanie. Trzeba je jeszcze potwierdzić kodem z e-maila, aplikacją uwierzytelniającą (TOTP) albo przez WebAuthn, a jedno potwierdzenie otwiera najwyżej jedną sesję. Do tego czasu endpointy konta odrzucają tymczasowy token.",
           detail: {
             topic: "Niedokończone logowanie i pełna sesja",
             mechanism:
-              "React trzyma dane rozpoczętego logowania tylko w pamięci. Token MFA wskazuje zapisane wyzwanie dla konkretnego użytkownika i metody. Nie daje dostępu do danych konta ani do odświeżenia sesji. Weryfikacja blokuje wiersz z wyzwaniem w transakcji, a po udanej weryfikacji go usuwa. TOTP zapamiętuje też ostatni zaakceptowany krok czasowy, a WebAuthn sprawdza origin i wymaga weryfikacji użytkownika.",
+              "Frontend w React przechowuje dane rozpoczętego logowania tylko w pamięci. Token MFA wskazuje zapisane wyzwanie dla konkretnego użytkownika i metody. Nie daje dostępu do danych konta ani do odświeżenia sesji. Weryfikacja blokuje wiersz z wyzwaniem w transakcji, a po udanej weryfikacji go usuwa. TOTP zapamiętuje też ostatni zaakceptowany krok czasowy, a WebAuthn sprawdza origin i wymaga weryfikacji użytkownika.",
             constraint:
-              "WebAuthn jest tu drugim składnikiem po haśle. Serwer nie ma listy unieważnionych refresh tokenów, a limity żądań są liczone osobno w każdej instancji backendu. Przy kilku instancjach liczniki trzeba by trzymać we wspólnym miejscu.",
+              "WebAuthn jest tu drugim składnikiem po haśle. Serwer nie przechowuje listy unieważnionych tokenów odświeżania, a limity żądań są liczone osobno w każdej instancji backendu. Przy kilku instancjach liczniki wymagałyby wspólnego magazynu danych.",
           },
         },
       ],

@@ -15,15 +15,15 @@ const c = pl
         "Jestem programistą full-stack. Pracuję zawodowo od 2021 roku, głównie przy frontendzie.",
       about: "O mnie",
       aboutText:
-        "Zwykle zaczynam od interfejsu, ale nie traktuję frontendu jako granicy problemu. Jeśli źródło tarcia leży w stanie aplikacji, kontrakcie API, modelu danych, backendzie albo wdrożeniu, schodzę niżej i rozwiązuję problem tam, gdzie faktycznie powstaje.",
+        "Zwykle zaczynam od interfejsu i sprawdzam, skąd bierze się problem. Czasem trzeba poprawić stan aplikacji lub sposób komunikacji z API, a czasem model danych, backend czy wdrożenie. Zajmuję się też tymi częściami aplikacji.",
       aboutTools:
-        "Obecnie pracuję w Railwaymen, głównie przy frontendzie i aplikacjach opartych o Rails. Najczęściej pracuję z Reactem i TypeScriptem, natomiast we własnych projektach sięgam także po Node.js, Rust i warstwę infrastruktury, jeśli wymaga tego problem. Ukończyłem studia magisterskie z informatyki ze specjalizacją w cyberbezpieczeństwie.",
+        "Pracuję w Railwaymen przy frontendzie i aplikacjach opartych na Rails. Na co dzień korzystam z Reacta i TypeScriptu. We własnych projektach używam też Node.js i Rusta oraz zajmuję się infrastrukturą, gdy wymaga tego aplikacja. Ukończyłem studia magisterskie z informatyki ze specjalizacją w cyberbezpieczeństwie.",
       selected: "Wybrane projekty",
       selectedNote: "Własne projekty",
       explore: "O projekcie",
       approach: "Jak pracuję",
       approachText:
-        "We własnych projektach zajmuję się zarówno interfejsem, jak i usługami, na których działa aplikacja. Korzystam z niej przez dłuższy czas i wracam do wcześniejszych decyzji, gdy zauważę coś niewygodnego.",
+        "We własnych projektach tworzę interfejs i usługi, z których korzysta aplikacja. Później sam jej używam. Z czasem zauważam, co jest niewygodne, i wracam do wcześniejszych decyzji.",
       approachMore:
         "W Random Frame musiałem zadbać o to, żeby historia była szyfrowana, a zmiany z kilku urządzeń dało się połączyć. W Kajtku sprawdzam, czy tytuł z API dotyczy utworu, który właśnie słychać. To, co ma działać w interfejsie, często wymaga więc pracy także po stronie danych i backendu.",
       contact: "Porozmawiajmy",
@@ -35,17 +35,17 @@ const c = pl
         "I’m a full-stack engineer. I’ve worked in software since 2021, mostly on the frontend.",
       about: "About me",
       aboutText:
-        "I usually start with the interface, but I don’t treat frontend as the boundary of the problem. If the friction comes from application state, an API contract, the data model, the backend or deployment, I go deeper and solve it where it actually originates.",
+        "I usually start with the interface and trace the problem to its source. That can mean changing application state or an API contract, fixing the data model, or working on the backend or deployment.",
       aboutTools:
-        "I currently work at Railwaymen, primarily across frontend and Rails applications. React and TypeScript are the tools I use most often, while my own work also takes me into Node.js, Rust and the infrastructure around the software when the problem calls for it. I hold an M.Sc. Eng. in Information Technology, specializing in Cybersecurity.",
+        "I work at Railwaymen on frontend and Rails applications, using React and TypeScript day to day. In my own projects, I also use Node.js and Rust and handle infrastructure when the application needs it. I hold an M.Sc. Eng. in Information Technology, specializing in Cybersecurity.",
       selected: "Selected work",
       selectedNote: "Personal projects",
       explore: "Explore the project",
       approach: "How I work",
       approachText:
-        "My own projects let me work through the interface and the services behind it. I revisit decisions after living with the software for a while, when the awkward parts become easier to see.",
+        "In my own projects, I build the interface and the services behind it. Then I use the software myself. Over time, I notice what gets in the way and revisit earlier decisions.",
       approachMore:
-        "In Random Frame, saving history leads into encryption and merging changes. In Kajtek, the title on the cassette means checking whether an API and the audio stream describe the same song. Those connections determine how much of the system I work on.",
+        "In Random Frame, I had to encrypt browsing history and merge changes from several devices. In Kajtek, I check whether the API’s track title matches the song playing in the stream. Getting the interface right often means working on the data and backend too.",
       contact: "Let’s talk",
       contactText: "Email me about a project or working together.",
     };
@@ -66,9 +66,9 @@ const c = pl
 >
   <section class="hero" aria-labelledby="hero-heading">
     <h1 id="hero-heading">
-      {pl ? "Tworzę" : "Software,"}
+      {pl ? "Tworzę" : "I build"}
       <br />
-      {pl ? "aplikacje." : "considered."}
+      {pl ? "aplikacje." : "software."}
     </h1>
     <div class="hero-note">
       <p>{c.intro}</p>
